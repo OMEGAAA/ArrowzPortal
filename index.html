@@ -141,7 +141,7 @@
                         </div>
                         <div class="mini-score">
                             <span class="value" id="home-ft-avg">—</span>
-                            <span class="unit">pts</span>
+                            <span class="unit">km/h</span>
                         </div>
                     </div>
                     <!-- Mini Ranking List (top 3, dynamically filled) -->
@@ -268,8 +268,12 @@
     <script>
         (function () {
             const data = window.RANKING_DATA || [];
-            // Sort by TOTAL score descending
-            const sorted = [...data].sort((a, b) => (b.score || 0) - (a.score || 0));
+            // Sort by vmax descending
+            const sorted = [...data].sort((a, b) => {
+                const valA = (a.scores && a.scores.vmax) || 0;
+                const valB = (b.scores && b.scores.vmax) || 0;
+                return valB - valA;
+            });
 
             // --- Mini FT card (top 3) ---
             const miniEl = document.getElementById('home-mini-ranking');
@@ -277,14 +281,15 @@
                 sorted.slice(0, 3).forEach((d, i) => {
                     const div = document.createElement('div');
                     div.className = 'mini-rank-item';
-                    div.innerHTML = `<span class="rank">${String(i + 1).padStart(2, '0')}</span><span class="name">${d.name}</span><span class="score">${(d.score || 0).toFixed(1)}</span>`;
+                    const scoreVal = (d.scores && d.scores.vmax) || 0;
+                    div.innerHTML = `<span class="rank">${String(i + 1).padStart(2, '0')}</span><span class="name">${d.name}</span><span class="score">${scoreVal.toFixed(1)}</span>`;
                     miniEl.appendChild(div);
                 });
             }
-            // Average score
+            // Average score (vmax)
             const avgEl = document.getElementById('home-ft-avg');
             if (avgEl && sorted.length) {
-                const avg = sorted.reduce((s, d) => s + (d.score || 0), 0) / sorted.length;
+                const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
                 avgEl.textContent = avg.toFixed(1);
             }
             // Date
