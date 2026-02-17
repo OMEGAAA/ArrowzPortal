@@ -5,40 +5,12 @@ window.addEventListener("load", () => {
     }, 2000); // Wait for animation
 });
 
+
+
 document.addEventListener("DOMContentLoaded", function () {
-    const cursorDot = document.querySelector("[data-cursor-dot]");
-    const cursorOutline = document.querySelector("[data-cursor-outline]");
+    // Mobile Menu Toggle (Basic implementation) -> Moved inside DOMContentLoaded for safety if it wasn't
 
-    window.addEventListener("mousemove", function (e) {
-        const posX = e.clientX;
-        const posY = e.clientY;
-
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
-
-        // Add some lag to the outline cursor for a smoother feel
-        cursorOutline.animate({
-            left: `${posX}px`,
-            top: `${posY}px`
-        }, { duration: 500, fill: "forwards" });
-    });
-
-    // Hover effects on links to expand cursor
-    const links = document.querySelectorAll("a, button, .nav-link");
-
-    links.forEach(link => {
-        link.addEventListener("mouseenter", () => {
-            cursorOutline.style.width = "60px";
-            cursorOutline.style.height = "60px";
-            cursorOutline.style.backgroundColor = "rgba(204, 255, 0, 0.1)";
-        });
-
-        link.addEventListener("mouseleave", () => {
-            cursorOutline.style.width = "40px";
-            cursorOutline.style.height = "40px";
-            cursorOutline.style.backgroundColor = "transparent";
-        });
-    });
+    // ... (rest of code follows)
 
     // Mobile Menu Toggle (Basic implementation)
     const menuToggle = document.querySelector(".menu-toggle");
