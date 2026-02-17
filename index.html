@@ -295,14 +295,26 @@
             }
 
             // --- Ranking table (top 10) ---
-            const tbody = document.getElementById('home-ranking-body');
-            if (tbody) {
-                sorted.slice(0, 10).forEach((d, i) => {
-                    const tr = document.createElement('tr');
-                    if (i < 3) tr.className = 'rank-' + (i + 1);
-                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${(d.score || 0).toFixed(1)}</td>`;
-                    tbody.appendChild(tr);
+            // The original 'sorted' array is based on 'score'.
+            // For the ranking table, we need to sort by 'vmax' as per the instruction.
+            if (window.RANKING_DATA) {
+                // Sort by vmax descending
+                const sortedByVmax = [...window.RANKING_DATA].sort((a, b) => {
+                    const valA = (a.scores && a.scores.vmax) || 0;
+                    const valB = (b.scores && b.scores.vmax) || 0;
+                    return valB - valA;
                 });
+
+                const tbody = document.getElementById('home-ranking-body');
+                if (tbody) {
+                    sortedByVmax.slice(0, 10).forEach((d, i) => {
+                        const tr = document.createElement('tr');
+                        if (i < 3) tr.className = 'rank-' + (i + 1);
+                        const scoreVal = (d.scores && d.scores.vmax) || 0;
+                        tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${scoreVal.toFixed(1)}</td>`;
+                        tbody.appendChild(tr);
+                    });
+                }
             }
 
             // --- News Data Logic ---

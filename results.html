@@ -134,15 +134,22 @@
     <script src="js/main.js"></script>
     <script>
         (function () {
-            const data = window.RANKING_DATA || [];
-            const sorted = [...data].sort((a, b) => (b.score || 0) - (a.score || 0));
+            if (!window.RANKING_DATA) return;
+
+            // Sort by vmax descending
+            const sorted = [...window.RANKING_DATA].sort((a, b) => {
+                const valA = (a.scores && a.scores.vmax) || 0;
+                const valB = (b.scores && b.scores.vmax) || 0;
+                return valB - valA;
+            });
 
             // Summary card
             const avgEl = document.getElementById('res-avg');
             const dateEl = document.getElementById('res-date');
             const summaryEl = document.getElementById('res-summary');
+
             if (avgEl && sorted.length) {
-                const avg = sorted.reduce((s, d) => s + (d.score || 0), 0) / sorted.length;
+                const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
                 avgEl.textContent = avg.toFixed(1);
             }
             if (dateEl) {
@@ -150,8 +157,8 @@
                 dateEl.textContent = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
             }
             if (summaryEl && sorted.length) {
-                const avg = sorted.reduce((s, d) => s + (d.score || 0), 0) / sorted.length;
-                summaryEl.textContent = `アローズジム全体の平均スコアは ${avg.toFixed(1)} pts です。登録人数：${sorted.length}名。`;
+                const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
+                summaryEl.textContent = `アローズジム全体の平均最高速度は ${avg.toFixed(1)} km/h です。登録人数：${sorted.length}名。`;
             }
 
             // Ranking table (all students)
@@ -160,7 +167,8 @@
                 sorted.forEach((d, i) => {
                     const tr = document.createElement('tr');
                     if (i < 3) tr.className = 'rank-' + (i + 1);
-                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${(d.score || 0).toFixed(1)}</td>`;
+                    const scoreVal = (d.scores && d.scores.vmax) || 0;
+                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${scoreVal.toFixed(1)}</td>`;
                     tbody.appendChild(tr);
                 });
             }
