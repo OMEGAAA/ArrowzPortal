@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const categoryTabs = document.querySelectorAll('.category-tabs-wrapper .tab-btn');
+    const categoryTabs = document.querySelectorAll('.tab-btn');
     const tableBody = document.querySelector('.ranking-full-table tbody');
     const testSelect = document.getElementById('test-select');
 
