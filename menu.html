@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THIS WEEK'S MENU | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .menu-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .menu-table th,
+        .menu-table td {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .menu-table th {
+            background-color: #1a1a1a;
+            color: var(--accent-color);
+            font-family: var(--font-primary);
+            width: 20%;
+        }
+
+        .menu-table td {
+            color: var(--text-color);
+            font-family: var(--font-secondary);
+        }
+
+        .menu-highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="MENU">THIS WEEK'S MENU</h2>
+                <div class="schedule-system-note"
+                    style="margin-bottom: 2rem; font-family: var(--font-secondary); color: var(--text-muted);">
+                    <p><strong style="color: var(--accent-color);">【MONTHLY SCHEDULE】</strong><br>
+                        WEEK 1 - 3: SKILL & PHYSICAL TRAINING (Weekly Change)<br>
+                        WEEK 4: FT (Field Test)</p>
+                </div>
+                <p class="section-desc">2月第3週 (2/16 - 2/22) のトレーニングメニュー</p>
+
+                <div class="weekly-menu-content"
+                    style="margin-top: 3rem; border: 1px solid var(--border-color); padding: 2rem; background: #0a0a0a;">
+                    <h3
+                        style="color: var(--accent-color); font-family: var(--font-primary); margin-bottom: 1.5rem; text-align: center; font-size: 1.5rem;">
+                        TRAINING CONTENT</h3>
+                    <ul class="menu-list" style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 1.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 1rem;">
+                            <strong
+                                style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">AGILITY
+                                & REACTION</strong>
+                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">・ラダー各種 / ミラードリル
+                                (反応) / ショートスプリント</span>
+                        </li>
+                        <li style="margin-bottom: 1.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 1rem;">
+                            <strong
+                                style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">POWER
+                                & STRENGTH</strong>
+                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">・メディシンボール投げ /
+                                ＢＯＸジャンプ / スクワット基礎</span>
+                        </li>
+                        <li style="margin-bottom: 1.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 1rem;">
+                            <strong
+                                style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">ENDURANCE</strong>
+                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">・サーキットトレーニング
+                                (30s ON / 30s OFF) / シャトルラン</span>
+                        </li>
+                        <li>
+                            <strong
+                                style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">GAME
+                                SKILL</strong>
+                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">・1on1 アジリティ /
+                                ボールハンドリング複合</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

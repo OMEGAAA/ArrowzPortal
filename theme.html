@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONTHLY THEME | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .theme-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .theme-image {
+            width: 100%;
+            height: 400px;
+            background-color: #1a1a1a;
+            border: 1px solid var(--accent-color);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .theme-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(204, 255, 0, 0.1) 50%, transparent 60%);
+            background-size: 200% 200%;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 200% 50%;
+            }
+
+            100% {
+                background-position: -200% 50%;
+            }
+        }
+
+        .theme-text h3 {
+            font-family: var(--font-primary);
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .theme-text p {
+            font-family: var(--font-secondary);
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .point-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .point-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-family: var(--font-secondary);
+        }
+
+        .point-list li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .theme-content {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-image {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="THEME">MONTHLY THEME</h2>
+                <div class="theme-content">
+                    <div class="theme-image">
+                        <svg viewBox="0 0 24 24" width="100" height="100" stroke="currentColor" stroke-width="0.5"
+                            fill="none" class="icon-svg" style="color: var(--accent-color);">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <div class="theme-text">
+                        <h3>AGILITY</h3>
+                        <p><strong>「アジリティ（俊敏性）」</strong><br>
+                            2月のテーマは、スポーツにおいて極めて重要な「素早い動作」と「スムーズな方向転換」の獲得です。</p>
+                        <p>単に足が速いだけでなく、状況に反応して体をコントロールする能力を高めます。</p>
+
+                        <ul class="point-list">
+                            <li>減速と加速のメリハリをつける</li>
+                            <li>重心の低い姿勢での方向転換</li>
+                            <li>視覚情報への反応速度向上</li>
+                            <li>バランスを崩した状態からのリカバリー</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

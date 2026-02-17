@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS DETAIL | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .detail-hero {
+            height: 60vh;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 4rem;
+        }
+
+        .detail-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.8) 100%);
+        }
+
+        .detail-header {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .detail-title {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .detail-meta {
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .detail-category {
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 0.2rem 0.6rem;
+            margin-left: 1rem;
+        }
+
+        .detail-body {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+            font-family: var(--font-secondary);
+            /* Or sans-serif for better readability */
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+
+        .detail-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Image placeholders if no image provided */
+        .news-1 {
+            background-image: url('images/連続ジャンプ写真.jpg');
+        }
+
+        .news-2 {
+            background-color: #444;
+        }
+
+        .news-3 {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loader">
+        <div class="loader-text">LOADING</div>
+        <div class="loader-bar"></div>
+    </div>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main id="news-detail-main" style="padding-top: 0; display: none;">
+        <!-- Content injected via JS -->
+    </main>
+
+    <div id="not-found" style="display: none; padding: 150px 0; text-align: center;">
+        <h2>News Not Found</h2>
+        <a href="news.html" class="btn-primary" style="margin-top: 2rem;">BACK TO NEWS</a>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/news_data.js"></script>
+    <script src="js/news_manager.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            if (!id) {
+                document.getElementById('not-found').style.display = 'block';
+                return;
+            }
+
+            // Ensure data is loaded (this triggers the auto-ID generation if needed)
+            const allNews = NewsManager.getNews();
+            const newsItem = NewsManager.getNewsById(id);
+
+            if (!newsItem) {
+                document.getElementById('not-found').style.display = 'block';
+                return;
+            }
+
+            // Render content
+            const main = document.getElementById('news-detail-main');
+            const bgStyle = newsItem.imageData ? `background-image: url('${newsItem.imageData}')` : '';
+            const bgClass = newsItem.imageClass || 'news-2';
+
+            // If imageData is used, we set it inline, otherwise we rely on bgClass in CSS style block (or fallback)
+            // Note: Since detail-hero needs the class for fallback images, we add it. 
+            // BUT inline style overrides class background-image.
+
+            main.innerHTML = `
+                <div class="detail-hero ${bgClass}" style="${bgStyle}">
+                    <div class="detail-header">
+                        <div class="detail-meta">
+                            <span>${newsItem.date}</span>
+                            <span class="detail-category">${newsItem.category}</span>
+                        </div>
+                        <h1 class="detail-title">${newsItem.title}</h1>
+                    </div>
+                </div>
+                
+                <div class="container">
+                    <article class="detail-body">
+                        ${(newsItem.body || newsItem.excerpt).replace(/\n/g, '<br>')}
+                    </article>
+                    
+                    <div style="text-align: center; margin-top: 4rem;">
+                        <a href="news.html" class="btn-primary">BACK TO NEWS LIST</a>
+                    </div>
+                </div>
+            `;
+
+            main.style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>

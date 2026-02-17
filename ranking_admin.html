@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RANKING ADMIN | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Admin specific styles */
+        body {
+            cursor: auto !important;
+        }
+
+        .admin-section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .admin-panel {
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .status-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #333;
+            color: #888;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="news_admin.html" class="nav-link">NEWS ADMIN</a></li>
+                <li class="nav-item"><a href="ranking_admin.html" class="nav-link">RANKING ADMIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <h2 class="section-title">RANKING ADMIN</h2>
+
+                <div class="admin-panel">
+                    <h3>1. DOWNLOAD CSV</h3>
+                    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">
+                        Download the current ranking data as a CSV file to edit in Excel.
+                    </p>
+                    <button id="btn-download-csv" class="btn-primary btn-action"
+                        style="background-color: #333; border: 1px solid #555;">
+                        DOWNLOAD CSV
+                    </button>
+                </div>
+
+                <div class="admin-panel">
+                    <h3>2. IMPORT CSV & UPDATE</h3>
+                    <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">
+                        Select the edited CSV file to update the ranking data.
+                    </p>
+                    <input type="file" id="csv-file" accept=".csv"
+                        style="width: 100%; padding: 1rem; background: #000; color: #fff; border: 1px solid #333;">
+
+                    <button id="btn-process" class="btn-primary btn-action">
+                        PROCESS SCV & GENERATE JS
+                    </button>
+
+                    <div id="status-box" class="status-box" style="display: none;"></div>
+                </div>
+
+                <div class="admin-panel" id="download-panel" style="display: none; border-color: var(--accent-color);">
+                    <h3 style="color: var(--accent-color);">3. DOWNLOAD JS FILE</h3>
+                    <p style="color: #fff; font-size: 0.9rem; margin-bottom: 1rem;">
+                        Success! Valid data found: <span id="data-count" style="font-weight: bold;">0</span>
+                        records.<br>
+                        Download the file and overwrite <code>js/ranking_data.js</code>.
+                    </p>
+                    <button id="btn-download-js" class="btn-primary btn-action"
+                        style="background-color: var(--accent-color); color: #000; border: none;">
+                        DOWNLOAD ranking_data.js
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/ranking_data.js"></script>
+    <script src="js/ranking_manager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusBox = document.getElementById('status-box');
+            let processedData = null;
+
+            // 1. Download CSV
+            document.getElementById('btn-download-csv').addEventListener('click', () => {
+                if (!window.RANKING_DATA) {
+                    alert('No existing ranking data found.');
+                    return;
+                }
+                const csv = RankingManager.toCSV(window.RANKING_DATA);
+                downloadFile(csv, 'ranking_data.csv', 'text/csv');
+            });
+
+            // 2. Process CSV
+            document.getElementById('btn-process').addEventListener('click', () => {
+                const fileInput = document.getElementById('csv-file');
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert('Please select a CSV file.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const csvText = e.target.result;
+                        processedData = RankingManager.parseCSV(csvText);
+
+                        // Basic validation
+                        if (processedData.length === 0) {
+                            throw new Error('No valid data found in CSV.');
+                        }
+
+                        statusBox.style.display = 'block';
+                        statusBox.style.color = 'var(--accent-color)';
+                        statusBox.textContent = `Successfully parsed ${processedData.length} records.\nTop record: ${processedData[0].name} (${processedData[0].score})`;
+
+                        document.getElementById('data-count').textContent = processedData.length;
+                        document.getElementById('download-panel').style.display = 'block';
+
+                    } catch (err) {
+                        console.error(err);
+                        statusBox.style.display = 'block';
+                        statusBox.style.color = '#ff4444';
+                        statusBox.textContent = 'Error processing CSV: ' + err.message;
+                        document.getElementById('download-panel').style.display = 'none';
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+            // 3. Download JS
+            document.getElementById('btn-download-js').addEventListener('click', () => {
+                if (!processedData) return;
+                const content = RankingManager.getExportJS(processedData);
+                downloadFile(content, 'ranking_data.js', 'text/javascript');
+                alert('File downloaded! Please overwrite js/ranking_data.js to apply changes.');
+            });
+
+            function downloadFile(content, filename, type) {
+                const blob = new Blob([content], { type: type });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
+    </script>
+</body>
+
+</html>

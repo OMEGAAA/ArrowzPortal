@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RANKING | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .ranking-full-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        .ranking-full-table th,
+        .ranking-full-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .ranking-full-table th {
+            font-family: var(--font-primary);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        .ranking-full-table td {
+            font-family: var(--font-secondary);
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        .rank-num-cell {
+            font-family: var(--font-primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+            width: 80px;
+        }
+
+        .rank-1 .rank-num-cell {
+            color: #ffd700;
+        }
+
+        .rank-2 .rank-num-cell {
+            color: #c0c0c0;
+        }
+
+        .rank-3 .rank-num-cell {
+            color: #cd7f32;
+        }
+
+        .ranking-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .category-tabs-wrapper {
+            margin-bottom: 0;
+            border-bottom: none;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .score-cell {
+            font-family: var(--font-primary);
+            font-weight: bold;
+            color: var(--accent-color);
+            text-align: right;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-color);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .ranking-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .category-tabs-wrapper {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                /* For scrollbar */
+                white-space: nowrap;
+            }
+
+            .test-select-wrapper {
+                width: 100%;
+            }
+
+            #test-select {
+                width: 100%;
+            }
+
+            .ranking-full-table {
+                display: block;
+            }
+
+            .ranking-full-table thead {
+                display: none;
+            }
+
+            .ranking-full-table tbody {
+                display: block;
+            }
+
+            .ranking-full-table tr {
+                display: block;
+                background: #111;
+                border: 1px solid #333;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+
+            .ranking-full-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: none;
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+
+            .ranking-full-table td::before {
+                content: attr(data-label);
+                font-family: var(--font-primary);
+                font-size: 0.8rem;
+                color: var(--text-muted);
+                font-weight: bold;
+                letter-spacing: 0.05em;
+            }
+
+            /* Adjust rank number for mobile card */
+            .rank-num-cell {
+                width: auto;
+                font-size: 1.2rem;
+            }
+
+            /* Adjust score size */
+            .score-cell {
+                text-align: right;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="RANKING">RANKING</h2>
+
+                <div class="ranking-controls">
+                    <div class="category-tabs-wrapper">
+                        <button class="tab-btn active">OVERALL</button>
+                        <button class="tab-btn">U-15</button>
+                        <button class="tab-btn">U-12</button>
+                        <button class="tab-btn">U-9</button>
+                    </div>
+                    <div class="test-select-wrapper">
+                        <select id="test-select"
+                            style="padding: 0.5rem; background: #000; color: #fff; border: 1px solid #333; font-family: 'Oswald', sans-serif;">
+                            <option value="TOTAL">TOTAL SCORE</option>
+                            <optgroup label="瞬発力">
+                                <option value="vmax">最高速度 (km/h)</option>
+                                <option value="vdec">速度維持率</option>
+                                <option value="sprint_score">スプリントスコア</option>
+                                <option value="pro">切り返し走 (sec)</option>
+                            </optgroup>
+                            <optgroup label="視力">
+                                <option value="dva">動体視力</option>
+                                <option value="eye">眼球運動</option>
+                                <option value="peri">周辺視</option>
+                                <option value="flash">瞬間視</option>
+                                <option value="arrowz_eye_total">ArrowzEye合計値</option>
+                                <option value="hand_eye">目と手の協応動作 (sec)</option>
+                            </optgroup>
+                            <optgroup label="跳躍力">
+                                <option value="vj">垂直跳び (cm)</option>
+                                <option value="sj">スクワットジャンプ (cm)</option>
+                                <option value="contact_time">接地時間 (sec)</option>
+                                <option value="jump_height">跳躍高 (cm)</option>
+                                <option value="rj_index">RJ-index</option>
+                                <option value="broad_jump">立ち幅跳び (cm)</option>
+                                <option value="stepping">ステッピング (回)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="ranking-list">
+                    <table class="ranking-full-table">
+                        <thead>
+                            <tr>
+                                <th>RANK</th>
+                                <th>NAME</th>
+                                <th>CLASS</th>
+                                <th>CATEGORY</th>
+                                <th style="text-align: right;">TOTAL SCORE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ranking-body">
+                            <tr class="rank-1">
+                                <td class="rank-num-cell">01</td>
+                                <td>小倉　大河</td>
+                                <td>中学生コースFT</td>
+                                <td>U-15</td>
+                                <td class="score-cell">179.1</td>
+                            </tr>
+                            <tr class="rank-2">
+                                <td class="rank-num-cell">02</td>
+                                <td>島田　龍空</td>
+                                <td>中学生コースFT</td>
+                                <td>U-15</td>
+                                <td class="score-cell">164.9</td>
+                            </tr>
+                            <tr class="rank-3">
+                                <td class="rank-num-cell">03</td>
+                                <td>須田　ほたる</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">163.8</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">04</td>
+                                <td>平子　創介</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">161.9</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">05</td>
+                                <td>小倉　丈</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">158.9</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">06</td>
+                                <td>高田　和音</td>
+                                <td>中学生コースFT</td>
+                                <td>U-15</td>
+                                <td class="score-cell">157.8</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">07</td>
+                                <td>臼井　結香</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">152.4</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">08</td>
+                                <td>鶴見　蓮音</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">151.3</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">09</td>
+                                <td>篠崎　龍</td>
+                                <td>中学生コースFT</td>
+                                <td>U-15</td>
+                                <td class="score-cell">151.0</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">10</td>
+                                <td>島田　和空</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">149.9</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">11</td>
+                                <td>玉川　葵</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">149.2</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">12</td>
+                                <td>川﨑　遥斗</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">148.1</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">13</td>
+                                <td>臼井　遥香</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">147.9</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">14</td>
+                                <td>篠崎　楓</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">146.2</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">15</td>
+                                <td>永井　悠太郎</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">145.6</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">16</td>
+                                <td>加藤　千空</td>
+                                <td>中学生コースFT</td>
+                                <td>U-15</td>
+                                <td class="score-cell">145.1</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">17</td>
+                                <td>大出　隆佑</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">144.8</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">18</td>
+                                <td>小井沼　晴義</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">143.9</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">19</td>
+                                <td>宮本　絢菜</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">143.6</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">20</td>
+                                <td>和久井　捺生</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">142.5</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">21</td>
+                                <td>成田　睦生</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">142.1</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">22</td>
+                                <td>玉川　風音</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">140.8</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">23</td>
+                                <td>比良　大輝</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">140.8</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">24</td>
+                                <td>筒井　陽菜</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">140.5</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">25</td>
+                                <td>斎藤　啓次</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">139.7</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">26</td>
+                                <td>南木　琥太郎</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">138.2</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">27</td>
+                                <td>佐藤　友悠</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">134.8</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">28</td>
+                                <td>大木　ゆいか</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">134.1</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">29</td>
+                                <td>加藤　怜</td>
+                                <td>小学生コースFT</td>
+                                <td>U-12</td>
+                                <td class="score-cell">131.5</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">30</td>
+                                <td>南木　こころ</td>
+                                <td>小学生コースFT</td>
+                                <td>U-9</td>
+                                <td class="score-cell">130.5</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">31</td>
+                                <td>清水　稜生</td>
+                                <td>小学生コースFT</td>
+                                <td>U-9</td>
+                                <td class="score-cell">130.3</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">32</td>
+                                <td>大出　悠貫</td>
+                                <td>小学生コースFT</td>
+                                <td>U-9</td>
+                                <td class="score-cell">129.9</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">33</td>
+                                <td>臼井　咲葵</td>
+                                <td>小学生コースFT</td>
+                                <td>U-9</td>
+                                <td class="score-cell">121.2</td>
+                            </tr>
+                            <tr class="">
+                                <td class="rank-num-cell">34</td>
+                                <td>小川　根ノ葉</td>
+                                <td>小学生コースFT</td>
+                                <td>U-9</td>
+                                <td class="score-cell">112.5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="comparison.html" class="btn-primary"
+                        style="text-decoration: none; display: inline-block; padding: 1rem 2rem; font-size: 1.1rem;">
+                        全国比較ツール →
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/ranking_data.js"></script>
+    <script src="js/ranking.js"></script>
+</body>
+
+</html>

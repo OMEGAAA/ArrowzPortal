@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOMEWORK | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+
+<body>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="index.html#info" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="index.html#ft-results" class="nav-link" data-hover="FT RESULTS">FT結果</a>
+                </li>
+                <li class="nav-item"><a href="index.html#weekly" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="HOMEWORK">宿題動画</h2>
+
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">ALL</button>
+                    <button class="filter-btn" data-filter="basic">BASIC (基礎)</button>
+                    <button class="filter-btn" data-filter="applied">APPLIED (応用)</button>
+                    <button class="filter-btn" data-filter="jump">JUMP (跳躍力)</button>
+                    <button class="filter-btn" data-filter="speed">SPEED (瞬発力)</button>
+                </div>
+
+                <div class="video-grid">
+                    <!-- Video 1 -->
+                    <div class="video-card" data-category="jump applied squat-jump"
+                        onclick="window.open('https://youtu.be/EahCXnDyUV8', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/EahCXnDyUV8/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / APPLIED</span>
+                            <h3 class="video-title">バンザイ腸腰筋</h3>
+                            <p class="video-desc">【跳躍力・スクワットジャンプ】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div class="video-card" data-category="jump applied stepping"
+                        onclick="window.open('https://youtu.be/60CA1jE37JQ', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/60CA1jE37JQ/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / APPLIED</span>
+                            <h3 class="video-title">階段一段昇り降り</h3>
+                            <p class="video-desc">【跳躍力・ステッピング】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div class="video-card" data-category="jump applied long-jump"
+                        onclick="window.open('https://youtu.be/nVPP58sEzbA', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/nVPP58sEzbA/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / APPLIED</span>
+                            <h3 class="video-title">連続立ち幅跳び</h3>
+                            <p class="video-desc">【跳躍力・立ち幅跳び】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 4 -->
+                    <div class="video-card" data-category="jump basic long-jump"
+                        onclick="window.open('https://youtu.be/-nuUayb3wbQ', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/-nuUayb3wbQ/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / BASIC</span>
+                            <h3 class="video-title">タックジャンプ</h3>
+                            <p class="video-desc">【跳躍力・立ち幅跳び】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 5 -->
+                    <div class="video-card" data-category="jump basic continuous-jump"
+                        onclick="window.open('https://youtu.be/Q19RqHF30aM', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/Q19RqHF30aM/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / BASIC</span>
+                            <h3 class="video-title">アンクルホップ</h3>
+                            <p class="video-desc">【跳躍力・連続ジャンプ】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 6 -->
+                    <div class="video-card" data-category="jump basic stepping"
+                        onclick="window.open('https://youtu.be/pIqq_XBPKVc', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/pIqq_XBPKVc/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / BASIC</span>
+                            <h3 class="video-title">ラダー</h3>
+                            <p class="video-desc">【跳躍力・ステッピング】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 7 -->
+                    <div class="video-card" data-category="jump applied continuous-jump"
+                        onclick="window.open('https://youtu.be/qJ0GcfYLG8I', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/qJ0GcfYLG8I/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / APPLIED</span>
+                            <h3 class="video-title">ポゴジャンプ</h3>
+                            <p class="video-desc">【跳躍力・連続ジャンプ】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 8 -->
+                    <div class="video-card" data-category="jump basic squat-jump"
+                        onclick="window.open('https://youtu.be/F4F3FHdnxt8', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/F4F3FHdnxt8/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / BASIC</span>
+                            <h3 class="video-title">ヒンジ</h3>
+                            <p class="video-desc">【跳躍力・スクワットジャンプ】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 9 -->
+                    <div class="video-card" data-category="jump applied vertical-jump"
+                        onclick="window.open('https://youtu.be/q7nNJizyJf8', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/q7nNJizyJf8/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / APPLIED</span>
+                            <h3 class="video-title">連続CMJ</h3>
+                            <p class="video-desc">【跳躍力・垂直跳び】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 10 -->
+                    <div class="video-card" data-category="jump basic stepping"
+                        onclick="window.open('https://youtu.be/63raM20u0NU', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/63raM20u0NU/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / BASIC</span>
+                            <h3 class="video-title">カーフレイズ</h3>
+                            <p class="video-desc">【跳躍力・ステッピング】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 11 -->
+                    <div class="video-card" data-category="jump applied long-jump"
+                        onclick="window.open('https://youtu.be/xq_f4AgKCp0', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/xq_f4AgKCp0/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / APPLIED</span>
+                            <h3 class="video-title">膝立ちジャンプ</h3>
+                            <p class="video-desc">【跳躍力・立ち幅跳び】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 12 -->
+                    <div class="video-card" data-category="jump basic continuous-jump"
+                        onclick="window.open('https://youtu.be/IRUk6ZxLzy0', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/IRUk6ZxLzy0/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">JUMP / BASIC</span>
+                            <h3 class="video-title">二重跳び</h3>
+                            <p class="video-desc">【跳躍力・連続ジャンプ】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 13 -->
+                    <div class="video-card" data-category="speed basic"
+                        onclick="window.open('https://youtu.be/m3KXvLAo8Rg', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/m3KXvLAo8Rg/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">SPEED / BASIC</span>
+                            <h3 class="video-title">プランク</h3>
+                            <p class="video-desc">【瞬発力・速度維持率】</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 14 -->
+                    <div class="video-card" data-category="speed basic"
+                        onclick="window.open('https://youtu.be/2w9w0xXjfNw', '_blank')">
+                        <div class="video-thumbnail"
+                            style="background-image: url('https://img.youtube.com/vi/2w9w0xXjfNw/maxresdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-category">SPEED / BASIC</span>
+                            <h3 class="video-title">膝蹴りスキップ</h3>
+                            <p class="video-desc">【瞬発力・最高速度】</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Enhanced filtering script with checks for partial matches
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const videoCards = document.querySelectorAll('.video-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active to clicked
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                videoCards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (filter === 'all' || category.includes(filter)) {
+                        card.style.display = 'block';
+                        // Basic animation for re-appearing
+                        card.style.opacity = '0';
+                        setTimeout(() => card.style.opacity = '1', 50);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

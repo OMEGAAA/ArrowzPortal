@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEEKLY ADMIN | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Admin specific styles */
+        body {
+            cursor: auto !important;
+        }
+
+        .admin-section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .card-editor {
+            background: #111;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-secondary);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: var(--accent-color);
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="news_admin.html" class="nav-link">NEWS ADMIN</a></li>
+                <li class="nav-item"><a href="ranking_admin.html" class="nav-link">RANKING ADMIN</a></li>
+                <li class="nav-item"><a href="weekly_admin.html" class="nav-link">WEEKLY ADMIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <h2 class="section-title">WEEKLY ADMIN</h2>
+                <p style="margin-bottom: 2rem; color: #888;">Update the content for "THIS WEEK'S ARROWZ".</p>
+
+                <!-- MENU EDITOR -->
+                <div class="card-editor">
+                    <h3>1. THIS WEEK'S MENU</h3>
+                    <label class="form-label">DESCRIPTION (HTML Allowed)</label>
+                    <textarea id="menu-desc" class="form-textarea"></textarea>
+
+                    <label class="form-label">BUTTON TEXT</label>
+                    <input type="text" id="menu-btn" class="form-input">
+                </div>
+
+                <!-- THEME EDITOR -->
+                <div class="card-editor">
+                    <h3>2. MONTHLY THEME</h3>
+                    <label class="form-label">DESCRIPTION (HTML Allowed)</label>
+                    <textarea id="theme-desc" class="form-textarea"></textarea>
+                </div>
+
+                <!-- SCHEDULE EDITOR -->
+                <div class="card-editor">
+                    <h3>3. CLOSED DAYS</h3>
+                    <label class="form-label">DESCRIPTION (HTML Allowed)</label>
+                    <textarea id="schedule-desc" class="form-textarea"></textarea>
+                </div>
+
+                <button id="btn-download" class="btn-action">
+                    DOWNLOAD weekly_data.js
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/weekly_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load existing data
+            if (window.WEEKLY_DATA) {
+                document.getElementById('menu-desc').value = window.WEEKLY_DATA.menu.desc.replace(/<br>/g, '\n');
+                document.getElementById('menu-btn').value = window.WEEKLY_DATA.menu.btnText;
+
+                document.getElementById('theme-desc').value = window.WEEKLY_DATA.theme.desc.replace(/<br>/g, '\n');
+
+                document.getElementById('schedule-desc').value = window.WEEKLY_DATA.schedule.desc.replace(/<br>/g, '\n');
+            }
+
+            document.getElementById('btn-download').addEventListener('click', () => {
+                // Update data object
+                const newData = { ...window.WEEKLY_DATA };
+
+                newData.menu.desc = document.getElementById('menu-desc').value.replace(/\n/g, '<br>');
+                newData.menu.btnText = document.getElementById('menu-btn').value;
+
+                newData.theme.desc = document.getElementById('theme-desc').value.replace(/\n/g, '<br>');
+
+                newData.schedule.desc = document.getElementById('schedule-desc').value.replace(/\n/g, '<br>');
+
+                // Generate JS
+                const content = `window.WEEKLY_DATA = ${JSON.stringify(newData, null, 4)};\n`;
+
+                // Download
+                const blob = new Blob([content], { type: 'text/javascript' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'weekly_data.js';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                alert('File downloaded! Please overwrite js/weekly_data.js to apply changes.');
+            });
+        });
+    </script>
+</body>
+
+</html>

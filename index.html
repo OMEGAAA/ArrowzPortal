@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+
+<body>
+
+    <div class="loader">
+        <div class="loader-text">ARROWZ</div>
+        <div class="loader-bar"></div>
+    </div>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-bg">
+                <div class="hero-slide active" style="background-image: url('images/AA_014.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('images/スプリント写真.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('images/連続ジャンプ写真.jpg');"></div>
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="line line-1">WE ARE</span>
+                    <span class="line line-2">THE <span class="glitch" data-text="ARROWZ">ARROWZ</span></span>
+                </h1>
+                <p class="hero-subtitle">LIMITLESS POTENTIAL // UNSTOPPABLE FORCE</p>
+                <div class="scroll-indicator">
+                    <span>SCROLL</span>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="marquee-section">
+            <div class="marquee-content">
+                <span>SPORTS SCIENCE // PERFORMANCE // LAB & GYM // ARROWZ // SPORTS SCIENCE // PERFORMANCE // LAB & GYM
+                    // ARROWZ //</span>
+                <span>SPORTS SCIENCE // PERFORMANCE // LAB & GYM // ARROWZ // SPORTS SCIENCE // PERFORMANCE // LAB & GYM
+                    // ARROWZ //</span>
+            </div>
+        </section>
+
+        <section id="info" class="section news">
+            <div class="container">
+                <h2 class="section-title" data-text="NOTICE">お知らせ</h2>
+                <div class="news-grid" id="home-news-grid">
+                    <!-- Dynamic content -->
+                </div>
+                <!-- Added View All Button -->
+                <div class="section-footer" style="padding-top: 2rem; text-align: center;">
+                    <a href="news.html" class="btn-link">VIEW ALL</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="homework" class="section about">
+            <div class="container">
+                <h2 class="section-title" data-text="HOMEWORK">宿題動画</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>TRAINING<br>ROUTINE</h3>
+                        <p>Latest homework assignments and training videos to keep your skills sharp. Consistent
+                            practice is the key to victory.</p>
+                        <a href="homework.html" class="btn-primary">WATCH ALL <span class="arrow">→</span></a>
+                    </div>
+                    <div class="about-image">
+                        <img src="images/agility01.jpg" alt="Agility Training"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Ranking Table -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="RANKING">ランキング表</h2>
+                <div class="ranking-wrapper">
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>RANK</th>
+                                <th>NAME</th>
+                                <th>CLASS</th>
+                                <th>SCORE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="home-ranking-body"></tbody>
+                    </table>
+                </div>
+                <div class="ranking-footer" style="text-align: center; margin-top: 2rem;">
+                    <a href="ranking.html" class="btn-primary"
+                        style="text-decoration: none; display: inline-block;">VIEW FULL RANKING <span
+                            class="arrow">→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="ft-results" class="section news">
+            <div class="container">
+                <h2 class="section-title" data-text="FT RESULTS">FT結果</h2>
+                <div class="result-summary-row">
+                    <!-- Mini Summary Card -->
+                    <div class="result-mini-card">
+                        <div class="mini-header">
+                            <span class="mini-label">MONTHLY</span>
+                            <span class="mini-date" id="home-ft-date">—</span>
+                        </div>
+                        <div class="mini-score">
+                            <span class="value" id="home-ft-avg">—</span>
+                            <span class="unit">pts</span>
+                        </div>
+                    </div>
+                    <!-- Mini Ranking List (top 3, dynamically filled) -->
+                    <div class="result-mini-ranking" id="home-mini-ranking"></div>
+                </div>
+                <!-- Added View All Button -->
+                <div class="section-footer" style="padding-top: 2rem; text-align: center;">
+                    <a href="results.html" class="btn-link">VIEW ALL</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="weekly" class="section team">
+            <div class="container">
+                <h2 class="section-title" data-text="WEEKLY">今週のアローズジム</h2>
+                <div class="weekly-grid">
+                    <!-- Card 1: This Week's Menu -->
+                    <article class="weekly-news-card">
+                        <div class="weekly-news-image">
+                            <div class="weekly-icon-wrapper">
+                                <svg viewBox="0 0 24 24" width="60" height="60" stroke="currentColor" stroke-width="1"
+                                    fill="none" class="icon-svg">
+                                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="weekly-news-content">
+                            <span class="weekly-news-category">TRAINING</span>
+                            <h3 class="weekly-news-title">THIS WEEK'S MENU</h3>
+                            <p class="weekly-news-desc">Week 1-3: Training / Week 4: FT</p>
+                            <a href="menu.html" class="weekly-news-btn">CHECK</a>
+                        </div>
+                    </article>
+
+                    <!-- Card 2: Monthly Theme -->
+                    <article class="weekly-news-card">
+                        <div class="weekly-news-image">
+                            <div class="weekly-icon-wrapper">
+                                <svg viewBox="0 0 24 24" width="60" height="60" stroke="currentColor" stroke-width="1"
+                                    fill="none" class="icon-svg">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="weekly-news-content">
+                            <span class="weekly-news-category">THEME</span>
+                            <h3 class="weekly-news-title">MONTHLY THEME</h3>
+                            <p class="weekly-news-desc">2月の強化テーマ: AGILITY</p>
+                            <a href="theme.html" class="weekly-news-btn">CHECK</a>
+                        </div>
+                    </article>
+
+                    <!-- Card 3: This Month's Closed Days -->
+                    <article class="weekly-news-card">
+                        <div class="weekly-news-image">
+                            <div class="weekly-icon-wrapper">
+                                <svg viewBox="0 0 24 24" width="60" height="60" stroke="currentColor" stroke-width="1"
+                                    fill="none" class="icon-svg">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="weekly-news-content">
+                            <span class="weekly-news-category">SCHEDULE</span>
+                            <h3 class="weekly-news-title">CLOSED DAYS</h3>
+                            <p class="weekly-news-desc">今月の休館日</p>
+                            <a href="schedule.html" class="weekly-news-btn">CHECK</a>
+                        </div>
+                    </article>
+
+                    <!-- Card 4: Arrowz Net -->
+                    <article class="weekly-news-card">
+                        <div class="weekly-news-image">
+                            <div class="weekly-icon-wrapper">
+                                <svg viewBox="0 0 24 24" width="60" height="60" stroke="currentColor" stroke-width="1"
+                                    fill="none" class="icon-svg">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path
+                                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10 15.3 15.3 0 0 1 4-10z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="weekly-news-content">
+                            <span class="weekly-news-category">MEMBER</span>
+                            <h3 class="weekly-news-title">ARROWZ NET</h3>
+                            <p class="weekly-news-desc">会員マイページ</p>
+                            <a href="https://sports-science.jp/member/auth/login?ReturnUrl=%2Fmember%2F"
+                                class="weekly-news-btn">LOGIN</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/ranking_data.js"></script>
+    <script src="js/news_data.js"></script>
+    <script src="js/news_manager.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        (function () {
+            const data = window.RANKING_DATA || [];
+            // Sort by TOTAL score descending
+            const sorted = [...data].sort((a, b) => (b.score || 0) - (a.score || 0));
+
+            // --- Mini FT card (top 3) ---
+            const miniEl = document.getElementById('home-mini-ranking');
+            if (miniEl) {
+                sorted.slice(0, 3).forEach((d, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'mini-rank-item';
+                    div.innerHTML = `<span class="rank">${String(i + 1).padStart(2, '0')}</span><span class="name">${d.name}</span><span class="score">${(d.score || 0).toFixed(1)}</span>`;
+                    miniEl.appendChild(div);
+                });
+            }
+            // Average score
+            const avgEl = document.getElementById('home-ft-avg');
+            if (avgEl && sorted.length) {
+                const avg = sorted.reduce((s, d) => s + (d.score || 0), 0) / sorted.length;
+                avgEl.textContent = avg.toFixed(1);
+            }
+            // Date
+            const dateEl = document.getElementById('home-ft-date');
+            if (dateEl) {
+                const now = new Date();
+                dateEl.textContent = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
+            }
+
+            // --- Ranking table (top 10) ---
+            const tbody = document.getElementById('home-ranking-body');
+            if (tbody) {
+                sorted.slice(0, 10).forEach((d, i) => {
+                    const tr = document.createElement('tr');
+                    if (i < 3) tr.className = 'rank-' + (i + 1);
+                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${(d.score || 0).toFixed(1)}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // --- News Data Logic ---
+            // Use NewsManager if available, otherwise fallback (though NewsManager handles fallback)
+            const newsData = window.NewsManager ? window.NewsManager.getNews() : (window.NEWS_DATA || []);
+            const newsGrid = document.getElementById('home-news-grid');
+            if (newsGrid && newsData.length) {
+                // Show top 3
+                newsData.slice(0, 3).forEach(item => {
+                    const article = document.createElement('article');
+                    article.className = 'news-card';
+
+                    // Use item.imageData if available, otherwise fallback to class
+                    const bgStyle = item.imageData ? `background-image: url('${item.imageData}')` : '';
+
+                    article.innerHTML = `
+                        <a href="news_detail.html?id=${item.id}" style="display:block; text-decoration:none; color:inherit; height:100%;">
+                            <div class="news-image ${item.imageClass}" style="${bgStyle}"></div>
+                            <div class="news-content">
+                                <span class="news-date">${item.date}</span>
+                                <span class="news-category">${item.category}</span>
+                                <h3 class="news-title">${item.title}</h3>
+                                <p class="news-excerpt" style="font-size: 0.9rem; color: #888; margin-top: 0.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${item.excerpt}</p>
+                            </div>
+                        </a>
+                    `;
+                    newsGrid.appendChild(article);
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>

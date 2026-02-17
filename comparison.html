@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全国比較ツール | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        /* ===== Comparison Page Specific ===== */
+        .comp-grid {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 980px) {
+            .comp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comp-card {
+            background-color: #0a0a0a;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            padding: 2rem;
+            transition: border-color 0.3s;
+        }
+
+        .comp-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .comp-card h2 {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .comp-mini {
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .comp-label {
+            display: block;
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .comp-card input,
+        .comp-card select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.8rem 1rem;
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .comp-card input:focus,
+        .comp-card select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .comp-card select {
+            color: var(--text-color);
+            background: #0a0a0a;
+        }
+
+        .comp-card select option {
+            color: #000;
+            background: #fff;
+        }
+
+        .comp-row2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 720px) {
+            .comp-row2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Buttons */
+        .comp-btns {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .comp-btn {
+            appearance: none;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-color);
+            padding: 0.8rem 1.2rem;
+            font-family: var(--font-primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .comp-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(204, 255, 0, 0.05);
+        }
+
+        .comp-btn.primary {
+            border-color: var(--accent-color);
+            color: var(--bg-color);
+            background: var(--accent-color);
+        }
+
+        .comp-btn.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        @media (max-width: 720px) {
+            .comp-btns {
+                position: sticky;
+                bottom: 12px;
+                padding: 0.8rem;
+                background: rgba(5, 5, 5, 0.9);
+                border: 1px solid var(--border-color);
+                backdrop-filter: blur(10px);
+                z-index: 5;
+            }
+        }
+
+        /* Input List */
+        .comp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .comp-item {
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.8rem 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .comp-item:hover {
+            border-color: rgba(204, 255, 0, 0.3);
+        }
+
+        .comp-itemTop {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        .comp-itemName {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .comp-itemMeta {
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .comp-itemGrid {
+            display: grid;
+            grid-template-columns: 1fr 160px;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+            align-items: center;
+        }
+
+        @media (max-width: 520px) {
+            .comp-itemGrid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Warning */
+        .comp-warn {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255, 107, 107, 0.35);
+            background: rgba(255, 107, 107, 0.08);
+            color: var(--text-muted);
+            font-family: var(--font-secondary);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .comp-note {
+            margin-top: 1rem;
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.7;
+        }
+
+        /* Result badges */
+        .comp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+            font-family: var(--font-secondary);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .comp-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .comp-good {
+            background: #ccff00;
+        }
+
+        .comp-mid {
+            background: #f5c451;
+        }
+
+        .comp-low {
+            background: #ff6b6b;
+        }
+
+        .comp-bar {
+            margin-top: 0.5rem;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .comp-barFill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-color) 0%, rgba(204, 255, 0, 0.5) 100%);
+            transition: width 0.35s ease;
+        }
+
+        .comp-tagRow {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .comp-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-muted);
+            font-family: var(--font-secondary);
+            font-size: 0.75rem;
+        }
+
+        .comp-tag b {
+            color: var(--text-color);
+        }
+
+        .comp-hr {
+            height: 1px;
+            background: var(--border-color);
+            margin: 1rem 0;
+        }
+
+        .comp-deltaPos {
+            color: #ccff00;
+            font-weight: 700;
+        }
+
+        .comp-deltaNeg {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+
+        /* Result details */
+        details.comp-res {
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.8rem 1rem;
+            transition: border-color 0.3s;
+        }
+
+        details.comp-res:hover {
+            border-color: rgba(204, 255, 0, 0.3);
+        }
+
+        details.comp-res+details.comp-res {
+            margin-top: 0.8rem;
+        }
+
+        details.comp-res summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        details.comp-res summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .comp-sumLeft {
+            min-width: 240px;
+            flex: 1;
+        }
+
+        .comp-sumName {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .comp-sumSmall {
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+        }
+
+        .comp-sumRight {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .comp-scoreNum {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        /* Radar */
+        .comp-radarWrap {
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+        }
+
+        .comp-radarTop {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        #radar {
+            width: 100%;
+            height: 280px;
+            display: block;
+            margin-top: 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Training */
+        .comp-trainBox {
+            margin-top: 1.5rem;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+        }
+
+        .comp-trainTitle {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comp-trainItem {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .comp-trainName {
+            font-family: var(--font-primary);
+            font-weight: 700;
+        }
+
+        .comp-trainMeta {
+            font-family: var(--font-secondary);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+        }
+
+        .comp-trainUl {
+            margin: 0.5rem 0 0 1.2rem;
+            color: var(--text-muted);
+            font-family: var(--font-secondary);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            list-style: disc;
+        }
+
+        .comp-tools {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .comp-tools>* {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="COMPARISON">COMPARISON</h2>
+                <p
+                    style="font-family: var(--font-secondary); color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">
+                    性別×学年を選んで、全種目をまとめて入力 → 一括で全国比較
+                </p>
+
+                <div class="comp-grid">
+                    <!-- Input Side -->
+                    <section class="comp-card">
+                        <h2>INPUT</h2>
+
+                        <div class="comp-row2">
+                            <div>
+                                <label class="comp-label">性別</label>
+                                <select id="sex">
+                                    <option value="M">男性</option>
+                                    <option value="F">女性</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="comp-label">学年（全国比較）</label>
+                                <select id="grade"></select>
+                            </div>
+                        </div>
+
+                        <div class="comp-row2">
+                            <div>
+                                <label class="comp-label">表示カテゴリ</label>
+                                <select id="filterCat"></select>
+                            </div>
+                            <div>
+                                <label class="comp-label">ソート</label>
+                                <select id="sortMode">
+                                    <option value="score_desc">スコア高い順</option>
+                                    <option value="top_asc">上位％小さい順</option>
+                                    <option value="cat_then_score">カテゴリ→スコア</option>
+                                    <option value="input_order">入力順</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="comp-tools">
+                            <button class="comp-btn" id="fillDemoBtn">DEMO INPUT</button>
+                            <button class="comp-btn" id="clearAllBtn">CLEAR ALL</button>
+                        </div>
+
+                        <h2 style="margin-top: 1.5rem;">METRICS</h2>
+                        <div class="comp-mini">未入力の種目は自動でスキップします。</div>
+                        <div id="inputList" class="comp-list"></div>
+
+                        <div class="comp-btns">
+                            <button class="comp-btn primary" id="calcAllBtn">一括で比較する</button>
+                            <button class="comp-btn" id="resetBtn">リセット</button>
+                        </div>
+
+                        <div class="comp-warn" id="warnBox"></div>
+
+                        <div class="comp-note">
+                            ・「低いほど良い（秒など）」は内部で反転し、<b>良いほどZがプラス</b>になるよう統一。<br>
+                            ・<b>上位％</b>は「あなたより上（より良い人）が何％いるか」。<b>小さいほど良い</b>。<br>
+                            ・バー/レーダーは見やすさのため <b>スコア＝100−上位％</b> を使用。
+                        </div>
+                    </section>
+
+                    <!-- Results Side -->
+                    <section class="comp-card">
+                        <h2>RESULTS</h2>
+                        <div class="comp-mini" id="bucketText">—</div>
+
+                        <div class="comp-radarWrap" id="radarWrap" style="display:none">
+                            <div class="comp-radarTop">
+                                <div class="comp-trainTitle">RADAR CHART</div>
+                                <div class="comp-mini">0〜100（大きいほど良い）</div>
+                            </div>
+                            <canvas id="radar" width="900" height="420" aria-label="レーダーチャート"></canvas>
+                            <div class="comp-mini" id="radarHint" style="margin-top:0.5rem">—</div>
+                        </div>
+
+                        <div class="comp-trainBox" id="trainBox" style="display:none">
+                            <div class="comp-trainTitle">TRAINING RECOMMENDATIONS</div>
+                            <div class="comp-mini">低かった3種目を伸ばすトレーニング</div>
+                            <div id="trainList"></div>
+                        </div>
+
+                        <div class="comp-tagRow" id="summaryTags" style="margin-top:1rem"></div>
+                        <div class="comp-hr"></div>
+
+                        <div id="resultEmpty" class="comp-mini">まだ計算していません</div>
+                        <div id="resultList" style="display:none"></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/comparison.js"></script>
+</body>
+
+</html>

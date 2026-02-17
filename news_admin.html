@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS ADMIN | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Admin specific styles */
+        body {
+            cursor: auto !important;
+        }
+
+        .admin-section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .admin-list {
+            margin-top: 3rem;
+        }
+
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-item-info {
+            flex-grow: 1;
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+        }
+
+        .btn-edit:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        .btn-cancel {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            padding: 1rem;
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            width: 100%;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .preview-box {
+            border: 1px dashed var(--border-color);
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link">HOME</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link">NEWS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <h2 class="section-title">POST NEWS</h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+                    <!-- Post Form -->
+                    <div class="post-form">
+                        <div class="form-group">
+                            <label class="form-label">DATE</label>
+                            <input type="text" id="post-date" class="form-input" placeholder="YYYY.MM.DD">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">CATEGORY</label>
+                            <select id="post-category" class="form-select">
+                                <option value="INFO">INFO</option>
+                                <option value="MAINTENANCE">MAINTENANCE</option>
+                                <option value="IMPORTANT">IMPORTANT</option>
+                                <option value="EVENT">EVENT</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">TITLE</label>
+                            <input type="text" id="post-title" class="form-input" placeholder="Enter title...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">EXCERPT (Summary)</label>
+                            <textarea id="post-excerpt" class="form-textarea" style="min-height: 80px;"
+                                placeholder="Enter short summary..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">BODY (Full Content)</label>
+                            <!-- Body Image Inserter -->
+                            <div
+                                style="background: #222; padding: 0.5rem; border: 1px solid #333; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="font-size: 0.8rem; color: #888;">Insert Image:</span>
+                                <input type="file" id="body-image-file" accept="image/*"
+                                    style="font-size: 0.8rem; color: #fff; border: none; background: transparent; padding: 0;">
+                                <button id="btn-insert-image" type="button" class="btn-primary"
+                                    style="padding: 0.2rem 0.5rem; font-size: 0.7rem; background-color: #444; border: none; margin-left: auto;">INSERT
+                                    TO BODY</button>
+                            </div>
+                            <textarea id="post-body" class="form-textarea" style="min-height: 300px;"
+                                placeholder="Enter full article content... (HTML allowed)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">IMAGE STYLE (Default)</label>
+                            <select id="post-image" class="form-select">
+                                <option value="news-1">Style 1 (Jump)</option>
+                                <option value="news-2">Style 2 (Dark Grey)</option>
+                                <option value="news-3">Style 3 (Light Grey)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="border: 1px dashed var(--border-color); padding: 1rem;">
+                            <label class="form-label">OR UPLOAD IMAGE (Max 800px width)</label>
+                            <input type="file" id="post-file" accept="image/*" class="form-input"
+                                style="padding-top: 0.5rem;">
+                            <div id="image-preview" class="preview-box"
+                                style="display: none; height: 150px; background-size: cover; background-position: center; margin-top: 1rem;">
+                            </div>
+                            <small style="color: #666; display: block; margin-top: 0.5rem;">* Uploading an image will
+                                override the style selection.</small>
+                        </div>
+
+                        <button id="btn-post" class="btn-primary"
+                            style="width: 100%; justify-content: center; margin-top: 1rem;">
+                            POST ARTICLE
+                        </button>
+                        <button id="btn-cancel-edit" class="btn-cancel">
+                            CANCEL EDIT
+                        </button>
+                    </div>
+
+                    <!-- Right Column: Preview & List -->
+                    <div class="right-column">
+                        <!-- Preview Section -->
+                        <div class="preview-section" style="margin-bottom: 3rem;">
+                            <h3>PREVIEW</h3>
+                            <p style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">* This is how the card will
+                                look on the site.</p>
+                            <div id="card-preview" class="news-card"
+                                style="max-width: 400px; margin: 0 auto; pointer-events: none;">
+                                <!-- Dynamic Preview Content -->
+                                <div class="news-image news-1"></div>
+                                <div class="news-content">
+                                    <span class="news-date">YYYY.MM.DD</span>
+                                    <span class="news-category">INFO</span>
+                                    <h3 class="news-title">Title...</h3>
+                                    <p class="news-excerpt">Excerpt...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- List of Existing Posts -->
+                        <div class="current-posts">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                <h3>CURRENT POSTS</h3>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button id="btn-copy" class="btn-primary"
+                                        style="background-color: #333; color: white; border: 1px solid #555; padding: 0.5rem 1rem; font-size: 0.8rem;">
+                                        COPY CODE
+                                    </button>
+                                    <button id="btn-download" class="btn-primary"
+                                        style="background-color: var(--accent-color); color: black; border: none; padding: 0.5rem 1rem; font-size: 0.8rem;">
+                                        DOWNLOAD
+                                    </button>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">
+                                * After editing, download this file (or copy code) and overwrite
+                                <code>js/news_data.js</code> to update the
+                                public site.
+                            </p>
+                            <div id="admin-news-list">
+                                <!-- Dynamic Content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/news_data.js"></script>
+    <script src="js/news_manager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                let currentImageData = null;
+                let editingId = null;
+
+                // Set default date to today
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+                document.getElementById('post-date').value = dateStr;
+
+                renderNewsList();
+                updatePreview(); // Initial preview
+
+                // Inputs for preview
+                const inputs = ['post-date', 'post-category', 'post-title', 'post-excerpt', 'post-body', 'post-image'];
+                inputs.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', updatePreview);
+                        el.addEventListener('change', updatePreview);
+                    } else {
+                        console.warn(`Element with ID ${id} not found.`);
+                    }
+                });
+
+                // File Input Change
+                document.getElementById('post-file').addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const img = new Image();
+                        img.onload = function () {
+                            // Resize logic
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+
+                            const maxWidth = 800;
+                            let width = img.width;
+                            let height = img.height;
+
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            // Compress to JPEG 0.7 quality
+                            currentImageData = canvas.toDataURL('image/jpeg', 0.7);
+
+                            // Show preview in uploaded box (optional, keeping original behavior)
+                            const previewBox = document.getElementById('image-preview');
+                            previewBox.style.display = 'block';
+                            previewBox.style.backgroundImage = `url(${currentImageData})`;
+                            previewBox.textContent = '';
+
+                            // Update Main Preview Card
+                            updatePreview();
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                function updatePreview() {
+                    const date = document.getElementById('post-date').value || 'YYYY.MM.DD';
+                    const category = document.getElementById('post-category').value || 'INFO';
+                    const title = document.getElementById('post-title').value || 'Title...';
+                    const excerpt = document.getElementById('post-excerpt').value || 'Excerpt...';
+                    const body = document.getElementById('post-body').value || '';
+                    const imageClass = document.getElementById('post-image').value;
+
+                    const cardPreview = document.getElementById('card-preview');
+                    const bgStyle = currentImageData ? `background-image: url('${currentImageData}')` : '';
+
+                    // If currentImageData is null, we rely on imageClass. If it's set, we override.
+                    let imageDivHtml = `<div class="news-image ${imageClass}" style="${bgStyle}"></div>`;
+
+                    cardPreview.innerHTML = `
+                        ${imageDivHtml}
+                        <div class="news-content">
+                            <span class="news-date">${date}</span>
+                            <span class="news-category">${category}</span>
+                            <h3 class="news-title">${title}</h3>
+                            <p class="news-excerpt" style="font-size: 0.9rem; color: #888; margin-top: 0.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${excerpt}</p>
+                        </div>
+                    `;
+                }
+
+                // Post/Update Button Click
+                document.getElementById('btn-post').addEventListener('click', () => {
+                    const date = document.getElementById('post-date').value;
+                    const category = document.getElementById('post-category').value;
+                    const title = document.getElementById('post-title').value;
+                    const excerpt = document.getElementById('post-excerpt').value;
+                    const body = document.getElementById('post-body').value;
+                    const imageClass = document.getElementById('post-image').value;
+
+                    if (!title || !excerpt) {
+                        alert('Please fill in Title and Excerpt.');
+                        return;
+                    }
+
+                    const newItem = {
+                        date,
+                        category,
+                        title,
+                        excerpt,
+                        body: body || excerpt, // Fallback to excerpt if body is empty
+                        imageClass,
+                        imageData: currentImageData // Add base64 data if available
+                    };
+
+                    if (editingId) {
+                        // Update existing
+                        if (NewsManager.updateNews(editingId, newItem)) {
+                            alert('News updated! Don\'t forget to DOWNLOAD and overwrite news_data.js.');
+                        } else {
+                            alert('Error: Could not find item to update.');
+                        }
+                    } else {
+                        // Create new
+                        NewsManager.addNews(newItem);
+                        alert('News posted! Don\'t forget to DOWNLOAD and overwrite news_data.js.');
+                    }
+
+                    resetForm();
+                    renderNewsList();
+                    updatePreview();
+                });
+
+                // Cancel Edit Button
+                document.getElementById('btn-cancel-edit').addEventListener('click', () => {
+                    resetForm();
+                    updatePreview();
+                });
+
+                function resetForm() {
+                    editingId = null;
+                    document.getElementById('post-title').value = '';
+                    document.getElementById('post-excerpt').value = '';
+                    document.getElementById('post-body').value = '';
+                    document.getElementById('post-file').value = '';
+                    const previewBox = document.getElementById('image-preview');
+                    previewBox.style.display = 'none';
+                    previewBox.style.backgroundImage = '';
+                    currentImageData = null;
+
+                    // Reset buttons
+                    document.getElementById('btn-post').textContent = 'POST ARTICLE';
+                    document.getElementById('btn-cancel-edit').style.display = 'none';
+
+                    // Reset date to today
+                    const today = new Date();
+                    const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+                    document.getElementById('post-date').value = dateStr;
+                }
+
+                // Expose edit function globally
+                window.editNewsItem = function (index) {
+                    const news = NewsManager.getNews();
+                    const item = news[index];
+                    if (!item) return;
+
+                    editingId = item.id;
+
+                    document.getElementById('post-date').value = item.date;
+                    document.getElementById('post-category').value = item.category;
+                    document.getElementById('post-title').value = item.title;
+                    document.getElementById('post-excerpt').value = item.excerpt;
+                    document.getElementById('post-body').value = item.body || item.excerpt;
+                    document.getElementById('post-image').value = item.imageClass || 'news-1';
+
+                    // Handle Image
+                    if (item.imageData) {
+                        currentImageData = item.imageData;
+                        const previewBox = document.getElementById('image-preview');
+                        previewBox.style.display = 'block';
+                        previewBox.style.backgroundImage = `url(${currentImageData})`;
+                    } else {
+                        currentImageData = null;
+                        document.getElementById('image-preview').style.display = 'none';
+                    }
+
+                    // Change button state
+                    document.getElementById('btn-post').textContent = 'UPDATE ARTICLE';
+                    document.getElementById('btn-cancel-edit').style.display = 'block';
+
+                    updatePreview();
+
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+
+                // Body Image Insertion Logic
+                document.getElementById('btn-insert-image').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const fileInput = document.getElementById('body-image-file');
+                    const file = fileInput.files[0];
+                    if (!file) {
+                        alert('Please select an image to insert.');
+                        return;
+                    }
+
+                    // Process image
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const img = new Image();
+                        img.onload = function () {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+
+                            // Resize to max 800px width
+                            const maxWidth = 800;
+                            let width = img.width;
+                            let height = img.height;
+
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            // Get Base64
+                            const base64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                            // Insert into Textarea
+                            const textarea = document.getElementById('post-body');
+                            const imgTag = `<img src="${base64}" style="width: 100%; height: auto; margin: 1rem 0; border-radius: 4px;">`;
+
+                            const start = textarea.selectionStart;
+                            const end = textarea.selectionEnd;
+                            const text = textarea.value;
+
+                            textarea.value = text.substring(0, start) + imgTag + text.substring(end);
+
+                            // Clear input
+                            fileInput.value = '';
+
+                            // Update Preview
+                            updatePreview();
+                            alert('Image inserted into Body!');
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                // Download Button Click
+                document.getElementById('btn-download').addEventListener('click', () => {
+                    const content = NewsManager.getExportJS();
+                    const blob = new Blob([content], { type: 'text/javascript' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'news_data.js';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+
+                // Copy Button Click
+                document.getElementById('btn-copy').addEventListener('click', () => {
+                    const content = NewsManager.getExportJS();
+                    navigator.clipboard.writeText(content).then(() => {
+                        alert('Code copied to clipboard! Paste it into js/news_data.js');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Failed to copy. Please use Download button.');
+                    });
+                });
+
+            } catch (err) {
+                console.error("Admin Page Error:", err);
+                alert("An error occurred initializing the Admin page: " + err.message);
+            }
+        });
+
+        function renderNewsList() {
+            const listEl = document.getElementById('admin-news-list');
+            const news = NewsManager.getNews();
+
+            listEl.innerHTML = '';
+
+            if (news.length === 0) {
+                listEl.innerHTML = '<p style="color: #666;">No posts found.</p>';
+                return;
+            }
+
+            news.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'admin-item';
+                div.innerHTML = `
+                    <div class="admin-item-info">
+                        <div style="color: var(--accent-color); font-size: 0.8rem;">${item.date} | ${item.category}</div>
+                        <div style="font-weight: bold;">${item.title}</div>
+                    </div>
+                    <div>
+                        <button class="btn-edit" onclick="editNewsItem(${index})">EDIT</button>
+                        <button class="btn-delete" onclick="deleteNewsItem(${index})">DELETE</button>
+                    </div>
+                `;
+                listEl.appendChild(div);
+            });
+        }
+
+        // Global function for onclick handler
+        window.deleteNewsItem = function (index) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                NewsManager.deleteNews(index);
+                renderNewsList();
+            }
+        };
+    </script>
+</body>
+
+</html>

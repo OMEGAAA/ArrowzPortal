@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCHEDULE | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: var(--border-color);
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .cal-header {
+            background-color: #1a1a1a;
+            color: var(--text-color);
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-family: var(--font-primary);
+            font-weight: bold;
+        }
+
+        .cal-day {
+            background-color: #050505;
+            min-height: 100px;
+            padding: 0.5rem;
+            font-family: var(--font-secondary);
+            position: relative;
+        }
+
+        .cal-day.closed {
+            background-color: #111;
+        }
+
+        .cal-day.closed::after {
+            content: 'CLOSED';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            color: var(--accent-color);
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            opacity: 0.5;
+            border: 2px solid var(--accent-color);
+            padding: 0.2rem 1rem;
+        }
+
+        .cal-date {
+            font-weight: bold;
+        }
+
+        .cal-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .schedule-list {
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .schedule-date {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            width: 150px;
+        }
+
+        .schedule-desc {
+            font-family: var(--font-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .calendar-grid {
+                display: none;
+                /* Hide calendar on mobile, show list only */
+            }
+
+            .schedule-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="HOME">ホーム</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="NEWS">お知らせ</a></li>
+                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="HOMEWORK">宿題動画</a></li>
+                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="FT RESULTS">FT結果</a></li>
+                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="WEEKLY">今週のアローズジム</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-text="SCHEDULE">SCHEDULE</h2>
+                <h3 style="color: var(--text-color); font-family: var(--font-primary); margin-bottom: 1rem;">FEBRUARY
+                    2026</h3>
+
+                <!-- Simple Calendar Markup for Feb 2026 (Example) -->
+                <div class="calendar-grid">
+                    <div class="cal-header">SUN</div>
+                    <div class="cal-header">MON</div>
+                    <div class="cal-header">TUE</div>
+                    <div class="cal-header">WED</div>
+                    <div class="cal-header">THU</div>
+                    <div class="cal-header">FRI</div>
+                    <div class="cal-header">SAT</div>
+
+                    <!-- Week 1: Feb 1 - 7 -->
+                    <div class="cal-day"><span class="cal-date">1</span></div>
+                    <div class="cal-day"><span class="cal-date">2</span></div>
+                    <div class="cal-day"><span class="cal-date">3</span></div>
+                    <div class="cal-day"><span class="cal-date">4</span></div>
+                    <div class="cal-day"><span class="cal-date">5</span></div>
+                    <div class="cal-day"><span class="cal-date">6</span></div>
+                    <div class="cal-day"><span class="cal-date">7</span></div>
+
+                    <!-- Week 2: Feb 8 - 14 -->
+                    <div class="cal-day"><span class="cal-date">8</span></div>
+                    <div class="cal-day"><span class="cal-date">9</span></div>
+                    <div class="cal-day"><span class="cal-date">10</span></div>
+                    <div class="cal-day closed"><span class="cal-date">11</span>
+                        <div class="cal-info">祝日休館</div>
+                    </div>
+                    <div class="cal-day"><span class="cal-date">12</span></div>
+                    <div class="cal-day"><span class="cal-date">13</span></div>
+                    <div class="cal-day"><span class="cal-date">14</span></div>
+
+                    <!-- Week 3: Feb 15 - 21 -->
+                    <div class="cal-day"><span class="cal-date">15</span></div>
+                    <div class="cal-day"><span class="cal-date">16</span></div>
+                    <div class="cal-day"><span class="cal-date">17</span></div>
+                    <div class="cal-day"><span class="cal-date">18</span></div>
+                    <div class="cal-day"><span class="cal-date">19</span></div>
+                    <div class="cal-day"><span class="cal-date">20</span></div>
+                    <div class="cal-day"><span class="cal-date">21</span></div>
+
+                    <!-- Week 4: Feb 22 - 28 -->
+                    <div class="cal-day"><span class="cal-date">22</span></div>
+                    <div class="cal-day closed"><span class="cal-date">23</span>
+                        <div class="cal-info">祝日休館</div>
+                    </div> <!-- Assuming 23rd is closed -->
+                    <div class="cal-day"><span class="cal-date">24</span></div>
+                    <div class="cal-day"><span class="cal-date">25</span></div>
+                    <div class="cal-day"><span class="cal-date">26</span></div>
+                    <div class="cal-day"><span class="cal-date">27</span></div>
+                    <div class="cal-day"><span class="cal-date">28</span></div>
+                </div>
+
+                <div class="schedule-list">
+                    <h3 style="color: var(--accent-color); font-family: var(--font-primary); margin-bottom: 1.5rem;">
+                        今月の休館日</h3>
+                    <div class="schedule-item">
+                        <div class="schedule-date">02.11</div>
+                        <div class="schedule-desc">
+                            <strong>建国記念の日</strong><br>
+                            祝日のため休館となります。
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-date">02.23</div>
+                        <div class="schedule-desc">
+                            <strong>天皇誕生日</strong><br>
+                            祝日のため休館となります。
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo"><a
+                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
+                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://line.me/R/ti/p/@322ctrff?ts=03251611&oat_content=url" target="_blank">LINE</a>
+                <a href="https://www.instagram.com/arrowz_tochigi/" target="_blank">INSTAGRAM</a>
+                <a href="https://www.youtube.com/@%E3%82%A2%E3%83%AD%E3%83%BC%E3%82%BA%E6%A0%83%E6%9C%A8"
+                    target="_blank">YOUTUBE</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
