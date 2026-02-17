@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const testSelect = document.getElementById('test-select');
 
     let currentCategory = 'OVERALL';
-    let currentTest = 'TOTAL';
+    let currentTest = 'vmax'; // Default to start with
 
     // Sort: desc = higher is better, asc = lower is better
     const SORT_CONFIG = {
-        'TOTAL': { dir: 'desc', label: 'TOTAL SCORE' },
+        // 'TOTAL' removed
         'vmax': { dir: 'desc', label: '最高速度 (km/h)' },
         'vdec': { dir: 'desc', label: '速度維持率' },
         'sprint_score': { dir: 'desc', label: 'スプリントスコア' },
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredData = fullRankingData.filter(item => item.category === currentCategory);
         }
 
-        const config = SORT_CONFIG[currentTest] || SORT_CONFIG['TOTAL'];
+        const config = SORT_CONFIG[currentTest] || SORT_CONFIG['sprint_score'];
         const isDesc = config.dir === 'desc';
 
         filteredData = filteredData.filter(item => {

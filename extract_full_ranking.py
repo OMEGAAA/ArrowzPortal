@@ -89,11 +89,14 @@ for index, row in df.iterrows():
         except:
             pass
 
-    # Total Score (Legacy: Use Height)
-    total_score = scores.get('height', 0)
-    scores['TOTAL'] = total_score
+    # Total Score removed
+    # total_score = scores.get('height', 0)
+    # scores['TOTAL'] = total_score
     
-    if has_data and total_score > 0:
+    # Use vmax (Max Speed) as the main score for sorting
+    main_score = scores.get('vmax', 0)
+
+    if has_data:
         all_records.append({
             "name": name.strip(),
             "class": class_name.strip() if class_name else grade.strip(),
@@ -101,7 +104,7 @@ for index, row in df.iterrows():
             "grade": grade.strip(),
             "gender": gender.strip(),
             "test_date": test_date,
-            "score": total_score,
+            "score": main_score, # Use vmax for internal sorting
             "scores": scores
         })
 

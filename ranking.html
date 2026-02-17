@@ -226,9 +226,9 @@
                     <div class="test-select-wrapper">
                         <select id="test-select"
                             style="padding: 0.5rem; background: #000; color: #fff; border: 1px solid #333; font-family: 'Oswald', sans-serif;">
-                            <option value="TOTAL">TOTAL SCORE</option>
+                            <!-- <option value="TOTAL">TOTAL SCORE</option> Removed -->
                             <optgroup label="瞬発力">
-                                <option value="vmax">最高速度 (km/h)</option>
+                                <option value="vmax" selected>最高速度 (km/h)</option>
                                 <option value="vdec">速度維持率</option>
                                 <option value="sprint_score">スプリントスコア</option>
                                 <option value="pro">切り返し走 (sec)</option>
@@ -262,7 +262,7 @@
                                 <th>NAME</th>
                                 <th>CLASS</th>
                                 <th>CATEGORY</th>
-                                <th style="text-align: right;">TOTAL SCORE</th>
+                                <th style="text-align: right;">SCORE</th>
                             </tr>
                         </thead>
                         <tbody id="ranking-body">
