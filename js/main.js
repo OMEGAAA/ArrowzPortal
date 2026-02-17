@@ -17,17 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const navList = document.querySelector(".nav-list");
 
     menuToggle.addEventListener("click", () => {
-        navList.style.display = navList.style.display === "flex" ? "none" : "flex";
-        if (navList.style.display === "flex") {
-            navList.style.flexDirection = "column";
-            navList.style.position = "absolute";
-            navList.style.top = "100%";
-            navList.style.left = "0";
-            navList.style.width = "100%";
-            navList.style.backgroundColor = "var(--bg-color)";
-            navList.style.padding = "2rem";
-            navList.style.borderBottom = "1px solid var(--border-color)";
-        }
+        const nav = document.querySelector(".nav");
+        nav.classList.toggle("nav-active");
+        menuToggle.classList.toggle("active"); // Optional for animating the hamburger to X
     });
 
     // Scroll Reveal
