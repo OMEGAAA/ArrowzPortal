@@ -25,9 +25,9 @@ const METRICS = {
 
 /* 2) Training DB */
 const TRAINING_DB = {
-    vmax: [`<a href="https://youtu.be/2w9w0xXjfNw" target="_blank">膝蹴りスキップ</a>`],
-    vdec: [`<a href="https://youtu.be/m3KXvLAo8Rg" target="_blank">プランク</a>`],
-    sprint_score: [`<a href="https://youtu.be/2w9w0xXjfNw" target="_blank">膝蹴りスキップ</a>`, `<a href="https://youtu.be/m3KXvLAo8Rg" target="_blank">プランク</a>`],
+    vmax: [`<a href="https://youtu.be/2w9w0xXjfNw" target="_blank">膝蹴りスキップ</a>`, "腕振りドリル：その場で30秒×3セット（肘を引く意識）。", "変形ダッシュ：うつ伏せ・長座からスタート（反応練習）。"],
+    vdec: [`<a href="https://youtu.be/m3KXvLAo8Rg" target="_blank">プランク</a>`, "バーピージャンプ：20秒全力＋10秒休×8セット（タバタ式）。"],
+    sprint_score: [`<a href="https://youtu.be/2w9w0xXjfNw" target="_blank">膝蹴りスキップ</a>`, `<a href="https://youtu.be/m3KXvLAo8Rg" target="_blank">プランク</a>`, "腕振り＋もも上げ：その場で20秒全力×3セット。"],
     pro: ["減速ドリル：5mで止まる×8回（左右）／腰を落とす前に胸を立てる。", "ミラードリル：15秒×6本（休45秒）／相手を見て反応。", "Run-Shuffle-Run：10m→シャッフル→10m×6本（休60秒）。"],
     dva: ["ボール落下キャッチ：10回×3セット（片手も）。", "指追い：左右30秒×3本（頭固定）。", "見る→反応：合図でタップ（音/合図）30秒×4本。"],
     eye: ["上下左右サッケード：各20回×2セット（頭固定）。", "遠近交代：近い点→遠い点を交互に30秒×4本。", "8の字追跡：30秒×3本（滑らかに）。"],
@@ -35,13 +35,13 @@ const TRAINING_DB = {
     flash: ["フラッシュカード：10〜20枚×3セット（正確さ優先）。", "ストップウォッチ瞬間読み：10回×3セット。", "数字列（3〜5桁）瞬間記憶：10回×2セット。"],
     arrowz_eye_total: ["弱い視機能2つを抽出して毎日3分。（例：周辺視＋瞬間視）", "観察→反応：30秒×4本（休45秒）を週3回。", "スポーツ観戦：見るポイントを決めて5分（目線移動を意識）。"],
     hand_eye: ["ナンバータッチ：30秒×4本／ミス0を狙う。", "ボール2個キャッチ：10回×3セット（落としてOK）。", "壁当てキャッチ：30秒×4本（休45秒）。"],
-    vj: [`<a href="https://youtu.be/q7nNJizyJf8" target="_blank">連続CMJ</a>`],
-    sj: [`<a href="https://youtu.be/EahCXnDyUV8" target="_blank">バンザイ腸腰筋</a>`, `<a href="https://youtu.be/F4F3FHdnxt8" target="_blank">ヒンジ</a>`],
-    contact_time: [`<a href="https://youtu.be/qJ0GcfYLG8I" target="_blank">ポゴジャンプ</a>`, `<a href="https://youtu.be/IRUk6ZxLzy0" target="_blank">二重跳び</a>`],
-    jump_height: [`<a href="https://youtu.be/Q19RqHF30aM" target="_blank">アンクルホップ</a>`],
-    rj_index: [`<a href="https://youtu.be/Q19RqHF30aM" target="_blank">アンクルホップ</a>`, `<a href="https://youtu.be/qJ0GcfYLG8I" target="_blank">ポゴジャンプ</a>`],
-    broad_jump: [`<a href="https://youtu.be/nVPP58sEzbA" target="_blank">連続立ち幅跳び</a>`, `<a href="https://youtu.be/-nuUayb3wbQ" target="_blank">タックジャンプ</a>`, `<a href="https://youtu.be/xq_f4AgKCp0" target="_blank">膝立ちジャンプ</a>`],
-    stepping: [`<a href="https://youtu.be/60CA1jE37JQ" target="_blank">階段一段昇り降り</a>`, `<a href="https://youtu.be/pIqq_XBPKVc" target="_blank">ラダー</a>`, `<a href="https://youtu.be/63raM20u0NU" target="_blank">カーフレイズ</a>`],
+    vj: [`<a href="https://youtu.be/q7nNJizyJf8" target="_blank">連続CMJ</a>`, "スクワット：フォーム重視で20回×3セット（股関節を使う）。"],
+    sj: [`<a href="https://youtu.be/EahCXnDyUV8" target="_blank">バンザイ腸腰筋</a>`, `<a href="https://youtu.be/F4F3FHdnxt8" target="_blank">ヒンジ</a>`, "椅子座りジャンプ：座った状態から一気にジャンプ 5回×3セット。"],
+    contact_time: [`<a href="https://youtu.be/qJ0GcfYLG8I" target="_blank">ポゴジャンプ</a>`, `<a href="https://youtu.be/IRUk6ZxLzy0" target="_blank">二重跳び</a>`, "縄跳び（前跳び）：1分×3セット（リズミカルに）。"],
+    jump_height: [`<a href="https://youtu.be/Q19RqHF30aM" target="_blank">アンクルホップ</a>`, "ジャンプランジ：左右交互に10回×3セット（深く）。"],
+    rj_index: [`<a href="https://youtu.be/Q19RqHF30aM" target="_blank">アンクルホップ</a>`, `<a href="https://youtu.be/qJ0GcfYLG8I" target="_blank">ポゴジャンプ</a>`, "片足ケンケン：左右20回×2セット（接地短く）。"],
+    broad_jump: [`<a href="https://youtu.be/nVPP58sEzbA" target="_blank">連続立ち幅跳び</a>`, `<a href="https://youtu.be/-nuUayb3wbQ" target="_blank">タックジャンプ</a>`, `<a href="https://youtu.be/xq_f4AgKCp0" target="_blank">膝立ちジャンプ</a>`, "ヒップヒンジ：お尻を引く動作確認 20回×3セット。"],
+    stepping: [`<a href="https://youtu.be/60CA1jE37JQ" target="_blank">階段一段昇り降り</a>`, `<a href="https://youtu.be/pIqq_XBPKVc" target="_blank">ラダー</a>`, `<a href="https://youtu.be/63raM20u0NU" target="_blank">カーフレイズ</a>`, "高速足踏み：その場で10秒全力×5セット（姿勢維持）。"],
 };
 
 /* 3) National DB */
