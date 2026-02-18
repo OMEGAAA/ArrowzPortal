@@ -144,8 +144,8 @@ ul {
 .logo {
     display: flex;
     align-items: center;
-    height: 35px;
-    /* Reduced to prevent overlap */
+    height: 50px;
+    /* Increased from 35px */
 }
 
 .logo a {
