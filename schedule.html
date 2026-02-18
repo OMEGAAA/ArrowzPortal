@@ -194,12 +194,19 @@
 
                 <div class="schedule-list">
                     <h3 style="color: var(--accent-color); font-family: var(--font-primary); margin-bottom: 1.5rem;">
-                        今月の休館日</h3>
+                        今月のスケジュール</h3>
                     <div class="schedule-item">
                         <div class="schedule-date">02.11</div>
                         <div class="schedule-desc">
                             <strong>建国記念の日</strong><br>
                             祝日のため休館となります。
+                        </div>
+                        <div class="calendar-btn-group" style="margin-left: auto; display: flex; gap: 0.5rem;">
+                            <button onclick="addToGoogleCalendar('建国記念の日 (休館)', '20260211', 'アローズジム休館日')"
+                                class="btn-cal"
+                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">Google</button>
+                            <button onclick="downloadIcs('建国記念の日 (休館)', '20260211', 'アローズジム休館日')" class="btn-cal"
+                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">iCal</button>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -208,12 +215,65 @@
                             <strong>天皇誕生日</strong><br>
                             祝日のため休館となります。
                         </div>
+                        <div class="calendar-btn-group" style="margin-left: auto; display: flex; gap: 0.5rem;">
+                            <button onclick="addToGoogleCalendar('天皇誕生日 (休館)', '20260223', 'アローズジム休館日')" class="btn-cal"
+                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">Google</button>
+                            <button onclick="downloadIcs('天皇誕生日 (休館)', '20260223', 'アローズジム休館日')" class="btn-cal"
+                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">iCal</button>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </section>
     </main>
+
+    <script>
+        function addToGoogleCalendar(title, date, details) {
+            // date format: YYYYMMDD
+            // For all-day events, Google Calendar requires end date to be invalid or +1 day?
+            // Actually, dates=20260211/20260212 covers the whole day of 11th.
+            // Let's parse and add one day.
+            const year = date.substring(0, 4);
+            const month = date.substring(4, 6);
+            const day = date.substring(6, 8);
+
+            const startDate = new Date(year, month - 1, day);
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 1);
+
+            const startStr = date;
+            const endStr = endDate.getFullYear() + String(endDate.getMonth() + 1).padStart(2, '0') + String(endDate.getDate()).padStart(2, '0');
+
+            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startStr}/${endStr}&details=${encodeURIComponent(details)}`;
+            window.open(url, '_blank');
+        }
+
+        function downloadIcs(title, date, details) {
+            // Simple ICS generation
+            const icsContent =
+                `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Arrowz Gym//Schedule//EN
+BEGIN:VEVENT
+UID:${date}-${Date.now()}@arrowz.gym
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z
+DTSTART;VALUE=DATE:${date}
+DTEND;VALUE=DATE:${date}
+SUMMARY:${title}
+DESCRIPTION:${details}
+END:VEVENT
+END:VCALENDAR`;
+
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', 'schedule.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 
     <footer class="footer">
         <div class="container footer-content">
