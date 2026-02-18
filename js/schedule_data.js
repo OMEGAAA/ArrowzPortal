@@ -7,6 +7,13 @@ window.SCHEDULE_DATA = [
         "type": "closed"
     },
     {
+        "date": "2026.02.21",
+        "type": "event",
+        "title": "競技特化イベント（陸上/野球）",
+        "description": "イベントが開催",
+        "id": "1771386553563"
+    },
+    {
         "id": "20260223-1",
         "date": "2026.02.23",
         "title": "天皇誕生日",
