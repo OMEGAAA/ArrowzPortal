@@ -138,11 +138,12 @@
         <section class="section">
             <div class="container">
                 <h2 class="section-title" data-text="SCHEDULE">SCHEDULE</h2>
-                <h3 style="color: var(--text-color); font-family: var(--font-primary); margin-bottom: 1rem;">FEBRUARY
-                    2026</h3>
+                <h3 id="current-month-display"
+                    style="color: var(--text-color); font-family: var(--font-primary); margin-bottom: 1rem;">
+                    Loading...</h3>
 
-                <!-- Simple Calendar Markup for Feb 2026 (Example) -->
-                <div class="calendar-grid">
+                <!-- Calendar Grid Container -->
+                <div id="calendar-grid" class="calendar-grid">
                     <div class="cal-header">SUN</div>
                     <div class="cal-header">MON</div>
                     <div class="cal-header">TUE</div>
@@ -150,77 +151,14 @@
                     <div class="cal-header">THU</div>
                     <div class="cal-header">FRI</div>
                     <div class="cal-header">SAT</div>
-
-                    <!-- Week 1: Feb 1 - 7 -->
-                    <div class="cal-day"><span class="cal-date">1</span></div>
-                    <div class="cal-day"><span class="cal-date">2</span></div>
-                    <div class="cal-day"><span class="cal-date">3</span></div>
-                    <div class="cal-day"><span class="cal-date">4</span></div>
-                    <div class="cal-day"><span class="cal-date">5</span></div>
-                    <div class="cal-day"><span class="cal-date">6</span></div>
-                    <div class="cal-day"><span class="cal-date">7</span></div>
-
-                    <!-- Week 2: Feb 8 - 14 -->
-                    <div class="cal-day"><span class="cal-date">8</span></div>
-                    <div class="cal-day"><span class="cal-date">9</span></div>
-                    <div class="cal-day"><span class="cal-date">10</span></div>
-                    <div class="cal-day closed"><span class="cal-date">11</span>
-                        <div class="cal-info">祝日休館</div>
-                    </div>
-                    <div class="cal-day"><span class="cal-date">12</span></div>
-                    <div class="cal-day"><span class="cal-date">13</span></div>
-                    <div class="cal-day"><span class="cal-date">14</span></div>
-
-                    <!-- Week 3: Feb 15 - 21 -->
-                    <div class="cal-day"><span class="cal-date">15</span></div>
-                    <div class="cal-day"><span class="cal-date">16</span></div>
-                    <div class="cal-day"><span class="cal-date">17</span></div>
-                    <div class="cal-day"><span class="cal-date">18</span></div>
-                    <div class="cal-day"><span class="cal-date">19</span></div>
-                    <div class="cal-day"><span class="cal-date">20</span></div>
-                    <div class="cal-day"><span class="cal-date">21</span></div>
-
-                    <!-- Week 4: Feb 22 - 28 -->
-                    <div class="cal-day"><span class="cal-date">22</span></div>
-                    <div class="cal-day closed"><span class="cal-date">23</span>
-                        <div class="cal-info">祝日休館</div>
-                    </div> <!-- Assuming 23rd is closed -->
-                    <div class="cal-day"><span class="cal-date">24</span></div>
-                    <div class="cal-day"><span class="cal-date">25</span></div>
-                    <div class="cal-day"><span class="cal-date">26</span></div>
-                    <div class="cal-day"><span class="cal-date">27</span></div>
-                    <div class="cal-day"><span class="cal-date">28</span></div>
+                    <!-- Days will be injected here -->
                 </div>
 
                 <div class="schedule-list">
                     <h3 style="color: var(--accent-color); font-family: var(--font-primary); margin-bottom: 1.5rem;">
                         今月のスケジュール</h3>
-                    <div class="schedule-item">
-                        <div class="schedule-date">02.11</div>
-                        <div class="schedule-desc">
-                            <strong>建国記念の日</strong><br>
-                            祝日のため休館となります。
-                        </div>
-                        <div class="calendar-btn-group" style="margin-left: auto; display: flex; gap: 0.5rem;">
-                            <button onclick="addToGoogleCalendar('建国記念の日 (休館)', '20260211', 'アローズジム休館日')"
-                                class="btn-cal"
-                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">Google</button>
-                            <button onclick="downloadIcs('建国記念の日 (休館)', '20260211', 'アローズジム休館日')" class="btn-cal"
-                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">iCal</button>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-date">02.23</div>
-                        <div class="schedule-desc">
-                            <strong>天皇誕生日</strong><br>
-                            祝日のため休館となります。
-                        </div>
-                        <div class="calendar-btn-group" style="margin-left: auto; display: flex; gap: 0.5rem;">
-                            <button onclick="addToGoogleCalendar('天皇誕生日 (休館)', '20260223', 'アローズジム休館日')" class="btn-cal"
-                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">Google</button>
-                            <button onclick="downloadIcs('天皇誕生日 (休館)', '20260223', 'アローズジム休館日')" class="btn-cal"
-                                style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">iCal</button>
-                        </div>
+                    <div id="schedule-list-container">
+                        <!-- List items will be injected here -->
                     </div>
                 </div>
 
@@ -228,12 +166,110 @@
         </section>
     </main>
 
+    <script src="js/schedule_data.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            renderCalendar(now.getFullYear(), now.getMonth());
+            renderScheduleList(now.getFullYear(), now.getMonth());
+        });
+
+        function renderCalendar(year, month) {
+            const grid = document.getElementById('calendar-grid');
+            // Clear existing days (keep headers)
+            const headers = grid.querySelectorAll('.cal-header');
+            grid.innerHTML = '';
+            headers.forEach(h => grid.appendChild(h));
+
+            const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+            document.getElementById('current-month-display').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Empty cells for previous month
+            for (let i = 0; i < firstDay; i++) {
+                const div = document.createElement('div');
+                div.className = 'cal-day';
+                div.style.opacity = '0.3';
+                grid.appendChild(div);
+            }
+
+            // Days
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${year}.${String(month + 1).padStart(2, '0')}.${String(d).padStart(2, '0')}`;
+                // Check for events
+                const events = (window.SCHEDULE_DATA || []).filter(item => item.date === dateStr);
+
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'cal-day';
+
+                let dateHtml = `<span class="cal-date">${d}</span>`;
+
+                if (events.length > 0) {
+                    // Prioritize 'closed' type for styling
+                    const isClosed = events.some(e => e.type === 'closed');
+                    if (isClosed) {
+                        dayDiv.classList.add('closed');
+                        // The CSS ::after content 'CLOSED' handles the label
+                        // But if we have other event types, we might want to show them?
+                        // CSS for .closed might obscure other content.
+                        // Let's modify CSS in a separate step if needed. 
+                        // For now, assume 'closed' takes precedence visually.
+                        const closedEvent = events.find(e => e.type === 'closed');
+                        dateHtml += `<div class="cal-info">${closedEvent.title}</div>`;
+                    } else {
+                        // Regular events
+                        events.forEach(e => {
+                            dateHtml += `<div class="cal-info" style="color: var(--accent-color);">${e.title}</div>`;
+                        });
+                    }
+                }
+
+                dayDiv.innerHTML = dateHtml;
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        function renderScheduleList(year, month) {
+            const container = document.getElementById('schedule-list-container');
+            container.innerHTML = '';
+
+            const currentMonthStr = `${year}.${String(month + 1).padStart(2, '0')}`;
+            // Filter events starting with YYYY.MM
+            const events = (window.SCHEDULE_DATA || []).filter(item => item.date.startsWith(currentMonthStr));
+
+            // Sort by date
+            events.sort((a, b) => a.date.localeCompare(b.date));
+
+            if (events.length === 0) {
+                container.innerHTML = '<p>No scheduled events for this month.</p>';
+                return;
+            }
+
+            events.forEach(item => {
+                const dateParts = item.date.split('.');
+                const displayDate = `${dateParts[1]}.${dateParts[2]}`;
+                const dateForCal = item.date.replace(/\./g, ''); // YYYYMMDD
+
+                const div = document.createElement('div');
+                div.className = 'schedule-item';
+                div.innerHTML = `
+                    <div class="schedule-date">${displayDate}</div>
+                    <div class="schedule-desc">
+                        <strong>${item.title}</strong><br>
+                        ${item.description || ''}
+                    </div>
+                    <div class="calendar-btn-group" style="margin-left: auto; display: flex; gap: 0.5rem;">
+                        <button onclick="addToGoogleCalendar('${item.title}', '${dateForCal}', '${item.description || ''}')" class="btn-cal" style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">Google</button>
+                        <button onclick="downloadIcs('${item.title}', '${dateForCal}', '${item.description || ''}')" class="btn-cal" style="background:none; border: 1px solid #333; color: #fff; padding: 0.2rem 0.5rem; cursor: pointer; font-family: var(--font-secondary); font-size: 0.8rem;">iCal</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         function addToGoogleCalendar(title, date, details) {
-            // date format: YYYYMMDD
-            // For all-day events, Google Calendar requires end date to be invalid or +1 day?
-            // Actually, dates=20260211/20260212 covers the whole day of 11th.
-            // Let's parse and add one day.
             const year = date.substring(0, 4);
             const month = date.substring(4, 6);
             const day = date.substring(6, 8);
@@ -250,7 +286,6 @@
         }
 
         function downloadIcs(title, date, details) {
-            // Simple ICS generation
             const icsContent =
                 `BEGIN:VCALENDAR
 VERSION:2.0

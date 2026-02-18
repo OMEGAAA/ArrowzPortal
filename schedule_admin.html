@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCHEDULE ADMIN | ARROWZ栃木ポータルサイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Admin specific styles */
+        body {
+            cursor: auto !important;
+        }
+
+        .admin-section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .admin-list {
+            margin-top: 3rem;
+        }
+
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-item-info {
+            flex-grow: 1;
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+        }
+
+        .btn-edit:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        .btn-cancel {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            padding: 1rem;
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            width: 100%;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html" class="nav-link">HOME</a></li>
+                <li class="nav-item"><a href="schedule.html" class="nav-link">SCHEDULE</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <h2 class="section-title">MANAGE SCHEDULE</h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+                    <!-- Post Form -->
+                    <div class="post-form">
+                        <div class="form-group">
+                            <label class="form-label">DATE (YYYY.MM.DD)</label>
+                            <input type="text" id="post-date" class="form-input" placeholder="2026.02.11">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">TYPE</label>
+                            <select id="post-type" class="form-select">
+                                <option value="closed">CLOSED (休館日)</option>
+                                <option value="event">EVENT (イベント)</option>
+                                <option value="match">MATCH (試合)</option>
+                                <option value="training">TRAINING (特別練習)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">TITLE</label>
+                            <input type="text" id="post-title" class="form-input" placeholder="e.g. 建国記念の日">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Details / Description</label>
+                            <textarea id="post-desc" class="form-textarea" placeholder="e.g. 祝日のため休館となります。"></textarea>
+                        </div>
+
+                        <button id="btn-add" class="btn-primary"
+                            style="width: 100%; justify-content: center; margin-top: 1rem;">
+                            ADD SCHEDULE
+                        </button>
+                        <button id="btn-cancel-edit" class="btn-cancel">
+                            CANCEL EDIT
+                        </button>
+                    </div>
+
+                    <!-- Right Column: List -->
+                    <div class="right-column">
+                        <div class="current-posts">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                <h3>CURRENT SCHEDULE</h3>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button id="btn-download" class="btn-primary"
+                                        style="background-color: var(--accent-color); color: black; border: none; padding: 0.5rem 1rem; font-size: 0.8rem;">
+                                        DOWNLOAD JS
+                                    </button>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">
+                                * After editing, download this file and overwrite <code>js/schedule_data.js</code>.
+                            </p>
+                            <div id="admin-schedule-list">
+                                <!-- Dynamic Content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/schedule_data.js"></script>
+    <script>
+        // Simple Manager Logic embedded or external? External is better.
+        // But for task simplicity, I'll use the definition I just created.
+    </script>
+    <script src="js/schedule_manager.js"></script> <!-- Assuming this exists -->
+
+    <script>
+        let editingId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderList();
+
+            // Set default date
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+            document.getElementById('post-date').value = dateStr;
+
+            // Add/Update Button
+            document.getElementById('btn-add').addEventListener('click', () => {
+                const date = document.getElementById('post-date').value;
+                const type = document.getElementById('post-type').value;
+                const title = document.getElementById('post-title').value;
+                const desc = document.getElementById('post-desc').value;
+
+                if (!date || !title) {
+                    alert('Date and Title are required.');
+                    return;
+                }
+
+                const newItem = {
+                    date,
+                    type,
+                    title,
+                    description: desc
+                };
+
+                if (editingId) {
+                    if (ScheduleManager.update(editingId, newItem)) {
+                        alert('Updated!');
+                    }
+                } else {
+                    ScheduleManager.add(newItem);
+                    alert('Added!');
+                }
+
+                resetForm();
+                renderList();
+            });
+
+            // Cancel Edit
+            document.getElementById('btn-cancel-edit').addEventListener('click', resetForm);
+
+            // Download
+            document.getElementById('btn-download').addEventListener('click', () => {
+                const content = `window.SCHEDULE_DATA = ${JSON.stringify(window.SCHEDULE_DATA || [], null, 4)};`;
+                const blob = new Blob([content], { type: 'text/javascript' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'schedule_data.js';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+
+        function renderList() {
+            const listEl = document.getElementById('admin-schedule-list');
+            const data = (window.SCHEDULE_DATA || []).sort((a, b) => a.date.localeCompare(b.date));
+
+            listEl.innerHTML = '';
+            if (data.length === 0) {
+                listEl.innerHTML = '<p>No schedule items.</p>';
+                return;
+            }
+
+            data.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'admin-item';
+                div.innerHTML = `
+                    <div class="admin-item-info">
+                        <div style="color: var(--accent-color); font-size: 0.8rem;">${item.date} [${item.type.toUpperCase()}]</div>
+                        <div style="font-weight: bold;">${item.title}</div>
+                        <div style="font-size: 0.8rem; color: #888;">${item.description || ''}</div>
+                    </div>
+                    <div>
+                        <button class="btn-edit" onclick="editItem('${item.id}')">EDIT</button>
+                        <button class="btn-delete" onclick="deleteItem(${index})">DELETE</button>
+                    </div>
+                `;
+                listEl.appendChild(div);
+            });
+        }
+
+        window.deleteItem = function (index) {
+            if (confirm('Delete this item?')) {
+                // Since my manager uses splice by index, we must be careful if sorted.
+                // The manager delete uses index. 
+                // But wait, renderList sorts the data for display. This breaks index correspondence.
+                // Let's rely on ID for deletion or sort the MANAGER's data same way.
+                // Better: find index in main array by ID.
+                const data = (window.SCHEDULE_DATA || []).sort((a, b) => a.date.localeCompare(b.date));
+                const item = data[index]; // This is the item from sorted list
+
+                // Find index in real source
+                const realIndex = window.SCHEDULE_DATA.indexOf(item);
+                if (realIndex > -1) {
+                    window.SCHEDULE_DATA.splice(realIndex, 1);
+                    renderList();
+                }
+            }
+        };
+
+        window.editItem = function (id) {
+            const item = (window.SCHEDULE_DATA || []).find(i => i.id === id);
+            if (!item) return;
+
+            editingId = id;
+            document.getElementById('post-date').value = item.date;
+            document.getElementById('post-type').value = item.type;
+            document.getElementById('post-title').value = item.title;
+            document.getElementById('post-desc').value = item.description;
+
+            document.getElementById('btn-add').textContent = 'UPDATE SCHEDULE';
+            document.getElementById('btn-cancel-edit').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        function resetForm() {
+            editingId = null;
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-desc').value = '';
+            document.getElementById('btn-add').textContent = 'ADD SCHEDULE';
+            document.getElementById('btn-cancel-edit').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
