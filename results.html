@@ -148,17 +148,24 @@
             const dateEl = document.getElementById('res-date');
             const summaryEl = document.getElementById('res-summary');
 
+            // Determine the date to display (use the first record's test_date if available)
+            let resultDate = new Date();
+            if (sorted.length > 0 && sorted[0].test_date) {
+                const d = new Date(sorted[0].test_date);
+                if (!isNaN(d.getTime())) {
+                    resultDate = d;
+                }
+            }
+
             if (avgEl && sorted.length) {
                 const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
                 avgEl.textContent = avg.toFixed(1);
             }
             if (dateEl) {
-                const now = new Date();
-                dateEl.textContent = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
+                dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
             }
             if (summaryEl && sorted.length) {
-                const now = new Date();
-                summaryEl.textContent = `${now.getMonth() + 1}月分の結果を反映しました。登録人数は${sorted.length}人です。`;
+                summaryEl.textContent = `${resultDate.getMonth() + 1}月分の結果を反映しました。登録人数は${sorted.length}人です。`;
             }
 
             // Ranking table (all students)
