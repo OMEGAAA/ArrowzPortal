@@ -157,8 +157,8 @@
                 dateEl.textContent = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
             }
             if (summaryEl && sorted.length) {
-                const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
-                summaryEl.textContent = `アローズジム全体の平均最高速度は ${avg.toFixed(1)} km/h です。登録人数：${sorted.length}名。`;
+                const now = new Date();
+                summaryEl.textContent = `${now.getMonth() + 1}月分の結果を反映しました。登録人数は${sorted.length}人です。`;
             }
 
             // Ranking table (all students)
