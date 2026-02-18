@@ -48,13 +48,14 @@
                 <div class="result-summary-card">
                     <div class="summary-header">
                         <span class="summary-date" id="res-date">—</span>
-                        <span class="summary-label">AVERAGE SCORE</span>
+                        <span class="summary-label">COMMENT</span>
                     </div>
                     <div class="summary-body">
-                        <div class="score-display">
-                            <span class="score-value" id="res-avg">—</span>
-                            <span class="score-unit">pts</span>
-                        </div>
+                        <!-- <div class="score-display"> Removed Average Score -->
+                        <p class="summary-comment" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1rem;">
+                            ここに今月のコメントを記入してください。<br>
+                            例：今月は全体的にスピードが向上しました！
+                        </p>
                         <p class="summary-text" id="res-summary">ランキングデータを読み込み中…</p>
                     </div>
                 </div>
@@ -157,10 +158,10 @@
                 }
             }
 
-            if (avgEl && sorted.length) {
-                const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
-                avgEl.textContent = avg.toFixed(1);
-            }
+            // if (avgEl && sorted.length) {
+            //    const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
+            //    avgEl.textContent = avg.toFixed(1);
+            // }
             if (dateEl) {
                 dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
             }
