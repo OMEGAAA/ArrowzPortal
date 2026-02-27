@@ -170,8 +170,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
-            renderCalendar(now.getFullYear(), now.getMonth());
-            renderScheduleList(now.getFullYear(), now.getMonth());
+            renderCalendar(now.getFullYear(), 2); // 2 is March
+            renderScheduleList(now.getFullYear(), 2);
         });
 
         function renderCalendar(year, month) {

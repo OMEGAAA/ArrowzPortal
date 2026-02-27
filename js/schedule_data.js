@@ -19,5 +19,12 @@ window.SCHEDULE_DATA = [
         "title": "天皇誕生日",
         "description": "祝日のため休館となります。",
         "type": "closed"
+    },
+    {
+        "id": "20260320-1",
+        "date": "2026.03.20",
+        "title": "春分の日",
+        "description": "祝日のため休館となります。",
+        "type": "closed"
     }
 ];
