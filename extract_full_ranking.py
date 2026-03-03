@@ -10,26 +10,26 @@ df = pd.read_excel(file_path, sheet_name=sheet, header=None, skiprows=3)
 
 # CORRECT MEASURED VALUE COLUMNS
 VALUE_COLS = {
-    'vmax':              44,   # 最高速度 (km/h)
-    'vdec':              46,   # 速度維持率
-    'sprint_score':      48,   # スプリントスコア (回)
-    'pro':               52,   # 切り返し走 (sec)
-    'dva':               54,   # 動体視力 (ランク)
-    'eye':               56,   # 眼球運動 (ランク)
-    'peri':              58,   # 周辺視 (ランク)
-    'flash':             60,   # 瞬間視 (ランク)
-    'arrowz_eye_total':  62,   # ArrowzEye合計値
-    'hand_eye':          66,   # 眼と手の協応動作 (sec)
-    'height':            68,   # 身長 (cm)
-    'weight':            70,   # 体重 (kg)
-    'bmi':               72,   # BMI
-    'vj':                74,   # 垂直跳び (cm)
-    'sj':                76,   # スクワットジャンプ (cm)
-    'contact_time':      78,   # 接地時間 (sec)
-    'jump_height':       80,   # 跳躍高 (cm)
-    'rj_index':          82,   # RJ-index
-    'broad_jump':        84,   # 立ち幅跳び (cm)
-    'stepping':          86,   # ステッピング (回)
+    'vmax':              43,   # 最高速度 (km/h)
+    'vdec':              45,   # 速度維持率
+    'sprint_score':      47,   # スプリントスコア (回)
+    'pro':               51,   # 切り返し走 (sec)
+    'dva':               53,   # 動体視力 (ランク)
+    'eye':               55,   # 眼球運動 (ランク)
+    'peri':              57,   # 周辺視 (ランク)
+    'flash':             59,   # 瞬間視 (ランク)
+    'arrowz_eye_total':  61,   # ArrowzEye合計値
+    'hand_eye':          65,   # 眼と手の協応動作 (sec)
+    'height':            67,   # 身長 (cm)
+    'weight':            69,   # 体重 (kg)
+    'bmi':               71,   # BMI
+    'vj':                73,   # 垂直跳び (cm)
+    'sj':                75,   # スクワットジャンプ (cm)
+    'contact_time':      77,   # 接地時間 (sec)
+    'jump_height':       79,   # 跳躍高 (cm)
+    'rj_index':          81,   # RJ-index
+    'broad_jump':        83,   # 立ち幅跳び (cm)
+    'stepping':          85,   # ステッピング (回)
 }
 
 TOTAL_SCORE_COL = 68 # Use Height as legacy Total Score for now since Grade cols are empty
@@ -56,7 +56,7 @@ for index, row in df.iterrows():
     if re.match(r'\d{4}/', str(name)):
         continue
 
-    test_date = parse_date(row[6])
+    test_date = parse_date(row[5])
     grade = str(row[2]) if pd.notna(row[2]) else ""
     gender = str(row[3]) if pd.notna(row[3]) else ""
     class_name = str(row[8]) if pd.notna(row[8]) else ""
