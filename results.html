@@ -167,7 +167,7 @@
                 dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
             }
             if (summaryEl && sorted.length) {
-                summaryEl.textContent = `${resultDate.getMonth()}月分の結果を反映しました。登録人数は${sorted.length}人です。`;
+                summaryEl.textContent = `${resultDate.getMonth() + 1}月の結果を反映しました。`;
             }
 
             // Ranking table (all students)
