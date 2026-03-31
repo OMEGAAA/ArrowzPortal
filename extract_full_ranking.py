@@ -2,7 +2,7 @@ import pandas as pd
 import json
 import re
 
-file_path = 'フィールドテストデータ 毎月更新.xlsm'
+file_path = 'フィールドテストデータ ランキング.xlsm'
 sheet = 'データ'
 
 # Student data starts from row 3 (rows 0-2 are headers)
