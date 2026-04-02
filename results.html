@@ -150,7 +150,7 @@
 
             // Determine the date to display (use the first record's test_date if available)
             let resultDate = new Date();
-            resultDate.setMonth(1); // Force to February (0-indexed)
+            resultDate.setMonth(2); // Force to March (0-indexed)
 
             if (sorted.length > 0 && sorted[0].test_date) {
                 const d = new Date(sorted[0].test_date);
