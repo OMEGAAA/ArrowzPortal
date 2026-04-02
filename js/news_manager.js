@@ -97,6 +97,7 @@ class NewsManager {
      * @param {number} index Index of the item to delete
      */
     static deleteNews(index) {
+        const currentNews = this.getNews();
         if (index >= 0 && index < currentNews.length) {
             currentNews.splice(index, 1);
             this.saveNews(currentNews);
