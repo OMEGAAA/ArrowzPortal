@@ -26,5 +26,19 @@ window.SCHEDULE_DATA = [
         "title": "春分の日",
         "description": "祝日のため休館となります。",
         "type": "closed"
+    },
+    {
+        "date": "2026.04.29",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1775114873873"
+    },
+    {
+        "date": "2026.04.30",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1775114908218"
     }
 ];
