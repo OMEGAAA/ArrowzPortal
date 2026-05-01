@@ -40,5 +40,40 @@ window.SCHEDULE_DATA = [
         "title": "休館日",
         "description": "全店舗休館日のため",
         "id": "1775114908218"
+    },
+    {
+        "date": "2026.05.01",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1777619648059"
+    },
+    {
+        "date": "2026.05.02",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1777619663306"
+    },
+    {
+        "date": "2026.05.03",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1777619675423"
+    },
+    {
+        "date": "2026.05.04",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1777619685609"
+    },
+    {
+        "date": "2026.05.05",
+        "type": "closed",
+        "title": "休館日",
+        "description": "全店舗休館日のため",
+        "id": "1777619697850"
     }
 ];
