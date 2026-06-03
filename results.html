@@ -25,7 +25,6 @@
                 <h2 class="section-title" data-text="今月の結果">今月の結果</h2>
                 <div class="result-summary-card">
                     <div class="summary-header">
-                        <span class="summary-date" id="res-date">—</span>
                         <span class="summary-label">COMMENT</span>
                     </div>
                     <div class="summary-body">
@@ -126,8 +125,6 @@
                 return valB - valA;
             });
 
-            const dateEl = document.getElementById('res-date');
-
             let resultDate = new Date();
             resultDate.setMonth(2); // Force to March (0-indexed)
 
@@ -138,9 +135,6 @@
                 }
             }
 
-            if (dateEl) {
-                dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
-            }
             const tbody = document.getElementById('res-ranking-body');
             if (tbody) {
                 sorted.forEach((d, i) => {
