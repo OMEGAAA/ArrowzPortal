@@ -568,6 +568,28 @@
                                 <label class="form-label">ボタンテキスト</label>
                                 <input type="text" id="weekly-menu-btn" class="form-input" placeholder="例: CHECK">
                             </div>
+                            <div class="form-group">
+                                <label class="form-label">メニューページ説明文 (HTMLおよび改行可)</label>
+                                <textarea id="weekly-menu-page-desc" class="form-textarea" placeholder="例: 6月第1週のトレーニングメニュー"></textarea>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;">
+                                <div class="form-group">
+                                    <label class="form-label">AGILITY & REACTION</label>
+                                    <textarea id="weekly-menu-agility" class="form-textarea" style="min-height: 90px;" placeholder="例: ラダー / リアクションドリル"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">POWER & STRENGTH</label>
+                                    <textarea id="weekly-menu-power" class="form-textarea" style="min-height: 90px;" placeholder="例: ジャンプ / スクワット"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">ENDURANCE</label>
+                                    <textarea id="weekly-menu-endurance" class="form-textarea" style="min-height: 90px;" placeholder="例: インターバル走"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">GAME SKILL</label>
+                                    <textarea id="weekly-menu-game" class="form-textarea" style="min-height: 90px;" placeholder="例: 競技別スキル練習"></textarea>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Theme Editor -->
@@ -577,6 +599,22 @@
                             <div class="form-group">
                                 <label class="form-label">説明文 (HTMLおよび改行可)</label>
                                 <textarea id="weekly-theme-desc" class="form-textarea" placeholder="例: 5月のテーマ: スタートダッシュ..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">テーマページ見出し</label>
+                                <input type="text" id="weekly-theme-page-title" class="form-input" placeholder="例: START DASH">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">テーマページリード文 (HTMLおよび改行可)</label>
+                                <textarea id="weekly-theme-lead" class="form-textarea" placeholder="例: 「スタートダッシュ」&#10;5月のテーマは..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">テーマページ本文 (HTMLおよび改行可)</label>
+                                <textarea id="weekly-theme-body" class="form-textarea" placeholder="例: 前に進む力を身に着けるために..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ポイント一覧 (1行につき1項目)</label>
+                                <textarea id="weekly-theme-points" class="form-textarea" placeholder="例: ヒップヒンジやドロップスクワット&#10;足の引き上げの改善"></textarea>
                             </div>
                         </div>
 
@@ -944,6 +982,40 @@
             }
 
             // ================= INITIALIZATION =================
+            function ensureWeeklyDefaults() {
+                weeklyData.menu = weeklyData.menu || {};
+                weeklyData.theme = weeklyData.theme || {};
+                weeklyData.schedule = weeklyData.schedule || {};
+
+                weeklyData.menu.category = weeklyData.menu.category || 'TRAINING';
+                weeklyData.menu.title = weeklyData.menu.title || "THIS WEEK'S MENU";
+                weeklyData.menu.desc = weeklyData.menu.desc || '';
+                weeklyData.menu.link = weeklyData.menu.link || 'menu.html';
+                weeklyData.menu.btnText = weeklyData.menu.btnText || 'CHECK';
+                weeklyData.menu.pageDesc = weeklyData.menu.pageDesc || '';
+                weeklyData.menu.contents = weeklyData.menu.contents || {};
+                weeklyData.menu.contents.agility = weeklyData.menu.contents.agility || '-';
+                weeklyData.menu.contents.power = weeklyData.menu.contents.power || '-';
+                weeklyData.menu.contents.endurance = weeklyData.menu.contents.endurance || '-';
+                weeklyData.menu.contents.game = weeklyData.menu.contents.game || '-';
+
+                weeklyData.theme.category = weeklyData.theme.category || 'THEME';
+                weeklyData.theme.title = weeklyData.theme.title || 'MONTHLY THEME';
+                weeklyData.theme.desc = weeklyData.theme.desc || '';
+                weeklyData.theme.link = weeklyData.theme.link || 'theme.html';
+                weeklyData.theme.btnText = weeklyData.theme.btnText || 'CHECK';
+                weeklyData.theme.pageTitle = weeklyData.theme.pageTitle || '';
+                weeklyData.theme.lead = weeklyData.theme.lead || '';
+                weeklyData.theme.body = weeklyData.theme.body || '';
+                weeklyData.theme.points = Array.isArray(weeklyData.theme.points) ? weeklyData.theme.points : [];
+
+                weeklyData.schedule.category = weeklyData.schedule.category || 'SCHEDULE';
+                weeklyData.schedule.title = weeklyData.schedule.title || 'SCHEDULE';
+                weeklyData.schedule.desc = weeklyData.schedule.desc || '';
+                weeklyData.schedule.link = weeklyData.schedule.link || 'schedule.html';
+                weeklyData.schedule.btnText = weeklyData.schedule.btnText || 'CHECK';
+            }
+
             function initData() {
                 // Try load news
                 const newsCache = localStorage.getItem('admin_news_draft');
@@ -964,11 +1036,12 @@
                     changeStatus.weekly = true;
                 } else {
                     weeklyData = JSON.parse(JSON.stringify(window.WEEKLY_DATA || {
-                        menu: { desc: "", btnText: "", category: "TRAINING", title: "THIS WEEK'S MENU", link: "menu.html" },
-                        theme: { desc: "", category: "THEME", title: "MONTHLY THEME", link: "theme.html", btnText: "CHECK" },
+                        menu: { desc: "", btnText: "", category: "TRAINING", title: "THIS WEEK'S MENU", link: "menu.html", pageDesc: "", contents: { agility: "-", power: "-", endurance: "-", game: "-" } },
+                        theme: { desc: "", category: "THEME", title: "MONTHLY THEME", link: "theme.html", btnText: "CHECK", pageTitle: "", lead: "", body: "", points: [] },
                         schedule: { desc: "", category: "SCHEDULE", title: "SCHEDULE", link: "schedule.html", btnText: "CHECK" }
                     }));
                 }
+                ensureWeeklyDefaults();
 
                 // Try load schedule
                 const scheduleCache = localStorage.getItem('admin_schedule_draft');
@@ -1490,12 +1563,22 @@
 
             // ================= WEEKLY MODULE LOGIC =================
             function loadWeeklyForm() {
+                ensureWeeklyDefaults();
                 if (weeklyData.menu) {
                     document.getElementById('weekly-menu-desc').value = weeklyData.menu.desc.replace(/<br>/g, '\n');
                     document.getElementById('weekly-menu-btn').value = weeklyData.menu.btnText || "CHECK";
+                    document.getElementById('weekly-menu-page-desc').value = weeklyData.menu.pageDesc.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-menu-agility').value = weeklyData.menu.contents.agility.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-menu-power').value = weeklyData.menu.contents.power.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-menu-endurance').value = weeklyData.menu.contents.endurance.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-menu-game').value = weeklyData.menu.contents.game.replace(/<br>/g, '\n');
                 }
                 if (weeklyData.theme) {
                     document.getElementById('weekly-theme-desc').value = weeklyData.theme.desc.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-theme-page-title').value = weeklyData.theme.pageTitle || '';
+                    document.getElementById('weekly-theme-lead').value = weeklyData.theme.lead.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-theme-body').value = weeklyData.theme.body.replace(/<br>/g, '\n');
+                    document.getElementById('weekly-theme-points').value = weeklyData.theme.points.join('\n');
                 }
                 if (weeklyData.schedule) {
                     document.getElementById('weekly-schedule-desc').value = weeklyData.schedule.desc.replace(/<br>/g, '\n');
@@ -1503,10 +1586,23 @@
             }
 
             document.getElementById('btn-save-weekly').addEventListener('click', async () => {
+                ensureWeeklyDefaults();
                 weeklyData.menu.desc = document.getElementById('weekly-menu-desc').value.replace(/\n/g, '<br>');
                 weeklyData.menu.btnText = document.getElementById('weekly-menu-btn').value;
+                weeklyData.menu.pageDesc = document.getElementById('weekly-menu-page-desc').value.replace(/\n/g, '<br>');
+                weeklyData.menu.contents.agility = document.getElementById('weekly-menu-agility').value.replace(/\n/g, '<br>') || '-';
+                weeklyData.menu.contents.power = document.getElementById('weekly-menu-power').value.replace(/\n/g, '<br>') || '-';
+                weeklyData.menu.contents.endurance = document.getElementById('weekly-menu-endurance').value.replace(/\n/g, '<br>') || '-';
+                weeklyData.menu.contents.game = document.getElementById('weekly-menu-game').value.replace(/\n/g, '<br>') || '-';
 
                 weeklyData.theme.desc = document.getElementById('weekly-theme-desc').value.replace(/\n/g, '<br>');
+                weeklyData.theme.pageTitle = document.getElementById('weekly-theme-page-title').value;
+                weeklyData.theme.lead = document.getElementById('weekly-theme-lead').value.replace(/\n/g, '<br>');
+                weeklyData.theme.body = document.getElementById('weekly-theme-body').value.replace(/\n/g, '<br>');
+                weeklyData.theme.points = document.getElementById('weekly-theme-points').value
+                    .split('\n')
+                    .map(point => point.trim())
+                    .filter(Boolean);
 
                 weeklyData.schedule.desc = document.getElementById('weekly-schedule-desc').value.replace(/\n/g, '<br>');
 

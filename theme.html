@@ -118,13 +118,12 @@
                         </svg>
                     </div>
                     <div class="theme-text">
-                        <h3>START DASH</h3>
-                        <p><strong>「スタートダッシュ」</strong><br>
+                        <h3 id="theme-page-title">START DASH</h3>
+                        <p id="theme-lead"><strong>「スタートダッシュ」</strong><br>
                             5月のテーマは、スタートダッシュの改善を図るためのトレーニングです。</p>
-                        <p>前に進む力を身に着けるために大切なポイントを確認しましょう。
-                        </p>
+                        <p id="theme-body">前に進む力を身に着けるために大切なポイントを確認しましょう。</p>
 
-                        <ul class="point-list">
+                        <ul class="point-list" id="theme-points">
                             <li>ヒップヒンジやドロップスクワットなど基礎的なトレーニング</li>
                             <li>足の引き上げの改善</li>
                             <li>トリプルエクステンションの獲得</li>
@@ -139,7 +138,29 @@
     <div id="common-footer"></div>
 
     <script src="js/layout.js"></script>
+    <script src="js/weekly_data.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        (function () {
+            const theme = window.WEEKLY_DATA && window.WEEKLY_DATA.theme;
+            if (!theme) return;
+
+            const titleEl = document.getElementById('theme-page-title');
+            const leadEl = document.getElementById('theme-lead');
+            const bodyEl = document.getElementById('theme-body');
+            const pointsEl = document.getElementById('theme-points');
+
+            if (titleEl && theme.pageTitle) titleEl.textContent = theme.pageTitle;
+            if (leadEl && theme.lead) leadEl.innerHTML = theme.lead;
+            if (bodyEl && theme.body) bodyEl.innerHTML = theme.body;
+            if (pointsEl && Array.isArray(theme.points)) {
+                pointsEl.innerHTML = theme.points
+                    .filter(point => String(point).trim())
+                    .map(point => `<li>${point}</li>`)
+                    .join('');
+            }
+        })();
+    </script>
 </body>
 
 </html>

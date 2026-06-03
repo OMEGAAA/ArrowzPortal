@@ -228,6 +228,7 @@
     <script src="js/layout.js"></script>
     <script src="js/ranking_data.js"></script>
     <script src="js/news_data.js"></script>
+    <script src="js/weekly_data.js"></script>
     <script src="js/main.js"></script>
     <script>
         (function () {
@@ -317,6 +318,31 @@
                         </a>
                     `;
                     newsGrid.appendChild(article);
+                });
+            }
+
+            // --- Weekly card data ---
+            const weeklyData = window.WEEKLY_DATA;
+            if (weeklyData) {
+                const cards = document.querySelectorAll('.weekly-news-card');
+                const keys = ['menu', 'theme', 'schedule'];
+                keys.forEach((key, index) => {
+                    const item = weeklyData[key];
+                    const card = cards[index];
+                    if (!item || !card) return;
+
+                    const categoryEl = card.querySelector('.weekly-news-category');
+                    const titleEl = card.querySelector('.weekly-news-title');
+                    const descEl = card.querySelector('.weekly-news-desc');
+                    const btnEl = card.querySelector('.weekly-news-btn');
+
+                    if (categoryEl && item.category) categoryEl.textContent = item.category;
+                    if (titleEl && item.title) titleEl.textContent = item.title;
+                    if (descEl && item.desc) descEl.innerHTML = item.desc;
+                    if (btnEl) {
+                        if (item.link) btnEl.href = item.link;
+                        if (item.btnText) btnEl.textContent = item.btnText;
+                    }
                 });
             }
         })();

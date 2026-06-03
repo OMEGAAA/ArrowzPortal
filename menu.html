@@ -60,7 +60,7 @@
                         WEEK 1 - 3: SKILL & PHYSICAL TRAINING (Weekly Change)<br>
                         WEEK 4: FT (Field Test)</p>
                 </div>
-                <p class="section-desc">4月第1週 (4/1 - 4/7) のトレーニングメニュー</p>
+                <p class="section-desc" id="menu-page-desc">4月第1週 (4/1 - 4/7) のトレーニングメニュー</p>
 
                 <div class="weekly-menu-content"
                     style="margin-top: 3rem; border: 1px solid var(--border-color); padding: 2rem; background: #0a0a0a;">
@@ -72,24 +72,24 @@
                             <strong
                                 style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">AGILITY
                                 & REACTION</strong>
-                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
+                            <span id="menu-content-agility" style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
                         </li>
                         <li style="margin-bottom: 1.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 1rem;">
                             <strong
                                 style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">POWER
                                 & STRENGTH</strong>
-                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
+                            <span id="menu-content-power" style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
                         </li>
                         <li style="margin-bottom: 1.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 1rem;">
                             <strong
                                 style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">ENDURANCE</strong>
-                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
+                            <span id="menu-content-endurance" style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
                         </li>
                         <li>
                             <strong
                                 style="color: var(--text-color); font-family: var(--font-primary); font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">GAME
                                 SKILL</strong>
-                            <span style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
+                            <span id="menu-content-game" style="color: var(--text-muted); font-family: var(--font-secondary);">-</span>
                         </li>
                     </ul>
                 </div>
@@ -100,7 +100,31 @@
     <div id="common-footer"></div>
 
     <script src="js/layout.js"></script>
+    <script src="js/weekly_data.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        (function () {
+            const menu = window.WEEKLY_DATA && window.WEEKLY_DATA.menu;
+            if (!menu) return;
+
+            const descEl = document.getElementById('menu-page-desc');
+            if (descEl && menu.pageDesc) descEl.innerHTML = menu.pageDesc;
+
+            const contents = menu.contents || {};
+            const fields = {
+                agility: document.getElementById('menu-content-agility'),
+                power: document.getElementById('menu-content-power'),
+                endurance: document.getElementById('menu-content-endurance'),
+                game: document.getElementById('menu-content-game')
+            };
+
+            Object.keys(fields).forEach(key => {
+                if (fields[key] && contents[key]) {
+                    fields[key].innerHTML = contents[key];
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>
