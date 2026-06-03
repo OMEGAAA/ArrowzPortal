@@ -99,29 +99,7 @@
         <div class="loader-bar"></div>
     </div>
 
-    <div class="cursor-dot" data-cursor-dot></div>
-    <div class="cursor-outline" data-cursor-outline></div>
-
-    <header class="header">
-        <div class="logo">
-            <a href="index.html">
-                <img src="images/arrowz_logo13.png" alt="ARROWZ" class="logo-img">
-            </a>
-        </div>
-        <nav class="nav">
-            <ul class="nav-list">
-                <li class="nav-item"><a href="index.html" class="nav-link" data-hover="ホーム">ホーム</a></li>
-                <li class="nav-item"><a href="news.html" class="nav-link" data-hover="お知らせ">お知らせ</a></li>
-                <li class="nav-item"><a href="homework.html" class="nav-link" data-hover="宿題動画">宿題動画</a></li>
-                <li class="nav-item"><a href="results.html" class="nav-link" data-hover="フィールドテスト">フィールドテスト</a></li>
-                <li class="nav-item"><a href="weekly.html" class="nav-link" data-hover="今週のアローズジム">今週のアローズジム</a></li>
-            </ul>
-        </nav>
-        <div class="menu-toggle">
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-    </header>
+    <div id="common-header"></div>
 
     <main id="news-detail-main" style="padding-top: 0; display: none;">
         <!-- Content injected via JS -->
@@ -132,20 +110,10 @@
         <a href="news.html" class="btn-primary" style="margin-top: 2rem;">BACK TO NEWS</a>
     </div>
 
-    <footer class="footer">
-        <div class="container footer-content">
-            <div class="footer-logo"><a
-                    href="https://www.sports-science.co.jp/facility/tochigi/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnA0qM_hiKRR2bV2FCewG_8KCj-2P1WLxekZuYS_LkNXkv36WaadTpXSyxyW0_aem_r9qsksJPKb-rXfjTjhn6wQ"
-                    target="_blank" style="text-decoration: none; color: inherit;">ARROWZ</a><span class="dot">.</span>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 ARROWZ. ALL RIGHTS RESERVED.</p>
-            </div>
-        </div>
-    </footer>
+    <div id="common-footer"></div>
 
+    <script src="js/layout.js"></script>
     <script src="js/news_data.js"></script>
-    <script src="js/news_manager.js"></script>
     <script src="js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -157,9 +125,7 @@
                 return;
             }
 
-            // Ensure data is loaded (this triggers the auto-ID generation if needed)
-            const allNews = NewsManager.getNews();
-            const newsItem = NewsManager.getNewsById(id);
+            const newsItem = (window.NEWS_DATA || []).find(item => item.id === id);
 
             if (!newsItem) {
                 document.getElementById('not-found').style.display = 'block';

@@ -1,27 +1,15 @@
 window.addEventListener("load", () => {
     const loader = document.querySelector(".loader");
-    setTimeout(() => {
-        loader.classList.add("fade-out");
-    }, 2000); // Wait for animation
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add("fade-out");
+        }, 2000); // Wait for animation
+    }
 });
 
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Mobile Menu Toggle (Basic implementation) -> Moved inside DOMContentLoaded for safety if it wasn't
-
-    // ... (rest of code follows)
-
-    // Mobile Menu Toggle (Basic implementation)
-    const menuToggle = document.querySelector(".menu-toggle");
-    const navList = document.querySelector(".nav-list");
-
-    menuToggle.addEventListener("click", () => {
-        const nav = document.querySelector(".nav");
-        nav.classList.toggle("nav-active");
-        menuToggle.classList.toggle("active"); // Optional for animating the hamburger to X
-    });
-
     // Scroll Reveal
     const revealElements = document.querySelectorAll(".section-title, .about-text, .about-image, .news-card, .team-member");
 

@@ -199,7 +199,8 @@ main {
     transition: top 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.nav-link:hover::before {
+.nav-link:hover::before,
+.nav-link.active::before {
     top: 0;
 }
 
