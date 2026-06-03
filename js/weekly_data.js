@@ -9,14 +9,14 @@ window.WEEKLY_DATA = {
     "theme": {
         "category": "THEME",
         "title": "MONTHLY THEME",
-        "desc": "3月の強化テーマ: <strong>筋力強化・走り強化</strong><br>力強い身体の土台を作り、走りのスピードアップを図るためのトレーニングを重点的に行います。",
+        "desc": "6月の強化テーマ: <strong>走りながらスピードを上げる</strong><br>爆発的加速を身に着けるための姿勢やばねを獲得する",
         "link": "theme.html",
         "btnText": "CHECK"
     },
     "schedule": {
         "category": "SCHEDULE",
         "title": "CLOSED DAYS",
-        "desc": "【3月の休館日】<br>・3月20日 (金・祝)<br>※ほかの曜日に振替は可能です",
+        "desc": "【6月の休館日】<br>・6月20日 (土)<br>※ほかの曜日に振替は可能です",
         "link": "schedule.html",
         "btnText": "CHECK"
     }
