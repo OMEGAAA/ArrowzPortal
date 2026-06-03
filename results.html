@@ -29,9 +29,8 @@
                         <span class="summary-label">COMMENT</span>
                     </div>
                     <div class="summary-body">
-                        <!-- <div class="score-display"> Removed Average Score -->
-                        <p class="summary-comment" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1rem;">
-                            今月は全体的にジャンプ力が向上しました！
+                        <p class="summary-comment" id="res-comment" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1rem;">
+                            今月の要約コメント
                         </p>
                         <p class="summary-text" id="res-summary">ランキングデータを読み込み中…</p>
                     </div>
@@ -40,7 +39,6 @@
         </section>
 
         <!-- Section 2: Personal Data -->
-        <!-- Section 2: Personal Data -->
         <section class="section">
             <div class="container">
                 <h2 class="section-title" data-text="個人データ">個人データ</h2>
@@ -48,17 +46,15 @@
                     <div class="personal-data-card">
                         <div class="login-prompt">
                             <p>個人の詳細データを確認するにはログインしてください。</p>
-                            <a href="https://drive.google.com/drive/folders/1eiqbKnCbcv80iE7pFOWnwh1apFcUn_vg?usp=sharing"
-                                class="btn-primary" style="text-decoration: none; display: inline-block;">LOGIN / MY
-                                PAGE
+                            <a href="" id="res-login-link"
+                                class="btn-primary" style="text-decoration: none; display: inline-block;">LOGIN / MY PAGE
                                 <span class="arrow">→</span></a>
                         </div>
-                        <!-- Sample visualization background -->
                         <div class="data-viz-bg"></div>
                     </div>
                     <div class="personal-data-image-container">
-                        <img src="images/ft_summary_img.png" alt="フィールドテスト結果まとめ" class="summary-img">
-                        <p class="summary-caption">フィールドテスト結果まとめ（2026.01.09更新）</p>
+                        <img src="images/ft_summary_img.png" alt="フィールドテスト結果まとめ" class="summary-img" id="res-summary-img">
+                        <p class="summary-caption" id="res-img-caption">フィールドテスト結果まとめ</p>
                     </div>
                 </div>
             </div>
@@ -94,24 +90,46 @@
 
     <script src="js/layout.js"></script>
     <script src="js/ranking_data.js"></script>
+    <script src="js/results_data.js"></script>
     <script src="js/main.js"></script>
     <script>
         (function () {
+            // Apply Results Data dynamically
+            if (window.RESULTS_DATA) {
+                const resData = window.RESULTS_DATA;
+                
+                const commentEl = document.getElementById('res-comment');
+                if (commentEl && resData.comment) {
+                    commentEl.textContent = resData.comment;
+                }
+
+                const loginLinkEl = document.getElementById('res-login-link');
+                if (loginLinkEl && resData.loginLink) {
+                    loginLinkEl.href = resData.loginLink;
+                }
+
+                const summaryImgEl = document.getElementById('res-summary-img');
+                if (summaryImgEl) {
+                    summaryImgEl.src = resData.imageData || resData.summaryImg || 'images/ft_summary_img.png';
+                }
+
+                const imgCaptionEl = document.getElementById('res-img-caption');
+                if (imgCaptionEl && resData.imgCaption) {
+                    imgCaptionEl.textContent = resData.imgCaption;
+                }
+            }
+
             if (!window.RANKING_DATA) return;
 
-            // Sort by vmax descending
             const sorted = [...window.RANKING_DATA].sort((a, b) => {
                 const valA = (a.scores && a.scores.vmax) || 0;
                 const valB = (b.scores && b.scores.vmax) || 0;
                 return valB - valA;
             });
 
-            // Summary card
-            const avgEl = document.getElementById('res-avg');
             const dateEl = document.getElementById('res-date');
             const summaryEl = document.getElementById('res-summary');
 
-            // Determine the date to display (use the first record's test_date if available)
             let resultDate = new Date();
             resultDate.setMonth(2); // Force to March (0-indexed)
 
@@ -122,10 +140,6 @@
                 }
             }
 
-            // if (avgEl && sorted.length) {
-            //    const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
-            //    avgEl.textContent = avg.toFixed(1);
-            // }
             if (dateEl) {
                 dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
             }
@@ -133,7 +147,6 @@
                 summaryEl.textContent = `${resultDate.getMonth() + 1}月の結果を反映しました。`;
             }
 
-            // Ranking table (all students)
             const tbody = document.getElementById('res-ranking-body');
             if (tbody) {
                 sorted.forEach((d, i) => {

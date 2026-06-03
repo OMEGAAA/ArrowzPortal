@@ -357,6 +357,14 @@
                 <img src="images/arrowz_logo13.png" alt="ARROWZ" class="sidebar-logo-img">
                 <span class="dot">.</span>ADMIN
             </div>
+            <!-- Sync Indicator in Sidebar -->
+            <div style="background-color: #121212; border: 1px solid var(--border-color); padding: 1rem; border-radius: 4px; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-family: var(--font-secondary);">
+                    <span>フォルダ同期:</span>
+                    <span id="sync-status" style="color: #ff4444; font-weight: bold; display: flex; align-items: center; gap: 0.3rem;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #ff4444;"></span>未接続</span>
+                </div>
+                <button id="btn-connect-folder" class="btn-admin btn-small" style="width: 100%; font-size: 0.75rem; padding: 0.5rem; justify-content: center;">接続する</button>
+            </div>
             <nav class="sidebar-menu">
                 <button class="menu-btn active" data-tab="news">
                     <span>📰</span> お知らせ管理
@@ -369,6 +377,12 @@
                 </button>
                 <button class="menu-btn" data-tab="schedule">
                     <span>📆</span> スケジュール管理
+                </button>
+                <button class="menu-btn" data-tab="homework">
+                    <span>📺</span> 宿題動画管理
+                </button>
+                <button class="menu-btn" data-tab="results">
+                    <span>📊</span> 結果ページ管理
                 </button>
                 <button class="menu-btn" data-tab="export">
                     <span>💾</span> 一括書き出し & 復元
@@ -636,6 +650,92 @@
                 </div>
             </section>
 
+            <!-- ================= TAB 6: HOMEWORK ================= -->
+            <section class="tab-content" id="tab-homework">
+                <h2 class="section-title">HOMEWORK VIDEO MANAGEMENT</h2>
+                <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem;">
+                    <!-- Edit Form -->
+                    <div>
+                        <div class="admin-card">
+                            <h3 id="homework-form-title">ADD HOMEWORK VIDEO</h3>
+                            <span class="card-subtitle">宿題動画の追加および編集を行います。</span>
+
+                            <div class="form-group">
+                                <label class="form-label">動画タイトル</label>
+                                <input type="text" id="homework-title" class="form-input" placeholder="例: バンザイ腸腰筋">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">YouTube動画URL</label>
+                                <input type="text" id="homework-url" class="form-input" placeholder="例: https://youtu.be/... または https://www.youtube.com/watch?v=...">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">カテゴリータグ (スペース区切りで複数可)</label>
+                                <input type="text" id="homework-category" class="form-input" placeholder="例: jump applied squat-jump">
+                                <small style="color: #666; display: block; margin-top: 0.3rem;">※ BASIC(基礎) / APPLIED(応用) / JUMP(跳躍力) / SPEED(瞬発力) に自動でフィルタリングされます。</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">説明文（【測定種目】など）</label>
+                                <input type="text" id="homework-desc" class="form-input" placeholder="例: 【跳躍力・スクワットジャンプ】">
+                            </div>
+
+                            <div class="btn-group">
+                                <button id="btn-save-homework" class="btn-admin primary">動画を保存</button>
+                                <button id="btn-cancel-homework-edit" class="btn-admin danger" style="display: none;">編集キャンセル</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- List & Download -->
+                    <div>
+                        <div class="admin-card">
+                            <h3>CURRENT VIDEOS <button class="btn-admin btn-small" id="btn-download-homework" style="background-color: var(--accent-color); color: #000; border: none;">DOWNLOAD JS</button></h3>
+                            <span class="card-subtitle">現在登録されている宿題動画一覧。編集や削除ができます。</span>
+                            <div class="item-list" id="homework-list-container">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= TAB 7: RESULTS ================= -->
+            <section class="tab-content" id="tab-results">
+                <h2 class="section-title">RESULTS PAGE MANAGEMENT</h2>
+                <div style="max-width: 900px;">
+                    <div class="admin-card">
+                        <h3>RESULTS GENERAL CONFIG (結果全体の情報) <button id="btn-download-results" class="btn-admin btn-small" style="background-color: var(--accent-color); color: #000; border: none; float: right;">DOWNLOAD JS</button></h3>
+                        <span class="card-subtitle">「今月の結果」ページに表示されるコメントやログインURL等を設定します。</span>
+
+                        <div class="form-group">
+                            <label class="form-label">今月のコメント総括</label>
+                            <textarea id="results-comment" class="form-textarea" placeholder="例: 今月は全体的にジャンプ力が向上しました！"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">マイページ / ログイン先 Google Drive リンク</label>
+                            <input type="text" id="results-login-link" class="form-input" placeholder="Google Drive のフォルダ共有URLなど">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">結果まとめ画像キャプション（更新日など）</label>
+                            <input type="text" id="results-img-caption" class="form-input" placeholder="例: フィールドテスト結果まとめ（2026.01.09更新）">
+                        </div>
+
+                        <div class="form-group" style="border: 1px dashed var(--border-color); padding: 1.2rem; background-color: rgba(255, 255, 255, 0.02);">
+                            <label class="form-label">結果まとめ画像のアップロード (Base64)</label>
+                            <input type="file" id="results-summary-file" accept="image/*" class="form-input">
+                            <div id="results-summary-preview" class="preview-box" style="display: none; height: 300px;"></div>
+                            <small style="color: #666; display: block; margin-top: 0.5rem;">※ 画像をアップロードすると、デフォルト画像よりも優先して適用されます。</small>
+                        </div>
+
+                        <button id="btn-save-results" class="btn-admin primary" style="width: 100%;">変更を作業データに適用</button>
+                    </div>
+                </div>
+            </section>
+
             <!-- ================= TAB 5: EXPORTS & BACKUP ================= -->
             <section class="tab-content" id="tab-export">
                 <h2 class="section-title">EXPORTS & BACKUP</h2>
@@ -688,6 +788,28 @@
                                 </div>
                                 <button id="btn-exp-schedule" class="btn-admin btn-small">DOWNLOAD</button>
                             </div>
+
+                            <!-- Homework data status -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.2rem; background: #121212; border: 1px solid var(--border-color);">
+                                <div>
+                                    <strong style="font-size: 1.1rem;">5. 宿題動画データ (homework_data.js)</strong>
+                                    <div style="font-size: 0.8rem; color: #888; font-family: var(--font-secondary); margin-top: 0.2rem;">
+                                        現在の件数: <span id="exp-homework-count">0</span> 件 | ステータス: <span id="exp-homework-status">未変更</span>
+                                    </div>
+                                </div>
+                                <button id="btn-exp-homework" class="btn-admin btn-small">DOWNLOAD</button>
+                            </div>
+
+                            <!-- Results data status -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.2rem; background: #121212; border: 1px solid var(--border-color);">
+                                <div>
+                                    <strong style="font-size: 1.1rem;">6. 測定結果データ (results_data.js)</strong>
+                                    <div style="font-size: 0.8rem; color: #888; font-family: var(--font-secondary); margin-top: 0.2rem;">
+                                        ステータス: <span id="exp-results-status">未変更</span>
+                                    </div>
+                                </div>
+                                <button id="btn-exp-results" class="btn-admin btn-small">DOWNLOAD</button>
+                            </div>
                         </div>
                     </div>
 
@@ -713,6 +835,8 @@
     <script src="js/ranking_data.js"></script>
     <script src="js/weekly_data.js"></script>
     <script src="js/schedule_data.js"></script>
+    <script src="js/homework_data.js"></script>
+    <script src="js/results_data.js"></script>
     <script src="js/ranking_manager.js"></script>
 
     <!-- Admin dashboard logic -->
@@ -724,22 +848,100 @@
             let rankingData = [];
             let weeklyData = {};
             let scheduleData = [];
+            let homeworkData = [];
+            let resultsData = {};
 
             // Change tracking flags
             const changeStatus = {
                 news: false,
                 ranking: false,
                 weekly: false,
-                schedule: false
+                schedule: false,
+                homework: false,
+                results: false
             };
 
             // Selected IDs for editing
             let editingNewsId = null;
             let editingScheduleId = null;
+            let editingHomeworkId = null;
+            
             let currentNewsCoverBase64 = null;
+            let currentResultsImageBase64 = null;
+
+            // FileSystem Access API directory handle
+            let projectDirectoryHandle = null;
 
             // Initialize App Data
             initData();
+
+            // ================= DIRECTORY SYNC (FILESYSTEM ACCESS API) =================
+            const btnConnectFolder = document.getElementById('btn-connect-folder');
+            const syncStatusEl = document.getElementById('sync-status');
+
+            if (btnConnectFolder) {
+                btnConnectFolder.addEventListener('click', async () => {
+                    if (projectDirectoryHandle) {
+                        // Disconnect
+                        projectDirectoryHandle = null;
+                        syncStatusEl.innerHTML = '<span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #ff4444;"></span>未接続';
+                        syncStatusEl.style.color = '#ff4444';
+                        btnConnectFolder.textContent = '接続する';
+                        alert('フォルダの同期を切断しました。');
+                        return;
+                    }
+
+                    try {
+                        projectDirectoryHandle = await window.showDirectoryPicker({
+                            mode: 'readwrite'
+                        });
+
+                        const options = { mode: 'readwrite' };
+                        if (await projectDirectoryHandle.queryPermission(options) !== 'granted') {
+                            if (await projectDirectoryHandle.requestPermission(options) !== 'granted') {
+                                alert('フォルダの読み書き権限が拒否されました。自動同期は使用できません。');
+                                projectDirectoryHandle = null;
+                                return;
+                            }
+                        }
+
+                        syncStatusEl.innerHTML = '<span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #ccff00;"></span>接続中';
+                        syncStatusEl.style.color = '#ccff00';
+                        btnConnectFolder.textContent = '同期解除';
+                        alert('ポータルフォルダに接続しました。変更を保存すると、ローカルファイルに直接同期保存されます！');
+                    } catch (err) {
+                        console.error('Directory Picker Error:', err);
+                        if (err.name !== 'AbortError') {
+                            alert('フォルダ接続に失敗しました: ' + err.message);
+                        }
+                    }
+                });
+            }
+
+            // Save file helper (FileSystem Access API)
+            async function saveFileDirectly(subpath, content) {
+                if (!projectDirectoryHandle) return false;
+                try {
+                    const parts = subpath.split('/');
+                    let dirHandle = projectDirectoryHandle;
+                    
+                    // Traverse folders (excluding filename)
+                    for (let i = 0; i < parts.length - 1; i++) {
+                        dirHandle = await dirHandle.getDirectoryHandle(parts[i], { create: false });
+                    }
+                    
+                    const filename = parts[parts.length - 1];
+                    const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(content);
+                    await writable.close();
+                    return true;
+                } catch (err) {
+                    console.error('File direct save error:', err);
+                    alert('ファイルの直接書き込みに失敗しました: ' + err.message + '\n手動ダウンロードで保存してください。');
+                    return false;
+                }
+            }
 
             // ================= INITIALIZATION =================
             function initData() {
@@ -761,7 +963,6 @@
                     weeklyData = JSON.parse(weeklyCache);
                     changeStatus.weekly = true;
                 } else {
-                    // Deep copy window.WEEKLY_DATA
                     weeklyData = JSON.parse(JSON.stringify(window.WEEKLY_DATA || {
                         menu: { desc: "", btnText: "", category: "TRAINING", title: "THIS WEEK'S MENU", link: "menu.html" },
                         theme: { desc: "", category: "THEME", title: "MONTHLY THEME", link: "theme.html", btnText: "CHECK" },
@@ -778,10 +979,36 @@
                     scheduleData = [...(window.SCHEDULE_DATA || [])];
                 }
 
-                // Initial render
+                // Try load homework
+                const homeworkCache = localStorage.getItem('admin_homework_draft');
+                if (homeworkCache) {
+                    homeworkData = JSON.parse(homeworkCache);
+                    changeStatus.homework = true;
+                } else {
+                    homeworkData = [...(window.HOMEWORK_DATA || [])];
+                }
+
+                // Try load results
+                const resultsCache = localStorage.getItem('admin_results_draft');
+                if (resultsCache) {
+                    resultsData = JSON.parse(resultsCache);
+                    changeStatus.results = true;
+                } else {
+                    resultsData = JSON.parse(JSON.stringify(window.RESULTS_DATA || {
+                        comment: "",
+                        loginLink: "",
+                        summaryImg: "images/ft_summary_img.png",
+                        imgCaption: "",
+                        imageData: null
+                    }));
+                }
+
+                // Initial render / load
                 renderNewsList();
                 renderScheduleList();
+                renderHomeworkList();
                 loadWeeklyForm();
+                loadResultsForm();
                 updateUnsavedBanner();
                 updateExportTabStats();
 
@@ -802,6 +1029,12 @@
 
                 if (changeStatus.schedule) localStorage.setItem('admin_schedule_draft', JSON.stringify(scheduleData));
                 else localStorage.removeItem('admin_schedule_draft');
+
+                if (changeStatus.homework) localStorage.setItem('admin_homework_draft', JSON.stringify(homeworkData));
+                else localStorage.removeItem('admin_homework_draft');
+
+                if (changeStatus.results) localStorage.setItem('admin_results_draft', JSON.stringify(resultsData));
+                else localStorage.removeItem('admin_results_draft');
 
                 updateUnsavedBanner();
                 updateExportTabStats();
@@ -828,6 +1061,13 @@
                 document.getElementById('exp-schedule-count').textContent = scheduleData.length;
                 document.getElementById('exp-schedule-status').textContent = changeStatus.schedule ? '変更あり(未保存)' : '変更なし';
                 document.getElementById('exp-schedule-status').style.color = changeStatus.schedule ? '#ff4444' : '#888';
+
+                document.getElementById('exp-homework-count').textContent = homeworkData.length;
+                document.getElementById('exp-homework-status').textContent = changeStatus.homework ? '変更あり(未保存)' : '変更なし';
+                document.getElementById('exp-homework-status').style.color = changeStatus.homework ? '#ff4444' : '#888';
+
+                document.getElementById('exp-results-status').textContent = changeStatus.results ? '変更あり(未保存)' : '変更なし';
+                document.getElementById('exp-results-status').style.color = changeStatus.results ? '#ff4444' : '#888';
             }
 
             // ================= TAB NAVIGATION =================
@@ -857,9 +1097,38 @@
                 const hasChanges = Object.values(changeStatus).some(val => val === true);
                 if (hasChanges) {
                     e.preventDefault();
-                    e.returnValue = '未ダウンロードの編集データがありますが、破棄してよろしいですか？';
+                    e.returnValue = '未保存の編集データがありますが、破棄してよろしいですか？';
                 }
             });
+
+            // ================= IMAGE COMPRESSION HELPER =================
+            function compressAndConvertImage(file, maxWidth, quality, callback) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                        callback(compressedBase64);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
 
             // ================= NEWS MODULE LOGIC =================
             // File input handle for Cover Image
@@ -899,37 +1168,8 @@
                 });
             });
 
-            // Helper: Image Resizer & Compressor to Base64
-            function compressAndConvertImage(file, maxWidth, quality, callback) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > maxWidth) {
-                            height *= maxWidth / width;
-                            width = maxWidth;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-                        callback(compressedBase64);
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-
             // Save or Update Article
-            document.getElementById('btn-save-news').addEventListener('click', () => {
+            document.getElementById('btn-save-news').addEventListener('click', async () => {
                 const date = document.getElementById('news-date').value;
                 const category = document.getElementById('news-category').value;
                 const title = document.getElementById('news-title').value;
@@ -954,22 +1194,25 @@
                 };
 
                 if (editingNewsId) {
-                    // Update existing
                     const idx = newsData.findIndex(item => item.id === editingNewsId);
                     if (idx !== -1) {
                         newsData[idx] = article;
                     }
-                    alert('記事を更新しました。作業データを反映させました。');
                 } else {
-                    // Insert at beginning
                     newsData.unshift(article);
-                    alert('新規記事を作成しました。作業データを反映させました。');
                 }
 
                 changeStatus.news = true;
                 resetNewsForm();
                 renderNewsList();
                 saveDrafts();
+
+                // If folder connected, save automatically
+                if (projectDirectoryHandle) {
+                    await downloadNewsJS();
+                } else {
+                    alert('記事を作成・更新しました（下書き保存）。本番に反映するには「DOWNLOAD JS」で保存してください。');
+                }
             });
 
             document.getElementById('btn-cancel-news-edit').addEventListener('click', resetNewsForm);
@@ -988,7 +1231,6 @@
                 document.getElementById('btn-save-news').textContent = '記事を保存・適用';
                 document.getElementById('btn-cancel-news-edit').style.display = 'none';
 
-                // Set date to today
                 const today = new Date();
                 document.getElementById('news-date').value = today.getFullYear() + '.' + String(today.getMonth() + 1).padStart(2, '0') + '.' + String(today.getDate()).padStart(2, '0');
             }
@@ -1002,7 +1244,7 @@
                     return;
                 }
 
-                newsData.forEach((item, index) => {
+                newsData.forEach((item) => {
                     const div = document.createElement('div');
                     div.className = 'list-item';
                     div.innerHTML = `
@@ -1018,7 +1260,6 @@
                     list.appendChild(div);
                 });
 
-                // Attach handlers
                 list.querySelectorAll('.btn-edit').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const id = e.target.getAttribute('data-id');
@@ -1064,26 +1305,39 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            function deleteNewsItem(id) {
+            async function deleteNewsItem(id) {
                 if (confirm('この記事を本当に削除しますか？')) {
                     newsData = newsData.filter(item => item.id !== id);
                     changeStatus.news = true;
                     renderNewsList();
                     saveDrafts();
+                    if (projectDirectoryHandle) {
+                        await downloadNewsJS();
+                    }
                 }
             }
 
-            // News JS Download
+            // News JS Download / Save
             document.getElementById('btn-download-news').addEventListener('click', downloadNewsJS);
             document.getElementById('btn-exp-news').addEventListener('click', downloadNewsJS);
 
-            function downloadNewsJS() {
+            async function downloadNewsJS() {
                 const content = `window.NEWS_DATA = ${JSON.stringify(newsData, null, 4)};\n`;
-                downloadFile(content, 'news_data.js', 'text/javascript');
-                changeStatus.news = false;
-                localStorage.removeItem('admin_news_draft');
-                saveDrafts();
-                alert('news_data.js をダウンロードしました。プロジェクトの js/news_data.js に上書き保存してください。');
+                if (projectDirectoryHandle) {
+                    const success = await saveFileDirectly('js/news_data.js', content);
+                    if (success) {
+                        changeStatus.news = false;
+                        localStorage.removeItem('admin_news_draft');
+                        saveDrafts();
+                        alert('news_data.js をローカルプロジェクトに直接保存しました！');
+                    }
+                } else {
+                    downloadFile(content, 'news_data.js', 'text/javascript');
+                    changeStatus.news = false;
+                    localStorage.removeItem('admin_news_draft');
+                    saveDrafts();
+                    alert('news_data.js をダウンロードしました。プロジェクトの js/news_data.js に上書き保存してください。');
+                }
             }
 
             // ================= RANKING MODULE LOGIC =================
@@ -1099,7 +1353,7 @@
                 downloadFile(csv, 'ranking_data.csv', 'text/csv;charset=utf-8');
             });
 
-            // File input logic: show/hide Excel options depending on extension
+            // File input logic
             const fileInput = document.getElementById('ranking-file');
             const excelOptionsPanel = document.getElementById('excel-options-panel');
             
@@ -1135,7 +1389,7 @@
                     const sheetName = document.getElementById('excel-sheet-name').value || 'データ';
                     const skiprows = parseInt(document.getElementById('excel-skiprows').value || '0', 10);
 
-                    reader.onload = function (e) {
+                    reader.onload = async function (e) {
                         try {
                             const arrayBuffer = e.target.result;
                             const result = RankingManager.parseExcel(arrayBuffer, sheetName, skiprows);
@@ -1158,6 +1412,9 @@
                             updateUnsavedBanner();
                             updateExportTabStats();
 
+                            if (projectDirectoryHandle) {
+                                await downloadRankingJS();
+                            }
                         } catch (err) {
                             console.error(err);
                             status.style.display = 'block';
@@ -1169,7 +1426,7 @@
                     };
                     reader.readAsArrayBuffer(file);
                 } else if (ext === 'csv') {
-                    reader.onload = function (e) {
+                    reader.onload = async function (e) {
                         try {
                             const csvText = e.target.result;
                             parsedRankingData = RankingManager.parseCSV(csvText);
@@ -1191,6 +1448,9 @@
                             updateUnsavedBanner();
                             updateExportTabStats();
 
+                            if (projectDirectoryHandle) {
+                                await downloadRankingJS();
+                            }
                         } catch (err) {
                             console.error(err);
                             status.style.display = 'block';
@@ -1206,17 +1466,26 @@
                 }
             });
 
-            // Download Ranking JS
+            // Download Ranking JS / Save
             document.getElementById('btn-download-ranking-js').addEventListener('click', downloadRankingJS);
             document.getElementById('btn-exp-ranking').addEventListener('click', downloadRankingJS);
 
-            function downloadRankingJS() {
+            async function downloadRankingJS() {
                 const dataToSave = parsedRankingData || rankingData;
                 const content = RankingManager.getExportJS(dataToSave);
-                downloadFile(content, 'ranking_data.js', 'text/javascript');
-                changeStatus.ranking = false;
-                saveDrafts();
-                alert('ranking_data.js をダウンロードしました。プロジェクトの js/ranking_data.js に上書き保存してください。');
+                if (projectDirectoryHandle) {
+                    const success = await saveFileDirectly('js/ranking_data.js', content);
+                    if (success) {
+                        changeStatus.ranking = false;
+                        saveDrafts();
+                        alert('ranking_data.js をローカルプロジェクトに直接保存しました！');
+                    }
+                } else {
+                    downloadFile(content, 'ranking_data.js', 'text/javascript');
+                    changeStatus.ranking = false;
+                    saveDrafts();
+                    alert('ranking_data.js をダウンロードしました。プロジェクトの js/ranking_data.js に上書き保存してください。');
+                }
             }
 
             // ================= WEEKLY MODULE LOGIC =================
@@ -1233,8 +1502,7 @@
                 }
             }
 
-            // Save weekly edits to temporary variable
-            document.getElementById('btn-save-weekly').addEventListener('click', () => {
+            document.getElementById('btn-save-weekly').addEventListener('click', async () => {
                 weeklyData.menu.desc = document.getElementById('weekly-menu-desc').value.replace(/\n/g, '<br>');
                 weeklyData.menu.btnText = document.getElementById('weekly-menu-btn').value;
 
@@ -1244,24 +1512,39 @@
 
                 changeStatus.weekly = true;
                 saveDrafts();
-                alert('今週のアローズメニュー情報を更新（作業データに保存）しました。本番適用にはDOWNLOADを押してください。');
+
+                if (projectDirectoryHandle) {
+                    await downloadWeeklyJS();
+                } else {
+                    alert('今週のアローズ情報を更新しました（下書き保存）。本番に反映するにはDOWNLOADを押してください。');
+                }
             });
 
-            // Weekly JS Download
+            // Weekly JS Download / Save
             document.getElementById('btn-download-weekly').addEventListener('click', downloadWeeklyJS);
             document.getElementById('btn-exp-weekly').addEventListener('click', downloadWeeklyJS);
 
-            function downloadWeeklyJS() {
+            async function downloadWeeklyJS() {
                 const content = `window.WEEKLY_DATA = ${JSON.stringify(weeklyData, null, 4)};\n`;
-                downloadFile(content, 'weekly_data.js', 'text/javascript');
-                changeStatus.weekly = false;
-                localStorage.removeItem('admin_weekly_draft');
-                saveDrafts();
-                alert('weekly_data.js をダウンロードしました。プロジェクトの js/weekly_data.js に上書き保存してください。');
+                if (projectDirectoryHandle) {
+                    const success = await saveFileDirectly('js/weekly_data.js', content);
+                    if (success) {
+                        changeStatus.weekly = false;
+                        localStorage.removeItem('admin_weekly_draft');
+                        saveDrafts();
+                        alert('weekly_data.js をローカルプロジェクトに直接保存しました！');
+                    }
+                } else {
+                    downloadFile(content, 'weekly_data.js', 'text/javascript');
+                    changeStatus.weekly = false;
+                    localStorage.removeItem('admin_weekly_draft');
+                    saveDrafts();
+                    alert('weekly_data.js をダウンロードしました。プロジェクトの js/weekly_data.js に上書き保存してください。');
+                }
             }
 
             // ================= SCHEDULE MODULE LOGIC =================
-            document.getElementById('btn-save-schedule').addEventListener('click', () => {
+            document.getElementById('btn-save-schedule').addEventListener('click', async () => {
                 const date = document.getElementById('schedule-date').value;
                 const type = document.getElementById('schedule-type').value;
                 const title = document.getElementById('schedule-title').value;
@@ -1285,16 +1568,20 @@
                     if (idx !== -1) {
                         scheduleData[idx] = item;
                     }
-                    alert('スケジュールを更新しました。');
                 } else {
                     scheduleData.push(item);
-                    alert('スケジュールを追加しました。');
                 }
 
                 changeStatus.schedule = true;
                 resetScheduleForm();
                 renderScheduleList();
                 saveDrafts();
+
+                if (projectDirectoryHandle) {
+                    await downloadScheduleJS();
+                } else {
+                    alert('スケジュールを保存しました（下書き保存）。「DOWNLOAD JS」で反映してください。');
+                }
             });
 
             document.getElementById('btn-cancel-schedule-edit').addEventListener('click', resetScheduleForm);
@@ -1307,7 +1594,6 @@
                 document.getElementById('btn-save-schedule').textContent = 'スケジュールを保存';
                 document.getElementById('btn-cancel-schedule-edit').style.display = 'none';
 
-                // Set date to today
                 const today = new Date();
                 document.getElementById('schedule-date').value = today.getFullYear() + '.' + String(today.getMonth() + 1).padStart(2, '0') + '.' + String(today.getDate()).padStart(2, '0');
             }
@@ -1316,7 +1602,6 @@
                 const container = document.getElementById('schedule-list-container');
                 container.innerHTML = '';
 
-                // Sort by date chronological
                 const sortedList = [...scheduleData].sort((a, b) => a.date.localeCompare(b.date));
 
                 if (sortedList.length === 0) {
@@ -1324,7 +1609,7 @@
                     return;
                 }
 
-                sortedList.forEach((item, index) => {
+                sortedList.forEach((item) => {
                     const div = document.createElement('div');
                     div.className = 'list-item';
                     div.innerHTML = `
@@ -1341,7 +1626,6 @@
                     container.appendChild(div);
                 });
 
-                // Bind handlers
                 container.querySelectorAll('.btn-edit-sch').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const id = e.target.getAttribute('data-id');
@@ -1374,26 +1658,264 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            function deleteScheduleItem(id) {
+            async function deleteScheduleItem(id) {
                 if (confirm('この予定を本当に削除しますか？')) {
                     scheduleData = scheduleData.filter(s => s.id !== id);
                     changeStatus.schedule = true;
                     renderScheduleList();
                     saveDrafts();
+                    if (projectDirectoryHandle) {
+                        await downloadScheduleJS();
+                    }
                 }
             }
 
-            // Schedule JS Download
+            // Schedule JS Download / Save
             document.getElementById('btn-download-schedule').addEventListener('click', downloadScheduleJS);
             document.getElementById('btn-exp-schedule').addEventListener('click', downloadScheduleJS);
 
-            function downloadScheduleJS() {
+            async function downloadScheduleJS() {
                 const content = `window.SCHEDULE_DATA = ${JSON.stringify(scheduleData, null, 4)};\n`;
-                downloadFile(content, 'schedule_data.js', 'text/javascript');
-                changeStatus.schedule = false;
-                localStorage.removeItem('admin_schedule_draft');
+                if (projectDirectoryHandle) {
+                    const success = await saveFileDirectly('js/schedule_data.js', content);
+                    if (success) {
+                        changeStatus.schedule = false;
+                        localStorage.removeItem('admin_schedule_draft');
+                        saveDrafts();
+                        alert('schedule_data.js をローカルプロジェクトに直接保存しました！');
+                    }
+                } else {
+                    downloadFile(content, 'schedule_data.js', 'text/javascript');
+                    changeStatus.schedule = false;
+                    localStorage.removeItem('admin_schedule_draft');
+                    saveDrafts();
+                    alert('schedule_data.js をダウンロードしました。プロジェクトの js/schedule_data.js に上書き保存してください。');
+                }
+            }
+
+            // ================= HOMEWORK MODULE LOGIC =================
+            document.getElementById('btn-save-homework').addEventListener('click', async () => {
+                const title = document.getElementById('homework-title').value;
+                const url = document.getElementById('homework-url').value;
+                const category = document.getElementById('homework-category').value;
+                const desc = document.getElementById('homework-desc').value;
+
+                if (!title || !url) {
+                    alert('タイトルとYouTube動画URLは必須項目です。');
+                    return;
+                }
+
+                const item = {
+                    id: editingHomeworkId || ('hw-' + Date.now()),
+                    url,
+                    category: category || 'jump basic',
+                    title,
+                    desc: desc || ''
+                };
+
+                if (editingHomeworkId) {
+                    const idx = homeworkData.findIndex(h => h.id === editingHomeworkId);
+                    if (idx !== -1) {
+                        homeworkData[idx] = item;
+                    }
+                } else {
+                    homeworkData.push(item);
+                }
+
+                changeStatus.homework = true;
+                resetHomeworkForm();
+                renderHomeworkList();
                 saveDrafts();
-                alert('schedule_data.js をダウンロードしました。プロジェクトの js/schedule_data.js に上書き保存してください。');
+
+                if (projectDirectoryHandle) {
+                    await downloadHomeworkJS();
+                } else {
+                    alert('動画情報を保存しました（下書き保存）。「DOWNLOAD JS」で反映してください。');
+                }
+            });
+
+            document.getElementById('btn-cancel-homework-edit').addEventListener('click', resetHomeworkForm);
+
+            function resetHomeworkForm() {
+                editingHomeworkId = null;
+                document.getElementById('homework-title').value = '';
+                document.getElementById('homework-url').value = '';
+                document.getElementById('homework-category').value = '';
+                document.getElementById('homework-desc').value = '';
+                document.getElementById('homework-form-title').textContent = 'ADD HOMEWORK VIDEO';
+                document.getElementById('btn-save-homework').textContent = '動画を保存';
+                document.getElementById('btn-cancel-homework-edit').style.display = 'none';
+            }
+
+            function renderHomeworkList() {
+                const container = document.getElementById('homework-list-container');
+                container.innerHTML = '';
+
+                if (homeworkData.length === 0) {
+                    container.innerHTML = '<p style="color: #666; padding: 1rem;">登録されている動画はありません。</p>';
+                    return;
+                }
+
+                homeworkData.forEach((item) => {
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `
+                        <div class="list-item-info">
+                            <div class="list-item-meta">[${item.category.toUpperCase()}]</div>
+                            <div class="list-item-title">${item.title}</div>
+                            <div class="list-item-desc">${item.desc || ''} | URL: ${item.url}</div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-admin btn-small btn-edit-hw" data-id="${item.id}">EDIT</button>
+                            <button class="btn-admin btn-small btn-delete-hw danger" data-id="${item.id}">DELETE</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+
+                container.querySelectorAll('.btn-edit-hw').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        editHomeworkItem(id);
+                    });
+                });
+
+                container.querySelectorAll('.btn-delete-hw').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        deleteHomeworkItem(id);
+                    });
+                });
+            }
+
+            function editHomeworkItem(id) {
+                const item = homeworkData.find(h => h.id === id);
+                if (!item) return;
+
+                editingHomeworkId = id;
+                document.getElementById('homework-title').value = item.title;
+                document.getElementById('homework-url').value = item.url;
+                document.getElementById('homework-category').value = item.category;
+                document.getElementById('homework-desc').value = item.desc || '';
+
+                document.getElementById('homework-form-title').textContent = 'EDIT HOMEWORK VIDEO';
+                document.getElementById('btn-save-homework').textContent = '変更を反映';
+                document.getElementById('btn-cancel-homework-edit').style.display = 'block';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            async function deleteHomeworkItem(id) {
+                if (confirm('この宿題動画を本当に削除しますか？')) {
+                    homeworkData = homeworkData.filter(h => h.id !== id);
+                    changeStatus.homework = true;
+                    renderHomeworkList();
+                    saveDrafts();
+                    if (projectDirectoryHandle) {
+                        await downloadHomeworkJS();
+                    }
+                }
+            }
+
+            // Homework JS Download / Save
+            document.getElementById('btn-download-homework').addEventListener('click', downloadHomeworkJS);
+            document.getElementById('btn-exp-homework').addEventListener('click', downloadHomeworkJS);
+
+            async function downloadHomeworkJS() {
+                const content = `window.HOMEWORK_DATA = ${JSON.stringify(homeworkData, null, 4)};\n`;
+                if (projectDirectoryHandle) {
+                    const success = await saveFileDirectly('js/homework_data.js', content);
+                    if (success) {
+                        changeStatus.homework = false;
+                        localStorage.removeItem('admin_homework_draft');
+                        saveDrafts();
+                        alert('homework_data.js をローカルプロジェクトに直接保存しました！');
+                    }
+                } else {
+                    downloadFile(content, 'homework_data.js', 'text/javascript');
+                    changeStatus.homework = false;
+                    localStorage.removeItem('admin_homework_draft');
+                    saveDrafts();
+                    alert('homework_data.js をダウンロードしました。プロジェクトの js/homework_data.js に上書き保存してください。');
+                }
+            }
+
+            // ================= RESULTS MODULE LOGIC =================
+            function loadResultsForm() {
+                if (resultsData) {
+                    document.getElementById('results-comment').value = resultsData.comment || '';
+                    document.getElementById('results-login-link').value = resultsData.loginLink || '';
+                    document.getElementById('results-img-caption').value = resultsData.imgCaption || '';
+
+                    const prev = document.getElementById('results-summary-preview');
+                    const savedImg = resultsData.imageData || resultsData.summaryImg;
+                    if (savedImg) {
+                        currentResultsImageBase64 = resultsData.imageData || null;
+                        prev.style.display = 'block';
+                        prev.style.backgroundImage = `url(${savedImg})`;
+                        prev.textContent = '';
+                    } else {
+                        currentResultsImageBase64 = null;
+                        prev.style.display = 'none';
+                        prev.style.backgroundImage = '';
+                    }
+                }
+            }
+
+            // Results summary image upload handle
+            document.getElementById('results-summary-file').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                compressAndConvertImage(file, 1000, 0.7, (base64) => {
+                    currentResultsImageBase64 = base64;
+                    const prev = document.getElementById('results-summary-preview');
+                    prev.style.display = 'block';
+                    prev.style.backgroundImage = `url(${base64})`;
+                    prev.textContent = '';
+                });
+            });
+
+            document.getElementById('btn-save-results').addEventListener('click', async () => {
+                resultsData.comment = document.getElementById('results-comment').value;
+                resultsData.loginLink = document.getElementById('results-login-link').value;
+                resultsData.imgCaption = document.getElementById('results-img-caption').value;
+                
+                if (currentResultsImageBase64) {
+                    resultsData.imageData = currentResultsImageBase64;
+                }
+
+                changeStatus.results = true;
+                saveDrafts();
+
+                if (projectDirectoryHandle) {
+                    await downloadResultsJS();
+                } else {
+                    alert('測定結果設定を更新しました（下書き保存）。本番に反映するにはDOWNLOADを押してください。');
+                }
+            });
+
+            // Results JS Download / Save
+            document.getElementById('btn-download-results').addEventListener('click', downloadResultsJS);
+            document.getElementById('btn-exp-results').addEventListener('click', downloadResultsJS);
+
+            async function downloadResultsJS() {
+                const content = `window.RESULTS_DATA = ${JSON.stringify(resultsData, null, 4)};\n`;
+                if (projectDirectoryHandle) {
+                    const success = await saveFileDirectly('js/results_data.js', content);
+                    if (success) {
+                        changeStatus.results = false;
+                        localStorage.removeItem('admin_results_draft');
+                        saveDrafts();
+                        alert('results_data.js をローカルプロジェクトに直接保存しました！');
+                    }
+                } else {
+                    downloadFile(content, 'results_data.js', 'text/javascript');
+                    changeStatus.results = false;
+                    localStorage.removeItem('admin_results_draft');
+                    saveDrafts();
+                    alert('results_data.js をダウンロードしました。プロジェクトの js/results_data.js に上書き保存してください。');
+                }
             }
 
             // ================= GENERAL / CACHE CONTROL =================
@@ -1402,12 +1924,16 @@
                     localStorage.removeItem('admin_news_draft');
                     localStorage.removeItem('admin_weekly_draft');
                     localStorage.removeItem('admin_schedule_draft');
+                    localStorage.removeItem('admin_homework_draft');
+                    localStorage.removeItem('admin_results_draft');
                     
                     // Reset statuses
                     changeStatus.news = false;
                     changeStatus.ranking = false;
                     changeStatus.weekly = false;
                     changeStatus.schedule = false;
+                    changeStatus.homework = false;
+                    changeStatus.results = false;
 
                     initData();
                     alert('データを初期状態にリセットしました！');
