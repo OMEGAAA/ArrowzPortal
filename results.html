@@ -32,7 +32,6 @@
                         <p class="summary-comment" id="res-comment" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1rem;">
                             今月の要約コメント
                         </p>
-                        <p class="summary-text" id="res-summary">ランキングデータを読み込み中…</p>
                     </div>
                 </div>
             </div>
@@ -128,7 +127,6 @@
             });
 
             const dateEl = document.getElementById('res-date');
-            const summaryEl = document.getElementById('res-summary');
 
             let resultDate = new Date();
             resultDate.setMonth(2); // Force to March (0-indexed)
@@ -143,10 +141,6 @@
             if (dateEl) {
                 dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
             }
-            if (summaryEl && sorted.length) {
-                summaryEl.textContent = `${resultDate.getMonth() + 1}月の結果を反映しました。`;
-            }
-
             const tbody = document.getElementById('res-ranking-body');
             if (tbody) {
                 sorted.forEach((d, i) => {
