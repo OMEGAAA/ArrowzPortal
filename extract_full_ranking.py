@@ -43,29 +43,32 @@ all_records = []
 if 'データ' in sheet_names:
     print("Detected format: Legacy (Single Sheet)")
     
-    df = pd.read_excel(file_path, sheet_name='データ', header=None, skiprows=3)
-    
+    # ヘッダー行は1行目のみ。データは2行目以降なので skiprows=1。
+    df = pd.read_excel(file_path, sheet_name='データ', header=None, skiprows=1)
+
+    # 「データ」シートは各測定項目が2列1組（ラベル列＋値列）で構成され、
+    # 実際の数値は組の右側（奇数列インデックス）に入っている。
     VALUE_COLS = {
-        'vmax':              43,   # 最高速度 (km/h)
-        'vdec':              45,   # 速度維持率
-        'sprint_score':      47,   # スプリントスコア (回)
-        'pro':               51,   # 切り返し走 (sec)
-        'dva':               53,   # 動体視力 (ランク)
-        'eye':               55,   # 眼球運動 (ランク)
-        'peri':              57,   # 周辺視 (ランク)
-        'flash':             59,   # 瞬間視 (ランク)
-        'arrowz_eye_total':  61,   # ArrowzEye合計値
-        'hand_eye':          65,   # 眼と手の協応動作 (sec)
-        'height':            67,   # 身長 (cm)
-        'weight':            69,   # 体重 (kg)
-        'bmi':               71,   # BMI
-        'vj':                73,   # 垂直跳び (cm)
-        'sj':                75,   # スクワットジャンプ (cm)
-        'contact_time':      77,   # 接地時間 (sec)
-        'jump_height':       79,   # 跳躍高 (cm)
-        'rj_index':          81,   # RJ-index
-        'broad_jump':        83,   # 立ち幅跳び (cm)
-        'stepping':          85,   # ステッピング (回)
+        'vmax':              41,   # 最高速度 (km/h)
+        'vdec':              43,   # 速度維持率
+        'sprint_score':      45,   # スプリントスコア (回)
+        'pro':               49,   # 切り返し走 (sec)
+        'dva':               51,   # 動体視力 (ランク)
+        'eye':               53,   # 眼球運動 (ランク)
+        'peri':              55,   # 周辺視 (ランク)
+        'flash':             57,   # 瞬間視 (ランク)
+        'arrowz_eye_total':  59,   # ArrowzEye合計値
+        'hand_eye':          63,   # 眼と手の協応動作 (sec)
+        'height':            65,   # 身長 (cm)
+        'weight':            67,   # 体重 (kg)
+        'bmi':               69,   # BMI
+        'vj':                71,   # 垂直跳び (cm)
+        'sj':                73,   # スクワットジャンプ (cm)
+        'contact_time':      75,   # 接地時間 (sec)
+        'jump_height':       77,   # 跳躍高 (cm)
+        'rj_index':          79,   # RJ-index
+        'broad_jump':        81,   # 立ち幅跳び (cm)
+        'stepping':          83,   # ステッピング (回)
     }
 
     for index, row in df.iterrows():
@@ -75,10 +78,10 @@ if 'データ' in sheet_names:
         if re.match(r'\d{4}/', str(name)):
             continue
 
-        test_date = parse_date(row[5])
-        grade = str(row[2]) if pd.notna(row[2]) else ""
-        gender = str(row[3]) if pd.notna(row[3]) else ""
-        class_name = str(row[8]) if pd.notna(row[8]) else ""
+        test_date = parse_date(row[3])                                  # 測定日
+        grade = str(row[10]) if pd.notna(row[10]) else ""               # 学年 (小1〜高3)
+        gender = str(row[9]) if pd.notna(row[9]) else ""                # 男子/女子
+        class_name = str(row[8]) if pd.notna(row[8]) else ""            # クラス時間帯
 
         category = "U-12"
         if "小" in grade:

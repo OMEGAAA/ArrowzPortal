@@ -148,27 +148,29 @@ class RankingManager {
 
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         
+        // 「データ」シートは各測定項目が2列1組（ラベル列＋値列）で、
+        // 実際の数値は組の右側（奇数列インデックス）に入っている。
         const VALUE_COLS = {
-            'vmax':              43,   // 最高速度 (km/h)
-            'vdec':              45,   // 速度維持率
-            'sprint_score':      47,   // スプリントスコア (回)
-            'pro':               51,   // 切り返し走 (sec)
-            'dva':               53,   // 動体視力 (ランク)
-            'eye':               55,   // 眼球運動 (ランク)
-            'peri':              57,   // 周辺視 (ランク)
-            'flash':             59,   // 瞬間視 (ランク)
-            'arrowz_eye_total':  61,   // ArrowzEye合計値
-            'hand_eye':          65,   // 眼と手の協応動作 (sec)
-            'height':            67,   // 身長 (cm)
-            'weight':            69,   // 体重 (kg)
-            'bmi':               71,   // BMI
-            'vj':                73,   // 垂直跳び (cm)
-            'sj':                75,   // スクワットジャンプ (cm)
-            'contact_time':      77,   // 接地時間 (sec)
-            'jump_height':       79,   // 跳躍高 (cm)
-            'rj_index':          81,   // RJ-index
-            'broad_jump':        83,   // 立ち幅跳び (cm)
-            'stepping':          85,   // ステッピング (回)
+            'vmax':              41,   // 最高速度 (km/h)
+            'vdec':              43,   // 速度維持率
+            'sprint_score':      45,   // スプリントスコア (回)
+            'pro':               49,   // 切り返し走 (sec)
+            'dva':               51,   // 動体視力 (ランク)
+            'eye':               53,   // 眼球運動 (ランク)
+            'peri':              55,   // 周辺視 (ランク)
+            'flash':             57,   // 瞬間視 (ランク)
+            'arrowz_eye_total':  59,   // ArrowzEye合計値
+            'hand_eye':          63,   // 眼と手の協応動作 (sec)
+            'height':            65,   // 身長 (cm)
+            'weight':            67,   // 体重 (kg)
+            'bmi':               69,   // BMI
+            'vj':                71,   // 垂直跳び (cm)
+            'sj':                73,   // スクワットジャンプ (cm)
+            'contact_time':      75,   // 接地時間 (sec)
+            'jump_height':       77,   // 跳躍高 (cm)
+            'rj_index':          79,   // RJ-index
+            'broad_jump':        81,   // 立ち幅跳び (cm)
+            'stepping':          83,   // ステッピング (回)
         };
 
         const parseDate = (val) => {
@@ -196,10 +198,10 @@ class RankingManager {
             
             if (/^\d{4}\//.test(nameStr)) continue;
 
-            const testDate = parseDate(row[5]);
-            const grade = row[2] !== undefined && row[2] !== null ? String(row[2]).trim() : "";
-            const gender = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : "";
-            const className = row[8] !== undefined && row[8] !== null ? String(row[8]).trim() : "";
+            const testDate = parseDate(row[3]);                                                       // 測定日
+            const grade = row[10] !== undefined && row[10] !== null ? String(row[10]).trim() : "";     // 学年 (小1〜高3)
+            const gender = row[9] !== undefined && row[9] !== null ? String(row[9]).trim() : "";       // 男子/女子
+            const className = row[8] !== undefined && row[8] !== null ? String(row[8]).trim() : "";    // クラス時間帯
 
             let category = "U-12";
             if (grade.includes("小")) {
