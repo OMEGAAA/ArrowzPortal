@@ -303,22 +303,49 @@ class RankingManager {
 
         // 生徒名になっているすべてのシートをループ
         for (const sName of workbook.SheetNames) {
-            if (EXCLUDE_SHEETS.includes(sName)) continue;
+            let isExclude = false;
+            for (const ex of EXCLUDE_SHEETS) {
+                if (sName.includes(ex) || ex.includes(sName)) {
+                    isExclude = true;
+                    break;
+                }
+            }
+            if (isExclude) continue;
 
             const sheet = workbook.Sheets[sName];
             if (!sheet) continue;
 
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            
+            // 安全対策: 行数不足や、列数が極端に少ないシート（管理用など）はスキップ
+            if (rows.length < 5) continue;
+            let maxCols = 0;
+            for (let rIdx = 0; rIdx < Math.min(5, rows.length); rIdx++) {
+                if (rows[rIdx] && rows[rIdx].length > maxCols) {
+                    maxCols = rows[rIdx].length;
+                }
+            }
+            if (maxCols < 20) continue;
+
             const nameStr = sName.trim();
 
             // データは4行目（インデックス4）以降
             for (let i = 4; i < rows.length; i++) {
                 const row = rows[i];
                 if (!row || row.length === 0) continue;
+                if (row.length < 44) continue; // 列数が足りない行はスキップ
 
-                // 測定日 (列6)
-                const testDate = parseDate(row[6]);
-                if (!testDate) continue; // 測定日が入っていない行はスキップ
+                // 年(列0)と月(列1)から日付オブジェクトを合成
+                const yearVal = parseInt(row[0], 10);
+                const monthVal = parseInt(row[1], 10);
+                let testDate = null;
+                if (!isNaN(yearVal) && !isNaN(monthVal)) {
+                    testDate = new Date(yearVal, monthVal - 1, 1);
+                } else {
+                    testDate = parseDate(row[6]);
+                }
+
+                if (!testDate) continue;
 
                 const grade = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : "";
                 const gender = row[4] !== undefined && row[4] !== null ? String(row[4]).trim() : "";
