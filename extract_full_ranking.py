@@ -5,17 +5,18 @@ import re
 import openpyxl
 import os
 
-# デフォルトのファイルパス（ダウンロードフォルダ）
+# 正となるファイル（プロジェクト直下のランキングExcel）を最優先で読み込む
+legacy_path = 'フィールドテストデータ ランキング.xlsm'
+# フォールバック用（新Ver.シート）
 default_path = r"C:\Users\山﨑元気\Downloads\FTシート_新Ver._氏名 毎月更新.xlsm"
 alt_path = 'FTシート_新Ver._氏名 毎月更新.xlsm'
-legacy_path = 'フィールドテストデータ ランキング.xlsm'
 
-if os.path.exists(default_path):
+if os.path.exists(legacy_path):
+    file_path = legacy_path
+elif os.path.exists(default_path):
     file_path = default_path
 elif os.path.exists(alt_path):
     file_path = alt_path
-elif os.path.exists(legacy_path):
-    file_path = legacy_path
 else:
     raise FileNotFoundError(f"Excelファイルが見つかりません。 (探索パス: {default_path}, {alt_path}, {legacy_path})")
 
