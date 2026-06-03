@@ -102,7 +102,315 @@ class RankingManager {
      * @param {Array} data 
      * @returns {string} content for ranking_data.js
      */
+    /**
+     * Generates JS content for exporting.
+     * @param {Array} data 
+     * @returns {string} content for ranking_data.js
+     */
     static getExportJS(data) {
         return `window.RANKING_DATA = ${JSON.stringify(data, null, 4)};\n`;
     }
+
+    /**
+     * Parses Excel (arrayBuffer) to JSON data.
+     * @param {ArrayBuffer} arrayBuffer Excel file content
+     * @param {string} sheetName Sheet name to read (default: 'データ')
+     * @param {number} skiprows Number of rows to skip (default: 0)
+     * @returns {Object} Object containing the parsed ranking data and the version string
+     */
+    static parseExcel(arrayBuffer, sheetName = 'データ', skiprows = 0) {
+        if (typeof XLSX === 'undefined') {
+            throw new Error('SheetJS (XLSX) ライブラリが読み込まれていません。');
+        }
+
+        const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+        
+        // 「データ」などの特定シートが存在するかどうかで従来型（1シート構成）か新Ver.型（生徒別複数シート）かを判定
+        const hasSingleDataSheet = workbook.SheetNames.includes(sheetName);
+        
+        if (hasSingleDataSheet) {
+            const data = this.parseExcelSingleSheet(workbook, sheetName, skiprows);
+            return { data: data, version: '従来Ver. (全員分1シート)' };
+        } else {
+            const data = this.parseExcelMultiSheets(workbook);
+            return { data: data, version: '新Ver. (生徒別複数シート)' };
+        }
+    }
+
+    /**
+     * Parses a single data sheet Excel (traditional format).
+     */
+    static parseExcelSingleSheet(workbook, sheetName, skiprows) {
+        const sheet = workbook.Sheets[sheetName];
+        if (!sheet) {
+            throw new Error(`シート「${sheetName}」が見つかりません。`);
+        }
+
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        
+        const VALUE_COLS = {
+            'vmax':              43,   // 最高速度 (km/h)
+            'vdec':              45,   // 速度維持率
+            'sprint_score':      47,   // スプリントスコア (回)
+            'pro':               51,   // 切り返し走 (sec)
+            'dva':               53,   // 動体視力 (ランク)
+            'eye':               55,   // 眼球運動 (ランク)
+            'peri':              57,   // 周辺視 (ランク)
+            'flash':             59,   // 瞬間視 (ランク)
+            'arrowz_eye_total':  61,   // ArrowzEye合計値
+            'hand_eye':          65,   // 眼と手の協応動作 (sec)
+            'height':            67,   // 身長 (cm)
+            'weight':            69,   // 体重 (kg)
+            'bmi':               71,   // BMI
+            'vj':                73,   // 垂直跳び (cm)
+            'sj':                75,   // スクワットジャンプ (cm)
+            'contact_time':      77,   // 接地時間 (sec)
+            'jump_height':       79,   // 跳躍高 (cm)
+            'rj_index':          81,   // RJ-index
+            'broad_jump':        83,   // 立ち幅跳び (cm)
+            'stepping':          85,   // ステッピング (回)
+        };
+
+        const parseDate = (val) => {
+            if (val === undefined || val === null || val === '') return null;
+            if (val instanceof Date) return val;
+            if (typeof val === 'number') {
+                return new Date((val - (25567 + 2)) * 86400 * 1000);
+            }
+            const s = String(val).trim();
+            const d = new Date(s);
+            return isNaN(d.getTime()) ? null : d;
+        };
+
+        const allRecords = [];
+
+        for (let i = skiprows; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || row.length === 0) continue;
+
+            const name = row[0];
+            if (name === undefined || name === null) continue;
+            
+            const nameStr = String(name).trim();
+            if (nameStr.length === 0) continue;
+            
+            if (/^\d{4}\//.test(nameStr)) continue;
+
+            const testDate = parseDate(row[5]);
+            const grade = row[2] !== undefined && row[2] !== null ? String(row[2]).trim() : "";
+            const gender = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : "";
+            const className = row[8] !== undefined && row[8] !== null ? String(row[8]).trim() : "";
+
+            let category = "U-12";
+            if (grade.includes("小")) {
+                try {
+                    const match = grade.match(/\d+/);
+                    if (match) {
+                        const g = parseInt(match[0], 10);
+                        category = g <= 3 ? "U-9" : "U-12";
+                    }
+                } catch (e) {}
+            } else if (grade.includes("中")) {
+                category = "U-15";
+            } else if (grade.includes("高")) {
+                category = "U-18";
+            }
+
+            const scores = {};
+            let hasData = false;
+
+            for (const [key, idx] of Object.entries(VALUE_COLS)) {
+                try {
+                    const valRaw = row[idx];
+                    if (valRaw === undefined || valRaw === null || valRaw === '') continue;
+
+                    const valStr = String(valRaw).replace(/,/g, '').trim();
+                    if (valStr === '' || valStr === '-') continue;
+
+                    const val = parseFloat(valStr);
+                    if (!isNaN(val)) {
+                        scores[key] = Math.round(val * 10000) / 10000;
+                        hasData = true;
+                    }
+                } catch (e) {}
+            }
+
+            const mainScore = scores['vmax'] || 0;
+
+            if (hasData) {
+                allRecords.push({
+                    name: nameStr,
+                    class: className || grade,
+                    category: category,
+                    grade: grade,
+                    gender: gender,
+                    test_date: testDate,
+                    score: mainScore,
+                    scores: scores
+                });
+            }
+        }
+
+        return this.filterLatestAndSort(allRecords);
+    }
+
+    /**
+     * Parses Excel with multiple student sheets (new format).
+     */
+    static parseExcelMultiSheets(workbook) {
+        // 管理用または無効なシートの除外リスト
+        const EXCLUDE_SHEETS = [
+            '引点克服TR', 'データ貼り付け', '男性', '女性', '結果シート', 
+            '個人シート', 'プルダウン', 'CheckList', 'TransferLog'
+        ];
+
+        // 新Ver.用の列インデックス定義 (個人シート内)
+        const NEW_VALUE_COLS = {
+            'vmax':              22,   // 最高速度 (km/h)
+            'vdec':              23,   // 速度維持率
+            'sprint_score':      24,   // スプリントスコア (回)
+            'pro':               26,   // 切り返し走 (sec)
+            'dva':               27,   // 動体視力 (ランク)
+            'eye':               28,   // 眼球運動 (ランク)
+            'peri':              29,   // 周辺視 (ランク)
+            'flash':             30,   // 瞬間視 (ランク)
+            'arrowz_eye_total':  31,   // ArrowzEye合計値
+            'hand_eye':          33,   // 眼と手の協応動作 (sec)
+            'height':            34,   // 身長 (cm)
+            'weight':            35,   // 体重 (kg)
+            'bmi':               36,   // BMI
+            'vj':                37,   // 垂直跳び (cm)
+            'sj':                38,   // スクワットジャンプ (cm)
+            'contact_time':      39,   // 接地時間 (sec)
+            'jump_height':       40,   // 跳躍高 (cm)
+            'rj_index':          41,   // RJ-index
+            'broad_jump':        42,   // 立ち幅跳び (cm)
+            'stepping':          43,   // ステッピング (回)
+        };
+
+        const parseDate = (val) => {
+            if (val === undefined || val === null || val === '') return null;
+            if (val instanceof Date) return val;
+            if (typeof val === 'number') {
+                return new Date((val - (25567 + 2)) * 86400 * 1000);
+            }
+            const s = String(val).trim();
+            const d = new Date(s);
+            return isNaN(d.getTime()) ? null : d;
+        };
+
+        const allRecords = [];
+
+        // 生徒名になっているすべてのシートをループ
+        for (const sName of workbook.SheetNames) {
+            if (EXCLUDE_SHEETS.includes(sName)) continue;
+
+            const sheet = workbook.Sheets[sName];
+            if (!sheet) continue;
+
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            const nameStr = sName.trim();
+
+            // データは4行目（インデックス4）以降
+            for (let i = 4; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
+
+                // 測定日 (列6)
+                const testDate = parseDate(row[6]);
+                if (!testDate) continue; // 測定日が入っていない行はスキップ
+
+                const grade = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : "";
+                const gender = row[4] !== undefined && row[4] !== null ? String(row[4]).trim() : "";
+                const className = row[7] !== undefined && row[7] !== null ? String(row[7]).trim() : "";
+
+                let category = "U-12";
+                if (grade.includes("小")) {
+                    try {
+                        const match = grade.match(/\d+/);
+                        if (match) {
+                            const g = parseInt(match[0], 10);
+                            category = g <= 3 ? "U-9" : "U-12";
+                        }
+                    } catch (e) {}
+                } else if (grade.includes("中")) {
+                    category = "U-15";
+                } else if (grade.includes("高")) {
+                    category = "U-18";
+                }
+
+                const scores = {};
+                let hasData = false;
+
+                // スコア抽出
+                for (const [key, idx] of Object.entries(NEW_VALUE_COLS)) {
+                    try {
+                        const valRaw = row[idx];
+                        if (valRaw === undefined || valRaw === null || valRaw === '') continue;
+
+                        const valStr = String(valRaw).replace(/,/g, '').trim();
+                        if (valStr === '' || valStr === '-') continue;
+
+                        const val = parseFloat(valStr);
+                        if (!isNaN(val)) {
+                            scores[key] = Math.round(val * 10000) / 10000;
+                            hasData = true;
+                        }
+                    } catch (e) {}
+                }
+
+                const mainScore = scores['vmax'] || 0;
+
+                if (hasData) {
+                    allRecords.push({
+                        name: nameStr,
+                        class: className || grade,
+                        category: category,
+                        grade: grade,
+                        gender: gender,
+                        test_date: testDate,
+                        score: mainScore,
+                        scores: scores
+                    });
+                }
+            }
+        }
+
+        return this.filterLatestAndSort(allRecords);
+    }
+
+    /**
+     * Helper to filter records to keep only the latest per student, and sort by score desc.
+     */
+    static filterLatestAndSort(allRecords) {
+        const latest = {};
+        for (const rec of allRecords) {
+            const name = rec.name;
+            if (!latest[name]) {
+                latest[name] = rec;
+            } else {
+                const existingDate = latest[name].test_date;
+                const newDate = rec.test_date;
+                if (newDate !== null) {
+                    if (existingDate === null || newDate > existingDate) {
+                        latest[name] = rec;
+                    }
+                }
+            }
+        }
+
+        const rankingData = Object.values(latest);
+
+        for (const item of rankingData) {
+            delete item.test_date;
+            delete item.grade;
+            delete item.gender;
+        }
+
+        rankingData.sort((a, b) => b.score - a.score);
+
+        return rankingData;
+    }
 }
+
+

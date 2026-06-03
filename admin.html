@@ -489,15 +489,38 @@
                     </div>
 
                     <div class="admin-card">
-                        <h3>2. IMPORT NEW DATA & PROCESS (CSV取り込み)</h3>
-                        <span class="card-subtitle">編集・保存したCSVファイルを読み込んでデータを解析し、JSファイルに変換します。</span>
+                        <h3>2. IMPORT NEW DATA & PROCESS (Excel / CSV取り込み)</h3>
+                        <span class="card-subtitle">測定データのエクセルファイル（.xlsx, .xlsm）またはCSVファイルを読み込んで解析し、JSデータを生成します。</span>
                         <div class="form-group">
-                            <label class="form-label">CSVファイルを選択</label>
-                            <input type="file" id="ranking-csv-file" accept=".csv" class="form-input">
+                            <label class="form-label">ファイルを選択（Excel または CSV）</label>
+                            <input type="file" id="ranking-file" accept=".xlsx,.xlsm,.csv" class="form-input">
                         </div>
-                        <button id="btn-process-ranking" class="btn-admin primary">CSVを処理してJSを生成</button>
 
-                        <div id="ranking-status" class="status-box" style="display: none; margin-top: 1.5rem;"></div>
+                        <!-- Options for Excel parsing -->
+                        <div id="excel-options-panel" style="display: none; background-color: #121212; border: 1px solid #222; padding: 1.2rem; margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--accent-color); font-size: 0.95rem; margin-bottom: 0.8rem; font-family: var(--font-primary);">Excel解析オプション</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">シート名</label>
+                                    <input type="text" id="excel-sheet-name" class="form-input" value="データ" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">データ開始行（スキップする行数）</label>
+                                    <select id="excel-skiprows" class="form-select" style="padding: 0.5rem 1rem; font-size: 0.85rem; height: auto;">
+                                        <option value="0">0行（1行目がヘッダー、2行目からデータ）※推奨</option>
+                                        <option value="3">3行（4行目からデータ、既存スクリプト互換）</option>
+                                        <option value="1">1行</option>
+                                        <option value="2">2行</option>
+                                        <option value="4">4行</option>
+                                        <option value="5">5行</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btn-process-ranking" class="btn-admin primary">ファイルを処理してJSを生成</button>
+
+                        <div id="ranking-status" class="status-box" style="display: none; margin-top: 1.5rem; padding: 1rem; background: #111; border: 1px solid var(--border-color); font-family: monospace; white-space: pre-wrap; font-size: 0.85rem;"></div>
                     </div>
 
                     <div class="admin-card" id="ranking-download-panel" style="display: none; border-color: var(--accent-color);">
@@ -681,6 +704,9 @@
             </section>
         </main>
     </div>
+
+    <!-- SheetJS (XLSX) Library for Excel parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <!-- Data scripts for initial load -->
     <script src="js/news_data.js"></script>
@@ -1073,51 +1099,111 @@
                 downloadFile(csv, 'ranking_data.csv', 'text/csv;charset=utf-8');
             });
 
-            // CSV Process
+            // File input logic: show/hide Excel options depending on extension
+            const fileInput = document.getElementById('ranking-file');
+            const excelOptionsPanel = document.getElementById('excel-options-panel');
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const ext = file.name.split('.').pop().toLowerCase();
+                        if (ext === 'xlsx' || ext === 'xlsm') {
+                            excelOptionsPanel.style.display = 'block';
+                        } else {
+                            excelOptionsPanel.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            // Process Excel or CSV File
             document.getElementById('btn-process-ranking').addEventListener('click', () => {
-                const fileInput = document.getElementById('ranking-csv-file');
+                const fileInput = document.getElementById('ranking-file');
                 const status = document.getElementById('ranking-status');
                 const file = fileInput.files[0];
 
                 if (!file) {
-                    alert('CSVファイルを選択してください。');
+                    alert('ExcelまたはCSVファイルを選択してください。');
                     return;
                 }
 
+                const ext = file.name.split('.').pop().toLowerCase();
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    try {
-                        const csvText = e.target.result;
-                        parsedRankingData = RankingManager.parseCSV(csvText);
 
-                        if (parsedRankingData.length === 0) {
-                            throw new Error('有効なデータレコードが見つかりません。ヘッダーの列名が正しいかご確認ください。');
+                if (ext === 'xlsx' || ext === 'xlsm') {
+                    const sheetName = document.getElementById('excel-sheet-name').value || 'データ';
+                    const skiprows = parseInt(document.getElementById('excel-skiprows').value || '0', 10);
+
+                    reader.onload = function (e) {
+                        try {
+                            const arrayBuffer = e.target.result;
+                            const result = RankingManager.parseExcel(arrayBuffer, sheetName, skiprows);
+                            parsedRankingData = result.data;
+
+                            if (parsedRankingData.length === 0) {
+                                throw new Error('有効なデータレコードが見つかりません。シート名やデータ開始行の設定が正しいかご確認ください。');
+                            }
+
+                            status.style.display = 'block';
+                            status.style.color = 'var(--accent-color)';
+                            status.style.borderColor = 'var(--accent-color)';
+                            status.textContent = `解析成功 (Excel)！\nフォーマット: ${result.version}\n件数: ${parsedRankingData.length} 件のレコードを取得しました。\n1位レコードの確認: 名前="${parsedRankingData[0].name}" / クラス="${parsedRankingData[0].class}" / vmax=${parsedRankingData[0].score}`;
+
+                            document.getElementById('ranking-data-count').textContent = parsedRankingData.length;
+                            document.getElementById('ranking-download-panel').style.display = 'block';
+
+                            rankingData = parsedRankingData;
+                            changeStatus.ranking = true;
+                            updateUnsavedBanner();
+                            updateExportTabStats();
+
+                        } catch (err) {
+                            console.error(err);
+                            status.style.display = 'block';
+                            status.style.color = '#ff4444';
+                            status.style.borderColor = '#ff4444';
+                            status.textContent = 'Excel読み込みエラー: ' + err.message;
+                            document.getElementById('ranking-download-panel').style.display = 'none';
                         }
+                    };
+                    reader.readAsArrayBuffer(file);
+                } else if (ext === 'csv') {
+                    reader.onload = function (e) {
+                        try {
+                            const csvText = e.target.result;
+                            parsedRankingData = RankingManager.parseCSV(csvText);
 
-                        status.style.display = 'block';
-                        status.style.color = 'var(--accent-color)';
-                        status.style.borderColor = 'var(--accent-color)';
-                        status.textContent = `解析成功！\n件数: ${parsedRankingData.length} 件のレコードを取得しました。\n1位レコードの確認: 名前="${parsedRankingData[0].name}" / クラス="${parsedRankingData[0].class}"`;
+                            if (parsedRankingData.length === 0) {
+                                throw new Error('有効なデータレコードが見つかりません。ヘッダーの列名が正しいかご確認ください。');
+                            }
 
-                        document.getElementById('ranking-data-count').textContent = parsedRankingData.length;
-                        document.getElementById('ranking-download-panel').style.display = 'block';
+                            status.style.display = 'block';
+                            status.style.color = 'var(--accent-color)';
+                            status.style.borderColor = 'var(--accent-color)';
+                            status.textContent = `解析成功 (CSV)！\n件数: ${parsedRankingData.length} 件のレコードを取得しました。\n1位レコードの確認: 名前="${parsedRankingData[0].name}" / クラス="${parsedRankingData[0].class}"`;
 
-                        // Apply to buffer but don't mark as saved until downloaded
-                        rankingData = parsedRankingData;
-                        changeStatus.ranking = true;
-                        updateUnsavedBanner();
-                        updateExportTabStats();
+                            document.getElementById('ranking-data-count').textContent = parsedRankingData.length;
+                            document.getElementById('ranking-download-panel').style.display = 'block';
 
-                    } catch (err) {
-                        console.error(err);
-                        status.style.display = 'block';
-                        status.style.color = '#ff4444';
-                        status.style.borderColor = '#ff4444';
-                        status.textContent = 'CSV読み込みエラー: ' + err.message;
-                        document.getElementById('ranking-download-panel').style.display = 'none';
-                    }
-                };
-                reader.readAsText(file);
+                            rankingData = parsedRankingData;
+                            changeStatus.ranking = true;
+                            updateUnsavedBanner();
+                            updateExportTabStats();
+
+                        } catch (err) {
+                            console.error(err);
+                            status.style.display = 'block';
+                            status.style.color = '#ff4444';
+                            status.style.borderColor = '#ff4444';
+                            status.textContent = 'CSV読み込みエラー: ' + err.message;
+                            document.getElementById('ranking-download-panel').style.display = 'none';
+                        }
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('サポートされていないファイル形式です。.xlsx, .xlsm, .csv ファイルを選択してください。');
+                }
             });
 
             // Download Ranking JS
