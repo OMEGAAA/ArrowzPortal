@@ -5,12 +5,12 @@ window.WEEKLY_DATA = {
         "desc": "【MONTHLY SCHEDULE】<br>Week 1-3: Skill & Physical Training<br>Week 4: Field Test (FT)",
         "link": "menu.html",
         "btnText": "CHECK",
-        "pageDesc": "4月第1週 (4/1 - 4/7) のトレーニングメニュー",
+        "pageDesc": "6月第1週 (6/1 - 6/6) のトレーニングメニュー",
         "contents": {
             "agility": "-",
-            "power": "-",
+            "power": "ヒップロック/2step/瞬発力",
             "endurance": "-",
-            "game": "-"
+            "game": "ダッシュ＆タッチ"
         }
     },
     "theme": {
@@ -20,13 +20,12 @@ window.WEEKLY_DATA = {
         "link": "theme.html",
         "btnText": "CHECK",
         "pageTitle": "START DASH",
-        "lead": "<strong>「スタートダッシュ」</strong><br>5月のテーマは、スタートダッシュの改善を図るためのトレーニングです。",
+        "lead": "<strong>「爆発的加速」</strong><br>6月のテーマは、加速力の改善を図るためのトレーニングです。",
         "body": "前に進む力を身に着けるために大切なポイントを確認しましょう。",
         "points": [
-            "ヒップヒンジやドロップスクワットなど基礎的なトレーニング",
+            "ヒップロックや足の入れ替えなど基礎的なトレーニング",
             "足の引き上げの改善",
-            "トリプルエクステンションの獲得",
-            "体幹の安定"
+            "加速局面での爆発的加速"
         ]
     },
     "schedule": {
