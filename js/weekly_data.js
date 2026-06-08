@@ -5,12 +5,12 @@ window.WEEKLY_DATA = {
         "desc": "【MONTHLY SCHEDULE】<br>Week 1-3: Skill & Physical Training<br>Week 4: Field Test (FT)",
         "link": "menu.html",
         "btnText": "CHECK",
-        "pageDesc": "6月第1週 (6/1 - 6/6) のトレーニングメニュー",
+        "pageDesc": "6月第2週目のトレーニングメニュー",
         "contents": {
-            "agility": "-",
-            "power": "ヒップロック/2step/瞬発力",
+            "agility": "バウンディング/ダッシュ",
+            "power": "ハードルジャンプ",
             "endurance": "-",
-            "game": "ダッシュ＆タッチ"
+            "game": "ジャンプ鬼ごっこ"
         }
     },
     "theme": {
