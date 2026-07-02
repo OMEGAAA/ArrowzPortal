@@ -82,5 +82,19 @@ window.SCHEDULE_DATA = [
         "type": "closed",
         "title": "休館日",
         "description": ""
+    },
+    {
+        "id": "1782960745155",
+        "date": "2026.07.18",
+        "type": "closed",
+        "title": "休館日",
+        "description": ""
+    },
+    {
+        "id": "1782960773219",
+        "date": "2026.07.20",
+        "type": "closed",
+        "title": "休館日",
+        "description": ""
     }
 ];
