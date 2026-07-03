@@ -5,33 +5,33 @@ window.WEEKLY_DATA = {
         "desc": "【MONTHLY SCHEDULE】<br>Week 1-3: Skill & Physical Training<br>Week 4: Field Test (FT)",
         "link": "menu.html",
         "btnText": "CHECK",
-        "pageDesc": "6月第2週目のトレーニングメニュー",
+        "pageDesc": "7月第1週目のトレーニングメニュー",
         "contents": {
-            "agility": "バウンディング/ダッシュ",
-            "power": "ハードルジャンプ",
+            "agility": "-",
+            "power": "-",
             "endurance": "-",
-            "game": "ジャンプ鬼ごっこ"
+            "game": "-"
         }
     },
     "theme": {
         "category": "THEME",
         "title": "MONTHLY THEME",
-        "desc": "6月の強化テーマ: <strong>走りながらスピードを上げる</strong><br>爆発的加速を身に着けるための姿勢やばねを獲得する",
+        "desc": "7月の強化テーマ: <strong>跳ぶ力を伸ばす</strong><br>ジャンプする姿勢、高く遠くに",
         "link": "theme.html",
         "btnText": "CHECK",
-        "pageTitle": "START DASH",
-        "lead": "<strong>「爆発的加速」</strong><br>6月のテーマは、加速力の改善を図るためのトレーニングです。",
-        "body": "前に進む力を身に着けるために大切なポイントを確認しましょう。",
+        "pageTitle": "JUMP",
+        "lead": "<strong>「爆発的加速」</strong><br>7月のテーマは、ジャンプ力を伸ばすためのトレーニングです。",
+        "body": "上・前に跳ぶ力を身に着けるために大切なポイントを確認しましょう。",
         "points": [
-            "ヒップロックや足の入れ替えなど基礎的なトレーニング",
-            "足の引き上げの改善",
-            "加速局面での爆発的加速"
+            "ヒップヒンジの姿勢",
+            "股関節をうまく使う",
+            "前への推進力"
         ]
     },
     "schedule": {
         "category": "SCHEDULE",
         "title": "CLOSED DAYS",
-        "desc": "【6月の休館日】<br>・6月20日 (土)<br>※ほかの曜日に振替は可能です",
+        "desc": "【7月の休館日】<br>・7月18日 (土),7月19日（月）<br>※ほかの曜日に振替は可能です",
         "link": "schedule.html",
         "btnText": "CHECK"
     }
