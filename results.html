@@ -36,29 +36,7 @@
             </div>
         </section>
 
-        <!-- Section 2: Personal Data -->
-        <section class="section">
-            <div class="container">
-                <h2 class="section-title" data-text="個人データ">個人データ</h2>
-                <div class="result-personal-wrapper">
-                    <div class="personal-data-card">
-                        <div class="login-prompt">
-                            <p>個人の詳細データを確認するにはログインしてください。</p>
-                            <a href="" id="res-login-link"
-                                class="btn-primary" style="text-decoration: none; display: inline-block;">LOGIN / MY PAGE
-                                <span class="arrow">→</span></a>
-                        </div>
-                        <div class="data-viz-bg"></div>
-                    </div>
-                    <div class="personal-data-image-container">
-                        <img src="images/ft_summary_img.png" alt="フィールドテスト結果まとめ" class="summary-img" id="res-summary-img">
-                        <p class="summary-caption" id="res-img-caption">フィールドテスト結果まとめ</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Ranking Table -->
+        <!-- Section 2: Ranking Table -->
         <section class="section">
             <div class="container">
                 <h2 class="section-title" data-text="ランキング">ランキング表</h2>
@@ -101,20 +79,6 @@
                     commentEl.textContent = resData.comment;
                 }
 
-                const loginLinkEl = document.getElementById('res-login-link');
-                if (loginLinkEl && resData.loginLink) {
-                    loginLinkEl.href = resData.loginLink;
-                }
-
-                const summaryImgEl = document.getElementById('res-summary-img');
-                if (summaryImgEl) {
-                    summaryImgEl.src = resData.imageData || resData.summaryImg || 'images/ft_summary_img.png';
-                }
-
-                const imgCaptionEl = document.getElementById('res-img-caption');
-                if (imgCaptionEl && resData.imgCaption) {
-                    imgCaptionEl.textContent = resData.imgCaption;
-                }
             }
 
             if (!window.RANKING_DATA) return;
