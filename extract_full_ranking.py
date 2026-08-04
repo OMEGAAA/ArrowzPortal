@@ -1,272 +1,301 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
+"""Generate js/ranking_data.js from the field-test ranking workbook."""
+
+from __future__ import annotations
+
 import json
 import re
+from datetime import date, datetime
+from pathlib import Path
+from typing import Any, Iterable
+
 import openpyxl
-import os
+from openpyxl.worksheet.worksheet import Worksheet
 
-# 正となるファイル（プロジェクト直下のランキングExcel）を最優先で読み込む
-legacy_path = 'フィールドテストデータ ランキング.xlsm'
-# フォールバック用（新Ver.シート）
-default_path = r"C:\Users\山﨑元気\Downloads\FTシート_新Ver._氏名 毎月更新.xlsm"
-alt_path = 'FTシート_新Ver._氏名 毎月更新.xlsm'
 
-if os.path.exists(legacy_path):
-    file_path = legacy_path
-elif os.path.exists(default_path):
-    file_path = default_path
-elif os.path.exists(alt_path):
-    file_path = alt_path
-else:
-    raise FileNotFoundError(f"Excelファイルが見つかりません。 (探索パス: {default_path}, {alt_path}, {legacy_path})")
+WORKBOOK_CANDIDATES = [
+    Path("フィールドテストデータ ランキング.xlsm"),
+    Path("FTシート_新Ver._氏名 毎月更新.xlsm"),
+    Path("フィールドテストデータ ランキング_backup.xlsm"),
+]
 
-print(f"Reading file: {file_path}")
+OUTPUT_PATH = Path("js/ranking_data.js")
 
-wb = openpyxl.load_workbook(file_path, read_only=True)
-sheet_names = wb.sheetnames
-wb.close()
+DATA_SHEET_VALUE_COLS = {
+    "vmax": 41,  # 最高速度 (km/h)
+    "vdec": 43,  # 速度維持率
+    "sprint_score": 45,  # スプリントスコア
+    "pro": 49,  # 切り返し走 (sec)
+    "dva": 51,  # 動体視力 (ランク)
+    "eye": 53,  # 眼球運動 (ランク)
+    "peri": 55,  # 周辺視 (ランク)
+    "flash": 57,  # 瞬間視 (ランク)
+    "arrowz_eye_total": 59,  # ArrowzEye合計値
+    "hand_eye": 63,  # 眼と手の協応動作
+    "height": 65,  # 身長 (cm)
+    "weight": 67,  # 体重 (kg)
+    "bmi": 69,  # BMI
+    "vj": 71,  # 垂直跳び (cm)
+    "sj": 73,  # スクワットジャンプ (cm)
+    "contact_time": 75,  # 接地時間 (sec)
+    "jump_height": 77,  # 跳躍高 (cm)
+    "rj_index": 79,  # RJ-index
+    "broad_jump": 81,  # 立ち幅跳び (cm)
+    "stepping": 83,  # ステッピング
+}
 
-def parse_date(val):
-    if pd.isna(val):
+PERSON_SHEET_VALUE_COLS = {
+    "vmax": 22,
+    "vdec": 23,
+    "sprint_score": 24,
+    "pro": 26,
+    "dva": 27,
+    "eye": 28,
+    "peri": 29,
+    "flash": 30,
+    "arrowz_eye_total": 31,
+    "hand_eye": 33,
+    "height": 34,
+    "weight": 35,
+    "bmi": 36,
+    "vj": 37,
+    "sj": 38,
+    "contact_time": 39,
+    "jump_height": 40,
+    "rj_index": 41,
+    "broad_jump": 42,
+    "stepping": 43,
+}
+
+EXCLUDE_SHEETS = [
+    "データ",
+    "Sheet",
+    "結果シート",
+    "個人シート",
+    "男子",
+    "女子",
+    "男性",
+    "女性",
+    "プルダウン",
+    "CheckList",
+    "TransferLog",
+    "引点克服TR",
+    "データ貼り付け",
+]
+
+
+def find_workbook() -> Path:
+    for path in WORKBOOK_CANDIDATES:
+        if path.exists():
+            return path
+    candidates = ", ".join(str(path) for path in WORKBOOK_CANDIDATES)
+    raise FileNotFoundError(f"Excel file not found. Checked: {candidates}")
+
+
+def parse_date(value: Any) -> datetime | None:
+    if value in (None, ""):
         return None
-    if isinstance(val, pd.Timestamp):
-        return val
-    s = str(val).strip()
+    if isinstance(value, datetime):
+        return value
+    if isinstance(value, date):
+        return datetime(value.year, value.month, value.day)
+
+    text = str(value).strip()
+    if not text:
+        return None
+
+    for fmt in ("%Y/%m/%d", "%Y-%m-%d", "%Y.%m.%d", "%Y/%m", "%Y-%m"):
+        try:
+            return datetime.strptime(text, fmt)
+        except ValueError:
+            pass
+    return None
+
+
+def parse_number(value: Any) -> float | None:
+    if value in (None, ""):
+        return None
+    text = str(value).replace(",", "").strip()
+    if text in ("", "-"):
+        return None
     try:
-        return pd.Timestamp(s)
-    except:
+        return round(float(text), 4)
+    except ValueError:
         return None
 
-all_records = []
 
-# 自動判定
-if 'データ' in sheet_names:
-    print("Detected format: Legacy (Single Sheet)")
-    
-    # ヘッダー行は1行目のみ。データは2行目以降なので skiprows=1。
-    df = pd.read_excel(file_path, sheet_name='データ', header=None, skiprows=1)
+def category_from_grade(grade: str) -> str:
+    grade = grade.strip()
+    match = re.search(r"\d+", grade)
 
-    # 「データ」シートは各測定項目が2列1組（ラベル列＋値列）で構成され、
-    # 実際の数値は組の右側（奇数列インデックス）に入っている。
-    VALUE_COLS = {
-        'vmax':              41,   # 最高速度 (km/h)
-        'vdec':              43,   # 速度維持率
-        'sprint_score':      45,   # スプリントスコア (回)
-        'pro':               49,   # 切り返し走 (sec)
-        'dva':               51,   # 動体視力 (ランク)
-        'eye':               53,   # 眼球運動 (ランク)
-        'peri':              55,   # 周辺視 (ランク)
-        'flash':             57,   # 瞬間視 (ランク)
-        'arrowz_eye_total':  59,   # ArrowzEye合計値
-        'hand_eye':          63,   # 眼と手の協応動作 (sec)
-        'height':            65,   # 身長 (cm)
-        'weight':            67,   # 体重 (kg)
-        'bmi':               69,   # BMI
-        'vj':                71,   # 垂直跳び (cm)
-        'sj':                73,   # スクワットジャンプ (cm)
-        'contact_time':      75,   # 接地時間 (sec)
-        'jump_height':       77,   # 跳躍高 (cm)
-        'rj_index':          79,   # RJ-index
-        'broad_jump':        81,   # 立ち幅跳び (cm)
-        'stepping':          83,   # ステッピング (回)
+    if "小" in grade and match:
+        return "U-9" if int(match.group()) <= 3 else "U-12"
+    if "中" in grade:
+        return "U-15"
+    if "高" in grade:
+        return "U-18"
+    return "U-12"
+
+
+def values_from_row(row: tuple[Any, ...], columns: dict[str, int]) -> dict[str, float]:
+    scores: dict[str, float] = {}
+    for key, index in columns.items():
+        if len(row) <= index:
+            continue
+        parsed = parse_number(row[index])
+        if parsed is not None:
+            scores[key] = parsed
+    return scores
+
+
+def make_record(
+    *,
+    name: str,
+    class_name: str,
+    grade: str,
+    gender: str,
+    test_date: datetime | None,
+    scores: dict[str, float],
+) -> dict[str, Any] | None:
+    if not name or not scores:
+        return None
+
+    return {
+        "name": name,
+        "class": class_name or grade,
+        "category": category_from_grade(grade),
+        "grade": grade,
+        "gender": gender,
+        "test_date": test_date,
+        "score": scores.get("vmax", 0),
+        "scores": scores,
     }
 
-    for index, row in df.iterrows():
-        name = row[0]
-        if pd.isna(name) or not isinstance(name, str) or len(name.strip()) == 0:
-            continue
-        if re.match(r'\d{4}/', str(name)):
+
+def read_data_sheet(ws: Worksheet) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        name = str(row[0]).strip() if len(row) > 0 and row[0] not in (None, "") else ""
+        if not name or re.match(r"^\d{4}/", name):
             continue
 
-        test_date = parse_date(row[3])                                  # 測定日
-        grade = str(row[10]) if pd.notna(row[10]) else ""               # 学年 (小1〜高3)
-        gender = str(row[9]) if pd.notna(row[9]) else ""                # 男子/女子
-        class_name = str(row[8]) if pd.notna(row[8]) else ""            # クラス時間帯
+        grade = str(row[10]).strip() if len(row) > 10 and row[10] not in (None, "") else ""
+        record = make_record(
+            name=name,
+            class_name=str(row[8]).strip() if len(row) > 8 and row[8] not in (None, "") else grade,
+            grade=grade,
+            gender=str(row[9]).strip() if len(row) > 9 and row[9] not in (None, "") else "",
+            test_date=parse_date(row[3] if len(row) > 3 else None),
+            scores=values_from_row(row, DATA_SHEET_VALUE_COLS),
+        )
+        if record:
+            records.append(record)
 
-        category = "U-12"
-        if "小" in grade:
+    return records
+
+
+def is_person_sheet(sheet_name: str) -> bool:
+    return not any(keyword in sheet_name for keyword in EXCLUDE_SHEETS)
+
+
+def iter_person_sheet_records(sheet_name: str, ws: Worksheet) -> Iterable[dict[str, Any]]:
+    if ws.max_column < 44:
+        return
+
+    for row in ws.iter_rows(min_row=5, values_only=True):
+        if len(row) < 44:
+            continue
+
+        test_date = None
+        year = parse_number(row[0])
+        month = parse_number(row[1])
+        if year and month:
             try:
-                g = int(re.search(r'\d+', grade).group())
-                category = "U-9" if g <= 3 else "U-12"
-            except:
-                pass
-        elif "中" in grade:
-            category = "U-15"
-        elif "高" in grade:
-            category = "U-18"
-
-        scores = {}
-        has_data = False
-        
-        for key, idx in VALUE_COLS.items():
-            try:
-                val_raw = row[idx]
-                if pd.isna(val_raw) or str(val_raw).strip() in ['', '-']:
-                    continue
-                val_str = str(val_raw).replace(',', '').strip()
-                val = float(val_str)
-                scores[key] = round(val, 4)
-                has_data = True
-            except:
-                pass
-
-        main_score = scores.get('vmax', 0)
-
-        if has_data:
-            all_records.append({
-                "name": name.strip(),
-                "class": class_name.strip() if class_name else grade.strip(),
-                "category": category,
-                "grade": grade.strip(),
-                "gender": gender.strip(),
-                "test_date": test_date,
-                "score": main_score,
-                "scores": scores
-            })
-
-else:
-    print("Detected format: New (Multiple Sheets per student)")
-    
-    EXCLUDE_SHEETS = [
-        '引点克服TR', 'データ貼り付け', '男性', '女性', '結果シート', 
-        '個人シート', 'プルダウン', 'CheckList', 'TransferLog'
-    ]
-
-    NEW_VALUE_COLS = {
-        'vmax':              22,   # 最高速度 (km/h)
-        'vdec':              23,   # 速度維持率
-        'sprint_score':      24,   # スプリントスコア (回)
-        'pro':               26,   # 切り返し走 (sec)
-        'dva':               27,   # 動体視力 (ランク)
-        'eye':               28,   # 眼球運動 (ランク)
-        'peri':              29,   # 周辺視 (ランク)
-        'flash':             30,   # 瞬間視 (ランク)
-        'arrowz_eye_total':  31,   # ArrowzEye合計値
-        'hand_eye':          33,   # 眼と手の協応動作 (sec)
-        'height':            34,   # 身長 (cm)
-        'weight':            35,   # 体重 (kg)
-        'bmi':               36,   # BMI
-        'vj':                37,   # 垂直跳び (cm)
-        'sj':                38,   # スクワットジャンプ (cm)
-        'contact_time':      39,   # 接地時間 (sec)
-        'jump_height':       40,   # 跳躍高 (cm)
-        'rj_index':          41,   # RJ-index
-        'broad_jump':        42,   # 立ち幅跳び (cm)
-        'stepping':          43,   # ステッピング (回)
-    }
-
-    for s_name in sheet_names:
-        # 文字エンコーディングの違いに対応するため、シート名の部分一致や除外キーワードでも判定
-        is_exclude = False
-        for ex in EXCLUDE_SHEETS:
-            if ex in s_name or s_name in ex:
-                is_exclude = True
-                break
-        if is_exclude:
+                test_date = datetime(int(year), int(month), 1)
+            except ValueError:
+                test_date = None
+        if test_date is None:
+            test_date = parse_date(row[6] if len(row) > 6 else None)
+        if test_date is None:
             continue
 
-        df = pd.read_excel(file_path, sheet_name=s_name, header=None)
-        
-        # 安全対策: 列数が少ないシート（管理シート等）はスキップ
-        if df.shape[1] < 20:
-            continue
+        grade = str(row[3]).strip() if row[3] not in (None, "") else ""
+        record = make_record(
+            name=sheet_name.strip(),
+            class_name=str(row[7]).strip() if row[7] not in (None, "") else grade,
+            grade=grade,
+            gender=str(row[4]).strip() if row[4] not in (None, "") else "",
+            test_date=test_date,
+            scores=values_from_row(row, PERSON_SHEET_VALUE_COLS),
+        )
+        if record:
+            yield record
 
-        # データは4行目（インデックス4）以降
-        for index, row in df.iloc[4:].iterrows():
-            # 列数が足りない行はスキップ
-            if len(row) < 44:
+
+def read_workbook(workbook_path: Path) -> tuple[str, list[dict[str, Any]]]:
+    wb = openpyxl.load_workbook(workbook_path, read_only=True, data_only=True)
+    try:
+        if "データ" in wb.sheetnames:
+            records = read_data_sheet(wb["データ"])
+            if records:
+                return "データ sheet", records
+
+        records: list[dict[str, Any]] = []
+        for sheet_name in wb.sheetnames:
+            if not is_person_sheet(sheet_name):
                 continue
+            records.extend(iter_person_sheet_records(sheet_name, wb[sheet_name]))
+        return "person sheets", records
+    finally:
+        wb.close()
 
-            # 年(列0)と月(列1)から測定日を合成
-            year_val = row[0]
-            month_val = row[1]
-            test_date = None
-            try:
-                if pd.notna(year_val) and pd.notna(month_val):
-                    test_date = pd.Timestamp(year=int(year_val), month=int(month_val), day=1)
-            except:
-                pass
-            
-            if test_date is None:
-                test_date = parse_date(row[6])
 
-            if test_date is None:
-                continue
+def keep_latest(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    latest: dict[str, dict[str, Any]] = {}
 
-            grade = str(row[3]).strip() if pd.notna(row[3]) else ""
-            gender = str(row[4]).strip() if pd.notna(row[4]) else ""
-            class_name = str(row[7]).strip() if pd.notna(row[7]) else ""
+    for record in records:
+        name = record["name"]
+        current = latest.get(name)
+        if current is None:
+            latest[name] = record
+            continue
 
-            category = "U-12"
-            if "小" in grade:
-                try:
-                    g = int(re.search(r'\d+', grade).group())
-                    category = "U-9" if g <= 3 else "U-12"
-                except:
-                    pass
-            elif "中" in grade:
-                category = "U-15"
-            elif "高" in grade:
-                category = "U-18"
+        new_date = record.get("test_date")
+        current_date = current.get("test_date")
+        if new_date is not None and (current_date is None or new_date > current_date):
+            latest[name] = record
 
-            scores = {}
-            has_data = False
+    ranking_data = list(latest.values())
+    for item in ranking_data:
+        item.pop("test_date", None)
+        item.pop("grade", None)
+        item.pop("gender", None)
 
-            for key, idx in NEW_VALUE_COLS.items():
-                try:
-                    val_raw = row[idx]
-                    if pd.isna(val_raw) or str(val_raw).strip() in ['', '-']:
-                        continue
-                    val_str = str(val_raw).replace(',', '').strip()
-                    val = float(val_str)
-                    scores[key] = round(val, 4)
-                    has_data = True
-                except:
-                    pass
+    ranking_data.sort(key=lambda item: item["score"], reverse=True)
+    return ranking_data
 
-            main_score = scores.get('vmax', 0)
 
-            if has_data:
-                all_records.append({
-                    "name": s_name.strip(),
-                    "class": class_name if class_name else grade,
-                    "category": category,
-                    "grade": grade,
-                    "gender": gender,
-                    "test_date": test_date,
-                    "score": main_score,
-                    "scores": scores
-                })
+def write_ranking_data(records: list[dict[str, Any]]) -> None:
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    json_str = json.dumps(records, ensure_ascii=False, separators=(",", ":"))
+    OUTPUT_PATH.write_text(f"window.RANKING_DATA = {json_str};\n", encoding="utf-8")
 
-# 最新判定
-latest = {}
-for rec in all_records:
-    name = rec["name"]
-    if name not in latest:
-        latest[name] = rec
-    else:
-        existing_date = latest[name].get("test_date")
-        new_date = rec.get("test_date")
-        if new_date is not None and (existing_date is None or new_date > existing_date):
-            latest[name] = rec
 
-ranking_data = list(latest.values())
+def main() -> None:
+    workbook_path = find_workbook()
+    source, records = read_workbook(workbook_path)
+    ranking_data = keep_latest(records)
+    write_ranking_data(ranking_data)
 
-for item in ranking_data:
-    item.pop("test_date", None)
-    item.pop("grade", None)
-    item.pop("gender", None)
+    print(f"Reading file: {workbook_path}")
+    print(f"Detected format: {source}")
+    print(f"Total records found: {len(records)}")
+    print(f"Unique students: {len(ranking_data)}")
+    if ranking_data:
+        top = ranking_data[0]
+        print(f"Top: {top['name']} = {top['score']}")
 
-ranking_data.sort(key=lambda x: x['score'], reverse=True)
 
-json_str = json.dumps(ranking_data, ensure_ascii=False)
-js_content = f"window.RANKING_DATA = {json_str};"
-
-with open('js/ranking_data.js', 'w', encoding='utf-8') as f:
-    f.write(js_content)
-
-print(f"Total records found: {len(all_records)}")
-print(f"Unique students: {len(ranking_data)}")
-if ranking_data:
-    top = ranking_data[0]
-    print(f"Top: {top['name']} = {top['score']}")
+if __name__ == "__main__":
+    main()
