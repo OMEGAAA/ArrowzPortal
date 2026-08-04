@@ -13,35 +13,30 @@ import openpyxl
 from openpyxl.worksheet.worksheet import Worksheet
 
 
-WORKBOOK_CANDIDATES = [
-    Path("フィールドテストデータ ランキング.xlsm"),
-    Path("FTシート_新Ver._氏名 毎月更新.xlsm"),
-    Path("フィールドテストデータ ランキング_backup.xlsm"),
-]
-
 OUTPUT_PATH = Path("js/ranking_data.js")
+DATA_SHEET_NAME = "\u30c7\u30fc\u30bf"
 
 DATA_SHEET_VALUE_COLS = {
-    "vmax": 41,  # 最高速度 (km/h)
-    "vdec": 43,  # 速度維持率
-    "sprint_score": 45,  # スプリントスコア
-    "pro": 49,  # 切り返し走 (sec)
-    "dva": 51,  # 動体視力 (ランク)
-    "eye": 53,  # 眼球運動 (ランク)
-    "peri": 55,  # 周辺視 (ランク)
-    "flash": 57,  # 瞬間視 (ランク)
-    "arrowz_eye_total": 59,  # ArrowzEye合計値
-    "hand_eye": 63,  # 眼と手の協応動作
-    "height": 65,  # 身長 (cm)
-    "weight": 67,  # 体重 (kg)
-    "bmi": 69,  # BMI
-    "vj": 71,  # 垂直跳び (cm)
-    "sj": 73,  # スクワットジャンプ (cm)
-    "contact_time": 75,  # 接地時間 (sec)
-    "jump_height": 77,  # 跳躍高 (cm)
-    "rj_index": 79,  # RJ-index
-    "broad_jump": 81,  # 立ち幅跳び (cm)
-    "stepping": 83,  # ステッピング
+    "vmax": 41,
+    "vdec": 43,
+    "sprint_score": 45,
+    "pro": 49,
+    "dva": 51,
+    "eye": 53,
+    "peri": 55,
+    "flash": 57,
+    "arrowz_eye_total": 59,
+    "hand_eye": 63,
+    "height": 65,
+    "weight": 67,
+    "bmi": 69,
+    "vj": 71,
+    "sj": 73,
+    "contact_time": 75,
+    "jump_height": 77,
+    "rj_index": 79,
+    "broad_jump": 81,
+    "stepping": 83,
 }
 
 PERSON_SHEET_VALUE_COLS = {
@@ -67,29 +62,17 @@ PERSON_SHEET_VALUE_COLS = {
     "stepping": 43,
 }
 
-EXCLUDE_SHEETS = [
-    "データ",
-    "Sheet",
-    "結果シート",
-    "個人シート",
-    "男子",
-    "女子",
-    "男性",
-    "女性",
-    "プルダウン",
-    "CheckList",
-    "TransferLog",
-    "引点克服TR",
-    "データ貼り付け",
-]
+EXCLUDE_ASCII_PATTERNS = ["Sheet", "CheckList", "TransferLog"]
 
 
 def find_workbook() -> Path:
-    for path in WORKBOOK_CANDIDATES:
-        if path.exists():
+    candidates = sorted(Path(".").glob("*.xlsm"), key=lambda p: ("backup" in p.name.lower(), p.name))
+    for path in candidates:
+        if "backup" not in path.name.lower():
             return path
-    candidates = ", ".join(str(path) for path in WORKBOOK_CANDIDATES)
-    raise FileNotFoundError(f"Excel file not found. Checked: {candidates}")
+    if candidates:
+        return candidates[0]
+    raise FileNotFoundError("No .xlsm workbook found in the project root.")
 
 
 def parse_date(value: Any) -> datetime | None:
@@ -128,11 +111,11 @@ def category_from_grade(grade: str) -> str:
     grade = grade.strip()
     match = re.search(r"\d+", grade)
 
-    if "小" in grade and match:
+    if "\u5c0f" in grade and match:
         return "U-9" if int(match.group()) <= 3 else "U-12"
-    if "中" in grade:
+    if "\u4e2d" in grade:
         return "U-15"
-    if "高" in grade:
+    if "\u9ad8" in grade:
         return "U-18"
     return "U-12"
 
@@ -157,7 +140,7 @@ def make_record(
     test_date: datetime | None,
     scores: dict[str, float],
 ) -> dict[str, Any] | None:
-    if not name or not scores:
+    if not name or not scores or "vmax" not in scores:
         return None
 
     return {
@@ -167,7 +150,7 @@ def make_record(
         "grade": grade,
         "gender": gender,
         "test_date": test_date,
-        "score": scores.get("vmax", 0),
+        "score": scores["vmax"],
         "scores": scores,
     }
 
@@ -196,7 +179,9 @@ def read_data_sheet(ws: Worksheet) -> list[dict[str, Any]]:
 
 
 def is_person_sheet(sheet_name: str) -> bool:
-    return not any(keyword in sheet_name for keyword in EXCLUDE_SHEETS)
+    if sheet_name == DATA_SHEET_NAME:
+        return False
+    return not any(pattern in sheet_name for pattern in EXCLUDE_ASCII_PATTERNS)
 
 
 def iter_person_sheet_records(sheet_name: str, ws: Worksheet) -> Iterable[dict[str, Any]]:
@@ -236,10 +221,10 @@ def iter_person_sheet_records(sheet_name: str, ws: Worksheet) -> Iterable[dict[s
 def read_workbook(workbook_path: Path) -> tuple[str, list[dict[str, Any]]]:
     wb = openpyxl.load_workbook(workbook_path, read_only=True, data_only=True)
     try:
-        if "データ" in wb.sheetnames:
-            records = read_data_sheet(wb["データ"])
+        if DATA_SHEET_NAME in wb.sheetnames:
+            records = read_data_sheet(wb[DATA_SHEET_NAME])
             if records:
-                return "データ sheet", records
+                return "data sheet", records
 
         records: list[dict[str, Any]] = []
         for sheet_name in wb.sheetnames:
