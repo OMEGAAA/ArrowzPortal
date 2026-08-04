@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentCategory = 'OVERALL';
     let currentTest = 'vmax';
+    const MAX_RANKING_ENTRIES = 10;
 
     const SORT_CONFIG = {
         vmax: { dir: 'desc', label: '\u6700\u9ad8\u901f\u5ea6 (km/h)' },
@@ -28,8 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            categoryTabs.forEach(t => t.classList.remove('active'));
+            categoryTabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
             tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
             currentCategory = tab.textContent.trim();
             renderTable();
         });
@@ -75,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tableBody.innerHTML = '';
 
-        filteredData.slice(0, 50).forEach((item, index) => {
+        filteredData.slice(0, MAX_RANKING_ENTRIES).forEach((item, index) => {
             const rank = index + 1;
             const rankClass = rank <= 3 ? `rank-${rank}` : '';
             const rankDisplay = rank.toString().padStart(2, '0');

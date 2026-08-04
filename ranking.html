@@ -39,6 +39,10 @@
             font-size: 1.1rem;
         }
 
+        .ranking-full-table tbody tr:nth-child(n + 11) {
+            display: none;
+        }
+
         .rank-num-cell {
             font-family: var(--font-primary);
             font-weight: bold;
@@ -63,6 +67,11 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+        }
+
+        .ranking-control-label,
+        .ranking-control-hint {
+            display: none;
         }
 
         .category-tabs-wrapper {
@@ -107,28 +116,146 @@
             color: var(--text-color);
         }
 
+        .test-select-wrapper {
+            position: relative;
+        }
+
+        .test-select-shell {
+            position: relative;
+        }
+
+        #test-select {
+            padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+            background: #000;
+            color: #fff;
+            border: 1px solid #333;
+            font-family: var(--font-primary);
+            border-radius: 0;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .test-select-shell::after {
+            content: "";
+            position: absolute;
+            right: 0.9rem;
+            top: 50%;
+            width: 0.55rem;
+            height: 0.55rem;
+            border-right: 2px solid var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            pointer-events: none;
+            transform: translateY(-65%) rotate(45deg);
+        }
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .ranking-controls {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
+                align-items: stretch;
+                gap: 1.2rem;
+                width: calc(100vw - (var(--spacing-sm) * 2));
+                max-width: 100%;
+                align-self: center;
+                overflow: hidden;
+                background: #0b0b0b;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 1rem;
+            }
+
+            .ranking-control-label {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.65rem;
+                color: var(--accent-color);
+                font-family: var(--font-secondary);
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+            }
+
+            .ranking-control-label::before {
+                content: "";
+                width: 0.45rem;
+                height: 0.45rem;
+                background: var(--accent-color);
+                box-shadow: 0 0 12px rgba(204, 255, 0, 0.6);
+            }
+
+            .ranking-control-hint {
+                display: block;
+                margin-top: 0.45rem;
+                color: var(--text-muted);
+                font-size: 0.76rem;
+                line-height: 1.5;
+                font-family: var(--font-secondary);
+            }
+
+            .category-filter,
+            .test-select-wrapper,
+            .test-select-shell {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
             }
 
             .category-tabs-wrapper {
                 width: 100%;
-                overflow-x: auto;
-                padding-bottom: 5px;
-                /* For scrollbar */
-                white-space: nowrap;
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 0.35rem;
+                overflow: visible;
+                padding: 0.3rem;
+                background: #000;
+                border: 1px solid #242424;
+                border-radius: 8px;
+                white-space: normal;
             }
 
-            .test-select-wrapper {
-                width: 100%;
+            .tab-btn {
+                min-height: 44px;
+                padding: 0.65rem 0.3rem;
+                border: 1px solid transparent;
+                border-radius: 6px;
+                color: #8f8f8f;
+                font-size: 1rem;
+                line-height: 1;
+                text-align: center;
+                overflow: hidden;
+            }
+
+            .tab-btn.active {
+                background: var(--accent-color);
+                border-bottom: 1px solid var(--accent-color);
+                border-color: var(--accent-color);
+                color: #050505;
+                box-shadow: 0 0 18px rgba(204, 255, 0, 0.28);
+            }
+
+            .tab-btn:hover {
+                color: var(--accent-color);
             }
 
             #test-select {
                 width: 100%;
+                min-height: 54px;
+                padding: 0.85rem 3.2rem 0.85rem 1rem;
+                border: 1px solid var(--accent-color);
+                border-radius: 8px;
+                background: #000;
+                color: var(--text-color);
+                font-size: 1.05rem;
+                box-shadow: inset 0 0 0 1px rgba(204, 255, 0, 0.12), 0 0 16px rgba(204, 255, 0, 0.12);
+            }
+
+            .test-select-shell::after {
+                right: 1.15rem;
+                width: 0.7rem;
+                height: 0.7rem;
+                border-width: 3px;
             }
 
             .ranking-full-table {
@@ -195,15 +322,19 @@
                 <h2 class="section-title" data-text="RANKING">RANKING</h2>
 
                 <div class="ranking-controls">
-                    <div class="category-tabs-wrapper">
-                        <button class="tab-btn active">OVERALL</button>
-                        <button class="tab-btn">U-15</button>
-                        <button class="tab-btn">U-12</button>
-                        <button class="tab-btn">U-9</button>
+                    <div class="category-filter">
+                        <div class="ranking-control-label">年代を選択</div>
+                        <div class="category-tabs-wrapper" role="tablist" aria-label="年代">
+                            <button class="tab-btn active" type="button" aria-selected="true">OVERALL</button>
+                            <button class="tab-btn" type="button" aria-selected="false">U-15</button>
+                            <button class="tab-btn" type="button" aria-selected="false">U-12</button>
+                            <button class="tab-btn" type="button" aria-selected="false">U-9</button>
+                        </div>
                     </div>
                     <div class="test-select-wrapper">
-                        <select id="test-select"
-                            style="padding: 0.5rem; background: #000; color: #fff; border: 1px solid #333; font-family: 'Oswald', sans-serif;">
+                        <label class="ranking-control-label" for="test-select">種目を選択</label>
+                        <div class="test-select-shell">
+                            <select id="test-select">
                             <!-- <option value="TOTAL">TOTAL SCORE</option> Removed -->
                             <optgroup label="瞬発力">
                                 <option value="vmax" selected>最高速度 (km/h)</option>
@@ -228,7 +359,9 @@
                                 <option value="broad_jump">立ち幅跳び (cm)</option>
                                 <option value="stepping">ステッピング (回)</option>
                             </optgroup>
-                        </select>
+                            </select>
+                        </div>
+                        <span class="ranking-control-hint">タップしてランキング種目を切り替え</span>
                     </div>
                 </div>
 
@@ -500,7 +633,7 @@
     <script src="js/layout.js"></script>
     <script src="js/main.js"></script>
     <script src="js/ranking_data.js"></script>
-    <script src="js/ranking.js?v=2"></script>
+    <script src="js/ranking.js?v=3"></script>
 </body>
 
 </html>
