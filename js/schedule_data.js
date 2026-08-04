@@ -96,5 +96,47 @@ window.SCHEDULE_DATA = [
         "type": "closed",
         "title": "休館日",
         "description": ""
+    },
+    {
+        "id": "1785834068899",
+        "date": "2026.08.10",
+        "type": "closed",
+        "title": "お盆休業",
+        "description": "お盆のため8/10~15を休館日とさせていただきます。"
+    },
+    {
+        "id": "1785834079961",
+        "date": "2026.08.11",
+        "type": "closed",
+        "title": "お盆休業",
+        "description": ""
+    },
+    {
+        "id": "1785834086178",
+        "date": "2026.08.12",
+        "type": "closed",
+        "title": "お盆休業",
+        "description": ""
+    },
+    {
+        "id": "1785834092642",
+        "date": "2026.08.13",
+        "type": "closed",
+        "title": "お盆休業",
+        "description": ""
+    },
+    {
+        "id": "1785834099389",
+        "date": "2026.08.14",
+        "type": "closed",
+        "title": "お盆休業",
+        "description": ""
+    },
+    {
+        "id": "1785834105335",
+        "date": "2026.08.15",
+        "type": "closed",
+        "title": "お盆休業",
+        "description": ""
     }
 ];
