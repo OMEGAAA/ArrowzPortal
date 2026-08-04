@@ -28,7 +28,8 @@
                         <span class="summary-label">COMMENT</span>
                     </div>
                     <div class="summary-body">
-                        <p class="summary-comment" id="res-comment" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1rem;">
+                        <p class="summary-comment" id="res-comment"
+                            style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1rem;">
                             今月の要約コメント
                         </p>
                     </div>
@@ -41,7 +42,7 @@
             <div class="container">
                 <div class="section-heading-row">
                     <h2 class="section-title" data-text="ランキング">ランキング表</h2>
-                    <a href="ranking.html" class="btn-primary ranking-heading-btn">VIEW FULL RANKING <span
+                    <a href="ranking.html" class="btn-primary ranking-heading-btn">全体ランキング <span
                             class="arrow">&rarr;</span></a>
                 </div>
                 <div class="ranking-wrapper">
@@ -72,7 +73,7 @@
             // Apply Results Data dynamically
             if (window.RESULTS_DATA) {
                 const resData = window.RESULTS_DATA;
-                
+
                 const commentEl = document.getElementById('res-comment');
                 if (commentEl && resData.comment) {
                     commentEl.textContent = resData.comment;
