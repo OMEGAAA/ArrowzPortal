@@ -1098,6 +1098,11 @@ main {
 }
 
 @media (max-width: 768px) {
+    .home-ranking-table th:nth-child(3),
+    .home-ranking-table td:nth-child(3) {
+        display: none;
+    }
+
     .result-summary-row {
         grid-template-columns: 1fr;
     }
