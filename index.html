@@ -88,8 +88,9 @@
         <section class="section">
             <div class="container">
                 <div class="section-heading-row">
-                    <h2 class="section-title" data-text="ランキング">ランキング表</h2>
-                    <a href="ranking.html" class="btn-primary ranking-heading-btn">VIEW FULL RANKING <span
+                    <h2 class="section-title" data-text="総合ランキング">総合ランキング<span
+                            class="ranking-title-badge">TOP10</span></h2>
+                    <a href="ranking.html" class="btn-primary ranking-heading-btn">種目別ランキング <span
                             class="arrow">&rarr;</span></a>
                 </div>
                 <div class="ranking-wrapper">
@@ -99,7 +100,7 @@
                                 <th>RANK</th>
                                 <th>NAME</th>
                                 <th>CLASS</th>
-                                <th>最高速度</th>
+                                <th>平均種目順位</th>
                             </tr>
                         </thead>
                         <tbody id="home-ranking-body"></tbody>
@@ -226,46 +227,32 @@
 
     <script src="js/layout.js"></script>
     <script src="js/ranking_data.js"></script>
+    <script src="js/overall_ranking.js"></script>
     <script src="js/news_data.js"></script>
     <script src="js/weekly_data.js"></script>
     <script src="js/main.js"></script>
     <script>
         (function () {
-            const data = (window.RANKING_DATA || []).filter(d => {
-                const vmax = d.scores && Number(d.scores.vmax);
-                return Number.isFinite(vmax) && vmax !== 0;
-            });
-            // Sort by vmax descending
-            const sorted = [...data].sort((a, b) => {
-                const valA = (a.scores && a.scores.vmax) || 0;
-                const valB = (b.scores && b.scores.vmax) || 0;
-                return valB - valA;
-            });
+            const sorted = window.OverallRanking.calculate(window.RANKING_DATA || []);
 
             // --- Mini FT card (top 3) ---
             const miniEl = document.getElementById('home-mini-ranking');
             if (miniEl) {
-                sorted.slice(0, 3).forEach((d, i) => {
+                sorted.slice(0, 3).forEach((entry, i) => {
+                    const d = entry.item;
                     const div = document.createElement('div');
                     div.className = 'mini-rank-item';
-                    const scoreVal = (d.scores && d.scores.vmax) || 0;
-                    div.innerHTML = `<span class="rank">${String(i + 1).padStart(2, '0')}</span><span class="name">${d.name}</span><span class="score">${scoreVal.toFixed(1)}</span>`;
+                    div.innerHTML = `<span class="rank">${String(i + 1).padStart(2, '0')}</span><span class="name">${d.name}</span><span class="score">${entry.averageRank.toFixed(2)}</span>`;
                     miniEl.appendChild(div);
                 });
-            }
-            // Average score (vmax)
-            const avgEl = document.getElementById('home-ft-avg');
-            if (avgEl && sorted.length) {
-                const avg = sorted.reduce((s, d) => s + ((d.scores && d.scores.vmax) || 0), 0) / sorted.length;
-                avgEl.textContent = avg.toFixed(1);
             }
             // Date
             const dateEl = document.getElementById('home-ft-date');
             if (dateEl) {
                 let resultDate = new Date();
                 // Use first record's test_date if available
-                if (sorted.length > 0 && sorted[0].test_date) {
-                    const d = new Date(sorted[0].test_date);
+                if (sorted.length > 0 && sorted[0].item.test_date) {
+                    const d = new Date(sorted[0].item.test_date);
                     if (!isNaN(d.getTime())) {
                         resultDate = d;
                     }
@@ -273,27 +260,16 @@
                 dateEl.textContent = resultDate.getFullYear() + '.' + String(resultDate.getMonth() + 1).padStart(2, '0');
             }
 
-            // --- Ranking table (top 10) ---
-            // The original 'sorted' array is based on 'score'.
-            // For the ranking table, we need to sort by 'vmax' as per the instruction.
-            if (window.RANKING_DATA) {
-                // Sort by vmax descending
-                const sortedByVmax = [...window.RANKING_DATA].sort((a, b) => {
-                    const valA = (a.scores && a.scores.vmax) || 0;
-                    const valB = (b.scores && b.scores.vmax) || 0;
-                    return valB - valA;
+            // --- Overall ranking table (top 10) ---
+            const tbody = document.getElementById('home-ranking-body');
+            if (tbody) {
+                sorted.slice(0, 10).forEach((entry, i) => {
+                    const d = entry.item;
+                    const tr = document.createElement('tr');
+                    if (i < 3) tr.className = 'rank-' + (i + 1);
+                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${entry.averageRank.toFixed(2)}</td>`;
+                    tbody.appendChild(tr);
                 });
-
-                const tbody = document.getElementById('home-ranking-body');
-                if (tbody) {
-                    sortedByVmax.slice(0, 10).forEach((d, i) => {
-                        const tr = document.createElement('tr');
-                        if (i < 3) tr.className = 'rank-' + (i + 1);
-                        const scoreVal = (d.scores && d.scores.vmax) || 0;
-                        tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${scoreVal.toFixed(1)}</td>`;
-                        tbody.appendChild(tr);
-                    });
-                }
             }
 
             // --- News Data Logic ---
