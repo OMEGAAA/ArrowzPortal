@@ -41,8 +41,9 @@
         <section class="section">
             <div class="container">
                 <div class="section-heading-row">
-                    <h2 class="section-title" data-text="ランキング">ランキング表</h2>
-                    <a href="ranking.html" class="btn-primary ranking-heading-btn">全体ランキング <span
+                    <h2 class="section-title" data-text="総合ランキング">総合ランキング<span
+                            class="ranking-title-badge">TOP10</span></h2>
+                    <a href="ranking.html" class="btn-primary ranking-heading-btn">種目別ランキング <span
                             class="arrow">&rarr;</span></a>
                 </div>
                 <div class="ranking-wrapper">
@@ -52,7 +53,7 @@
                                 <th>RANK</th>
                                 <th>NAME</th>
                                 <th>CLASS</th>
-                                <th>最高速度</th>
+                                <th>平均種目順位</th>
                             </tr>
                         </thead>
                         <tbody id="res-ranking-body"></tbody>
@@ -83,32 +84,72 @@
 
             if (!window.RANKING_DATA) return;
 
-            const sorted = window.RANKING_DATA.filter(d => {
-                const vmax = d.scores && Number(d.scores.vmax);
-                return Number.isFinite(vmax) && vmax !== 0;
-            }).sort((a, b) => {
-                const valA = (a.scores && a.scores.vmax) || 0;
-                const valB = (b.scores && b.scores.vmax) || 0;
-                return valB - valA;
+            // The same 17 events shown on the OVERALL tab of ranking.html.
+            // Lower values are better only for the three timed events.
+            const overallEvents = [
+                { key: 'vmax', direction: 'desc' },
+                { key: 'vdec', direction: 'desc' },
+                { key: 'sprint_score', direction: 'desc' },
+                { key: 'pro', direction: 'asc' },
+                { key: 'dva', direction: 'desc' },
+                { key: 'eye', direction: 'desc' },
+                { key: 'peri', direction: 'desc' },
+                { key: 'flash', direction: 'desc' },
+                { key: 'arrowz_eye_total', direction: 'desc' },
+                { key: 'hand_eye', direction: 'asc' },
+                { key: 'vj', direction: 'desc' },
+                { key: 'sj', direction: 'desc' },
+                { key: 'contact_time', direction: 'asc' },
+                { key: 'jump_height', direction: 'desc' },
+                { key: 'rj_index', direction: 'desc' },
+                { key: 'broad_jump', direction: 'desc' },
+                { key: 'stepping', direction: 'desc' }
+            ];
+
+            function hasValidScore(item, key) {
+                const value = item.scores && Number(item.scores[key]);
+                return Number.isFinite(value) && value !== 0;
+            }
+
+            // Compare only athletes who have results for every event. For each
+            // event, tied values receive the same competition rank (1, 2, 2, 4).
+            const eligible = window.RANKING_DATA.filter(item =>
+                overallEvents.every(event => hasValidScore(item, event.key))
+            );
+            const rankTotals = new Map(eligible.map(item => [item, 0]));
+
+            overallEvents.forEach(event => {
+                const eventRanking = [...eligible].sort((a, b) => {
+                    const valueA = Number(a.scores[event.key]);
+                    const valueB = Number(b.scores[event.key]);
+                    return event.direction === 'desc' ? valueB - valueA : valueA - valueB;
+                });
+
+                let eventRank = 0;
+                let previousValue = null;
+                eventRanking.forEach((item, index) => {
+                    const value = Number(item.scores[event.key]);
+                    if (index === 0 || value !== previousValue) eventRank = index + 1;
+                    rankTotals.set(item, rankTotals.get(item) + eventRank);
+                    previousValue = value;
+                });
             });
 
-            let resultDate = new Date();
-            resultDate.setMonth(2); // Force to March (0-indexed)
-
-            if (sorted.length > 0 && sorted[0].test_date) {
-                const d = new Date(sorted[0].test_date);
-                if (!isNaN(d.getTime())) {
-                    resultDate = d;
-                }
-            }
+            const sorted = eligible.map(item => ({
+                item,
+                rankTotal: rankTotals.get(item),
+                averageRank: rankTotals.get(item) / overallEvents.length
+            })).sort((a, b) =>
+                a.rankTotal - b.rankTotal || a.item.name.localeCompare(b.item.name, 'ja')
+            );
 
             const tbody = document.getElementById('res-ranking-body');
             if (tbody) {
-                sorted.forEach((d, i) => {
+                sorted.slice(0, 10).forEach((entry, i) => {
+                    const d = entry.item;
                     const tr = document.createElement('tr');
                     if (i < 3) tr.className = 'rank-' + (i + 1);
-                    const scoreVal = (d.scores && d.scores.vmax) || 0;
-                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${scoreVal.toFixed(1)}</td>`;
+                    tr.innerHTML = `<td class="rank-num">${String(i + 1).padStart(2, '0')}</td><td class="rank-name">${d.name}</td><td>${d.class || d.category || ''}</td><td class="rank-score">${entry.averageRank.toFixed(2)}</td>`;
                     tbody.appendChild(tr);
                 });
             }
