@@ -231,7 +231,10 @@
     <script src="js/main.js"></script>
     <script>
         (function () {
-            const data = window.RANKING_DATA || [];
+            const data = (window.RANKING_DATA || []).filter(d => {
+                const vmax = d.scores && Number(d.scores.vmax);
+                return Number.isFinite(vmax) && vmax !== 0;
+            });
             // Sort by vmax descending
             const sorted = [...data].sort((a, b) => {
                 const valA = (a.scores && a.scores.vmax) || 0;

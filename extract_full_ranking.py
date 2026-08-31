@@ -17,26 +17,26 @@ OUTPUT_PATH = Path("js/ranking_data.js")
 DATA_SHEET_NAME = "\u30c7\u30fc\u30bf"
 
 DATA_SHEET_VALUE_COLS = {
-    "vmax": 41,
-    "vdec": 43,
-    "sprint_score": 45,
-    "pro": 49,
-    "dva": 51,
-    "eye": 53,
-    "peri": 55,
-    "flash": 57,
-    "arrowz_eye_total": 59,
-    "hand_eye": 63,
-    "height": 65,
-    "weight": 67,
-    "bmi": 69,
-    "vj": 71,
-    "sj": 73,
-    "contact_time": 75,
-    "jump_height": 77,
-    "rj_index": 79,
-    "broad_jump": 81,
-    "stepping": 83,
+    "vmax": 42,
+    "vdec": 44,
+    "sprint_score": 46,
+    "pro": 50,
+    "dva": 52,
+    "eye": 54,
+    "peri": 56,
+    "flash": 58,
+    "arrowz_eye_total": 60,
+    "hand_eye": 64,
+    "height": 66,
+    "weight": 68,
+    "bmi": 70,
+    "vj": 72,
+    "sj": 74,
+    "contact_time": 76,
+    "jump_height": 78,
+    "rj_index": 80,
+    "broad_jump": 82,
+    "stepping": 84,
 }
 
 PERSON_SHEET_VALUE_COLS = {
@@ -140,7 +140,7 @@ def make_record(
     test_date: datetime | None,
     scores: dict[str, float],
 ) -> dict[str, Any] | None:
-    if not name or not scores or "vmax" not in scores:
+    if not name or not scores:
         return None
 
     return {
@@ -150,7 +150,7 @@ def make_record(
         "grade": grade,
         "gender": gender,
         "test_date": test_date,
-        "score": scores["vmax"],
+        "score": scores.get("vmax", 0),
         "scores": scores,
     }
 
@@ -163,13 +163,13 @@ def read_data_sheet(ws: Worksheet) -> list[dict[str, Any]]:
         if not name or re.match(r"^\d{4}/", name):
             continue
 
-        grade = str(row[10]).strip() if len(row) > 10 and row[10] not in (None, "") else ""
+        grade = str(row[11]).strip() if len(row) > 11 and row[11] not in (None, "") else ""
         record = make_record(
             name=name,
-            class_name=str(row[8]).strip() if len(row) > 8 and row[8] not in (None, "") else grade,
+            class_name=str(row[9]).strip() if len(row) > 9 and row[9] not in (None, "") else grade,
             grade=grade,
-            gender=str(row[9]).strip() if len(row) > 9 and row[9] not in (None, "") else "",
-            test_date=parse_date(row[3] if len(row) > 3 else None),
+            gender=str(row[10]).strip() if len(row) > 10 and row[10] not in (None, "") else "",
+            test_date=parse_date(row[4] if len(row) > 4 else None),
             scores=values_from_row(row, DATA_SHEET_VALUE_COLS),
         )
         if record:

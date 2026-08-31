@@ -83,7 +83,10 @@
 
             if (!window.RANKING_DATA) return;
 
-            const sorted = [...window.RANKING_DATA].sort((a, b) => {
+            const sorted = window.RANKING_DATA.filter(d => {
+                const vmax = d.scores && Number(d.scores.vmax);
+                return Number.isFinite(vmax) && vmax !== 0;
+            }).sort((a, b) => {
                 const valA = (a.scores && a.scores.vmax) || 0;
                 const valB = (b.scores && b.scores.vmax) || 0;
                 return valB - valA;
