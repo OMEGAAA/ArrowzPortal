@@ -1051,6 +1051,50 @@ main {
     color: #cd7f32;
 }
 
+/* Keep athlete names readable in the results ranking on phones. */
+@media (max-width: 768px) {
+    .results-ranking-table {
+        table-layout: fixed;
+        letter-spacing: 0.05em;
+    }
+
+    .results-ranking-table th,
+    .results-ranking-table td {
+        padding: 0.8rem 0.35rem;
+    }
+
+    .results-ranking-table th:nth-child(1) {
+        width: 18%;
+    }
+
+    .results-ranking-table th:nth-child(2) {
+        width: 50%;
+    }
+
+    .results-ranking-table th:nth-child(4) {
+        width: 32%;
+        font-size: 0.75rem;
+        line-height: 1.35;
+    }
+
+    .results-ranking-table th:nth-child(3),
+    .results-ranking-table td:nth-child(3) {
+        display: none;
+    }
+
+    .results-ranking-table .rank-name {
+        white-space: nowrap;
+        word-break: keep-all;
+        font-size: clamp(0.95rem, 4.2vw, 1.1rem);
+        letter-spacing: 0.02em;
+    }
+
+    .results-ranking-table .rank-num,
+    .results-ranking-table .rank-score {
+        white-space: nowrap;
+    }
+}
+
 /* Home Page Mini Results */
 .result-summary-row {
     display: grid;
