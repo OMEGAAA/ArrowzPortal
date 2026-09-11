@@ -138,5 +138,26 @@ window.SCHEDULE_DATA = [
         "type": "closed",
         "title": "お盆休業",
         "description": ""
+    },
+    {
+        "id": "1789100589788",
+        "date": "2026.09.21",
+        "type": "closed",
+        "title": "祝日のため",
+        "description": "祝日のためアローズジムはお休みとなります。"
+    },
+    {
+        "id": "1789100636383",
+        "date": "2026.09.22",
+        "type": "closed",
+        "title": "祝日のため",
+        "description": "祝日のためアローズジムはお休みとなります"
+    },
+    {
+        "id": "1789100657588",
+        "date": "2026.09.23",
+        "type": "closed",
+        "title": "祝日のため",
+        "description": "祝日のためアローズジムはお休みとなります"
     }
 ];
