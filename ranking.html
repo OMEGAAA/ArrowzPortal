@@ -270,47 +270,70 @@
                 display: block;
             }
 
+            /* One row per athlete: rank | name + (category · class) | score */
             .ranking-full-table tr {
-                display: block;
-                background: #111;
-                border: 1px solid #333;
-                border-radius: 8px;
-                margin-bottom: 1rem;
-                padding: 1rem;
+                display: grid;
+                grid-template-columns: 2.75rem auto minmax(0, 1fr) auto;
+                grid-template-areas:
+                    "rank name name score"
+                    "rank cat  cls  score";
+                align-items: center;
+                column-gap: 0.4rem;
+                row-gap: 0.15rem;
+                padding: 0.85rem 0.25rem;
+                border-bottom: 1px solid #333;
             }
 
             .ranking-full-table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
                 border: none;
-                padding: 0.5rem 0;
-                font-size: 1rem;
+                padding: 0;
+                min-width: 0;
+            }
+
+            .ranking-full-table td:nth-child(1) {
+                grid-area: rank;
+            }
+
+            .ranking-full-table td:nth-child(2) {
+                grid-area: name;
+                font-size: 1.05rem;
+                overflow-wrap: anywhere;
             }
 
             .ranking-full-table td:nth-child(3) {
-                display: none;
+                grid-area: cls;
             }
 
-            .ranking-full-table td::before {
-                content: attr(data-label);
-                font-family: var(--font-primary);
-                font-size: 0.8rem;
+            .ranking-full-table td:nth-child(4) {
+                grid-area: cat;
+            }
+
+            .ranking-full-table td:nth-child(5) {
+                grid-area: score;
+            }
+
+            .ranking-full-table td:nth-child(3),
+            .ranking-full-table td:nth-child(4) {
                 color: var(--text-muted);
-                font-weight: bold;
-                letter-spacing: 0.05em;
+                font-size: 0.78rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
-            /* Adjust rank number for mobile card */
+            .ranking-full-table td:nth-child(3)::before {
+                content: "· ";
+            }
+
             .rank-num-cell {
                 width: auto;
-                font-size: 1.2rem;
+                font-size: 1.4rem;
             }
 
-            /* Adjust score size */
             .score-cell {
                 text-align: right;
-                font-size: 1.2rem;
+                font-size: 1.3rem;
+                padding-left: 0.5rem;
             }
         }
     </style>
