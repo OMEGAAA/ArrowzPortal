@@ -159,5 +159,12 @@ window.SCHEDULE_DATA = [
         "type": "closed",
         "title": "祝日のため",
         "description": "祝日のためアローズジムはお休みとなります"
+    },
+    {
+        "id": "1790841965031",
+        "date": "2026.10.12",
+        "type": "closed",
+        "title": "祝日のため",
+        "description": "祝日のため休館となります。"
     }
 ];
